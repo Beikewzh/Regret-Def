@@ -25,17 +25,14 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
 \newtheorem{proposition}{Proposition}
-\newtheorem{corollary}{Corollary}
 
 \newcommand{\Ex}{\mathbb{E}}
 \newcommand{\Hist}{\mathcal{H}}
 \newcommand{\Acts}{\mathcal{A}}
-\newcommand{\Models}{\mathcal{M}}
+\newcommand{\ModE}{\mathcal{M}_E}
 \newcommand{\PiK}{\Pi_{K_L}}
 \newcommand{\Vlow}{V^{\mathrm{lo}}_t}
 \newcommand{\Vhi}{V^{\mathrm{hi}}_t}
-\newcommand{\CapReg}{\mathrm{CapReg}}
-\newcommand{\DynReg}{\mathrm{DynReg}}
 \newcommand{\Rex}{\mathcal{R}^{\mathrm{ex}}}
 \newcommand{\Rmax}{R_{\max}}
 \newcommand{\Dstruct}{\Delta^{\mathrm{str}}}
@@ -73,147 +70,132 @@ TODO
 \section{Introduction}
 \label{sec:intro}
 
-Continual reinforcement learning (CRL) studies agents that never stop learning \citep{abel2023definition}, a view forced by the \emph{big-world hypothesis}: the agent is far smaller than its world and cannot represent, learn, or retain a fixed optimal solution \citep{javed2025bigworld,lewandowski2025bigger}. We ask a question this picture makes unavoidable but that standard theory does not face: \emph{who evaluates such an agent?} Regret, our usual measure of learning, compares the agent to an optimum $V^{*}$ obtained from a model, prior, or comparator class supplied from outside \citep{lai1985asymptotically,jaksch2010ucrl2}. A continual agent in a big world has no such outside source, and would not be well served by one even if it did: bounded, it cannot represent the optimal policy, so the right benchmark is the best use of its own resources, not an external ideal \citep{russell1995bounded,lewis2014computational,lieder2020resource}.
+A central premise of continual reinforcement learning (CRL) is that the agent is far smaller than its world: under the \emph{big-world hypothesis}, no agent can represent, learn, or retain a fixed optimal solution, so the best agents never stop learning \citep{abel2023definition,javed2025bigworld,lewandowski2025bigger}. This premise quietly breaks the tool we use to certify that an agent is learning. Regret measures the agent against an optimum $V^{*}$ obtained from a model, a prior, or a comparator class supplied from outside \citep{lai1985asymptotically,jaksch2010ucrl2}. In an open-ended world the agent has no such outside source at run time; and even a known $V^{*}$ would be the wrong yardstick, because a bounded agent cannot represent the optimal policy and should be judged against the best use of its own resources \citep{russell1995bounded,lewis2014computational,lieder2020resource}.
 
-\paragraph{Position.} We take the position that, in CRL, \emph{there is no external examiner}. Whatever certifies the agent's progress must be computed by a bounded module inside the agent, drawing on the same finite capacity as acting. The meaningful notion of regret is therefore not what an idealized outside observer could measure, but what such an internal, capacity-bounded examiner can certify. Our central claim is that this self-evaluation is governed by \emph{coverage}: an agent can honestly certify its own progress to the extent that its experience can cover the part of the world that matters, and in a big world, where the world outruns experience, honest self-evaluation is \emph{necessarily} costly, for every agent and not merely for a careless one.
+\paragraph{Position.}
+We adopt the agent's-eye view of evaluation. If a continual agent is to know whether it is still learning, it must compute that judgment itself, from its own stream of experience, within its own finite capacity. We make this judgment an explicit object: alongside the acting \emph{learner}, an internal \emph{examiner} forecasts an \emph{aspiration} for the best value it believes attainable and a \emph{guarantee} for the value it is sure it achieves, and the gap between them, the \emph{examiner regret} $\rho_t$, is the agent's self-assessed room to improve. Our thesis is that this self-assessment is meaningful only at a price, and that the price is paid in a currency CRL has not named: \emph{the examiner must be the more strongly biased module}. To judge whether it could have done better, the agent must reason about choices it never tried, which requires a model of the world richer than the policy it acts with. We show this bias is both necessary and double-edged, and that in a big world honest self-assessment is never free.
 
-\paragraph{What we do.} We formalize the internal evaluator as an \emph{examiner} that, alongside the acting \emph{learner}, forecasts an \emph{aspiration} $\Vhi$ and a \emph{guarantee} $\Vlow$ on the agent's own value; the gap $\rho_t := \Vhi - \Vlow$ is the \emph{examiner regret}. The learner and examiner hold separate budgets $K_L$ and $K_E$, with $K = K_L + K_E$. We then argue the position in three results. A self-report is free and so guarantees nothing on its own (Proposition~\ref{prop:nothing}); a \emph{soundness} condition turns it into a certificate of the regret a bounded agent can actually reduce (Lemma~\ref{lem:bridge}), and when experience covers the world this certificate is tight, recovering the classical bandit rate (Proposition~\ref{prop:bandit}); but when the world outruns experience, no agent can keep its honest self-report small (Theorem~\ref{thm:price}). We close with how $\rho_t$ can be estimated and used, and with the limitations a reviewer should weigh. We claim no new algorithm or rate; the contribution is the position, the object that makes it precise, and a lower bound that shows the position has teeth.
+\paragraph{What we do.} We define examiner regret and observe that, on its own, it certifies nothing: an agent can simply declare it to be zero (Proposition~\ref{prop:nothing}). We isolate the missing ingredient as a \emph{soundness} condition and show it makes $\rho_t$ a certificate of the regret a bounded agent can actually reduce (Lemma~\ref{lem:bridge}), recovering the classical bandit rate when the agent can cover its world. We then prove the central claim: a sound examiner with a vanishing self-report requires either complete coverage of the world or a correct inductive bias, and neither is available for free in a big world (Theorem~\ref{thm:nofree}). We close with how $\rho_t$ can be estimated and used in practice, and with an explicit account of the limitations. We claim no new algorithm or rate; the contribution is the position, a definition that makes it precise, and a lower bound that gives it teeth.
 
 \section{A Learner That Acts and an Examiner That Judges}
 \label{sec:defs}
 
-\paragraph{Setting.} An agent interacts with an unknown environment over a single, never-resetting stream; we assume no MDP, POMDP, or stationarity structure. Rewards are bounded, $r_t \in [0,\Rmax]$, value is measured over an $H$-step window, and the agent is capacity-bounded. We seek a definition of a learning measure computable from the agent's internal state, the conditions under which it certifies learning, and the limit beyond which it cannot.
+\paragraph{Setting.} An agent interacts with an unknown environment over a single, never-resetting stream of experience; we assume no Markov, episodic, or stationarity structure. Rewards lie in $[0,\Rmax]$, and we measure value over an $H$-step look-ahead. The agent is capacity-bounded: it represents policies and beliefs within a fixed budget of bits. We seek a definition of a learning measure the agent can compute from its own state, the condition under which it is trustworthy, and the limit beyond which it cannot be.
 
-\begin{definition}[Stream and history]
-\label{def:stream}
-A \emph{stream} is a sequence $\{(o_t, r_t, a_t)\}_{t \ge 0}$ with $o_t \in \mathcal{O}$, $r_t \in [0,\Rmax]$, $a_t \in \Acts$. The \emph{history} is $h_t := (o_0, r_0, a_1, \dots, a_t, o_t, r_t) \in \Hist_t$. By Ionescu--Tulcea the kernels extend to a measure $\mu$ on $(\mathcal{O}\times\mathbb{R}\times\Acts)^{\infty}$.
+\begin{definition}[Stream, policy, value]
+\label{def:basic}
+A \emph{history} is $h_t = (o_0,r_0,a_1,\dots,a_t,o_t,r_t)$, with observations $o_s$, rewards $r_s \in [0,\Rmax]$, actions $a_s$; the underlying law is $\mu$. A \emph{policy} $\pi$ maps histories to action distributions, with value $f^{\pi}_t = \Ex_{\mu,\pi}\!\big[\sum_{s=t+1}^{t+H} r_s \mid h_t\big]$.
 \end{definition}
 
-\begin{definition}[Policy and value]
-\label{def:value}
-A \emph{policy} is $\pi : \Hist \to \Delta(\Acts)$, with value $f^{\pi}_t := \Ex_{\mu, \pi}\big[\sum_{s=t+1}^{t+H} r_s \mid h_t\big]$.
-\end{definition}
-
-\begin{definition}[Capacity-constrained comparator]
+\begin{definition}[What the learner could have done]
 \label{def:capcomp}
-Let $\Theta_L$ be the learner's parameter set, $|\Theta_L| \le 2^{K_L}$, and $\pi_\theta$ the policy encoded by $\theta$. Write $\PiK := \{\pi_\theta : \theta \in \Theta_L\}$. The \emph{capacity-constrained optimum} is $f^{K_L}_t := \sup_{\pi \in \PiK} f^{\pi}_t$, and the \emph{structural gap} is $\Dstruct_t := f^{*}_t - f^{K_L}_t \ge 0$ with $f^{*}_t := \sup_{\pi} f^{\pi}_t$.
+The learner represents policies within $K_L$ bits; write $\PiK$ for this representable set. The \emph{within-capacity optimum} is $f^{K_L}_t = \sup_{\pi \in \PiK} f^{\pi}_t$, and the \emph{structural gap} to the global optimum is $\Dstruct_t = f^{*}_t - f^{K_L}_t \ge 0$. We compare the agent to $f^{K_L}_t$, the best it could itself express, and keep $\Dstruct_t$ visible as the irreducible price of being small.
 \end{definition}
 
-\begin{definition}[Learner--examiner agent]
+\begin{definition}[Learner and examiner]
 \label{def:agent}
-An \emph{agent} is a pair $\mathcal{A} = (\mathcal{L}, \mathcal{E})$. The \emph{learner} $\mathcal{L} : \Hist_t \to \Delta(\Acts)$ emits $\pi_t \in \PiK$. The \emph{examiner} $\mathcal{E} = (U, L)$, with $U, L : \Hist_t \to \mathbb{R}$ and $U \ge L$ pointwise, emits aspiration $\Vhi := U(h_t)$ and guarantee $\Vlow := L(h_t)$, $|\Theta_E| \le 2^{K_E}$. Total capacity $K := K_L + K_E$.
+An agent is a pair $(\mathcal{L},\mathcal{E})$. The \emph{learner} $\mathcal{L}$ emits the policy $\pi_t \in \PiK$ it acts with. The \emph{examiner} $\mathcal{E}$ carries an \emph{inductive bias}, a model class $\ModE$ of environments it considers possible, and from the history outputs an \emph{aspiration} $\Vhi$ and a \emph{guarantee} $\Vlow$, with $\Vhi \ge \Vlow$. The examiner's role is to judge, not to act: setting $\Vhi$ requires reasoning about the value of policies the learner did not run, which is why $\ModE$ must be richer than a single policy.
 \end{definition}
 
 \begin{definition}[Examiner regret]
 \label{def:exreg}
-$\rho_t := \Vhi - \Vlow \ge 0$, with $\Rex_T := \sum_{t=1}^T \rho_t$; a function of $h_t$ and $\theta^E_t$ alone, with no reference to $\mu$, $f^{\pi}$, or any optimum.
+$\rho_t = \Vhi - \Vlow \ge 0$, with $\Rex_T = \sum_{t=1}^T \rho_t$. It depends only on the history and the examiner; it never refers to $\mu$ or to any optimum.
 \end{definition}
 
 \section{A Self-Report Carries No Guarantee}
 \label{sec:nothing}
 
-The definition is deliberately cheap, and that is the first thing to confront.
+The definition is cheap on purpose, and the first thing to say is what that cheapness costs.
 
-\begin{proposition}[Examiner regret is uninformative on its own]
+\begin{proposition}[Examiner regret says nothing on its own]
 \label{prop:nothing}
-There is an examiner $\mathcal{E}_0$ with $\rho_t \equiv 0$ for every learner and stream. Hence two agents on the same stream can share the trajectory $\rho_t \equiv 0$ while one has $\CapReg_T := \sum_t (f^{K_L}_t - f^{\pi_t}_t) = 0$ and the other has $\CapReg_T = \Omega(T)$.
+There is an examiner that reports $\rho_t \equiv 0$ for every learner and every world. Hence two agents with the identical self-report $\rho_t \equiv 0$ can differ arbitrarily in actual performance: one optimal within its capacity, the other suboptimal by a constant at every step.
 \end{proposition}
 
 \begin{proof}
-Let $\mathcal{E}_0$ output $U \equiv L \equiv 0$, so $\rho_t \equiv 0$ regardless of learner or environment. Pair it with a learner playing an optimum of $\PiK$ ($\CapReg_T = 0$), and separately with one playing value $f^{K_L}_t - c$ each step ($\CapReg_T = cT$). Both yield $\rho_t \equiv 0$.
+Let the examiner always output $\Vhi = \Vlow = 0$, so $\rho_t \equiv 0$ regardless of behaviour or environment. Pair it once with a learner that plays a within-capacity optimum, and once with a learner that plays a policy worth a constant less at each step. Both report $\rho_t \equiv 0$.
 \end{proof}
 
-Examiner regret therefore carries no guarantee by itself; any informativeness must come from a condition tying the examiner's outputs to value. That condition is extrinsic and costs capacity, and the rest of the paper is about it and its price.
+So examiner regret guarantees nothing by itself; trust must come from a condition tying the examiner's two numbers to real value. That condition is the subject of the paper, and it is where the examiner's bias enters.
 
-\section{Soundness Turns the Self-Report Into a Certificate}
-\label{sec:bridge}
+\section{Soundness, and Why the Examiner Must Be Biased}
+\label{sec:sound}
 
-\begin{definition}[Soundness and consistency]
+\begin{definition}[Soundness]
 \label{def:sound}
-$\mathcal{E}$ is \emph{sound} on $[1,T]$ with slack $(\delta_t)$, $\delta_t \ge 0$, if with probability at least $1-\eta$, for all $t \le T$, (S1) $\Vlow \le f^{\pi_t}_t$ and (S2) $\Vhi \ge f^{K_L}_t - \delta_t$; it is \emph{consistent} if also (S3) $\Gamma_T := \sum_t \delta_t = o(T)$.
+The examiner is \emph{sound} with slack $(\delta_t)$ if, with high probability, for all $t$: the guarantee is a true floor, $\Vlow \le f^{\pi_t}_t$, and the aspiration is a true ceiling for the within-capacity optimum, $\Vhi \ge f^{K_L}_t - \delta_t$. It is \emph{consistent} if the average slack vanishes, $\frac1T\sum_{t\le T}\delta_t \to 0$.
 \end{definition}
 
-(S1) makes the guarantee a true lower bound on the current policy's value; (S2) makes the aspiration optimistic for the best policy the learner could represent, the resource-rational comparator \citep{russell1995bounded,lieder2020resource}. The empty examiner $\mathcal{E}_0$ of Proposition~\ref{prop:nothing} fails (S2) whenever $f^{K_L}_t > \delta_t$, which is how soundness excludes the vacuous self-report.
+Soundness rules out the empty report of Proposition~\ref{prop:nothing}: the all-zero examiner violates the ceiling condition whenever the agent could do better than zero. The substantive question is how an examiner can \emph{meet} the ceiling condition, since it must set $\Vhi$ above the value of policies the learner may never have run. It has only two ways to do so. It can rely on \emph{coverage}, having actually seen those policies tried; or it can \emph{extrapolate} from its model class $\ModE$, inferring their value from structure it assumes. The second is an inductive bias, and it is what lets a small examiner judge a large space cheaply. This is the precise sense in which the examiner must be more strongly biased than the learner: acting needs only a policy, but judging counterfactual policies needs a world model.
 
-\begin{lemma}[Soundness bridge]
+\begin{lemma}[Soundness turns the self-report into a certificate]
 \label{lem:bridge}
-If $\mathcal{E}$ is sound with slack $(\delta_t)$ on $[1,T]$, then with probability $\ge 1-2\eta$,
+If the examiner is sound with slack $(\delta_t)$, then with high probability the agent's regret against its within-capacity optimum obeys
 \[
-\CapReg_T \le \Rex_T + \Gamma_T,
-\qquad
-\DynReg_T := \sum_t (f^{*}_t - f^{\pi_t}_t) \le \Rex_T + \Gamma_T + \sum_t \Dstruct_t .
+\sum_{t=1}^T \big(f^{K_L}_t - f^{\pi_t}_t\big) \;\le\; \Rex_T + \sum_{t=1}^T \delta_t,
 \]
+and the regret against the global optimum adds only the irreducible $\sum_t \Dstruct_t$.
 \end{lemma}
 
 \begin{proof}
-For each $t$, $f^{K_L}_t - f^{\pi_t}_t = (f^{K_L}_t - \Vhi) + (\Vhi - \Vlow) + (\Vlow - f^{\pi_t}_t)$; on the joint event of (S1),(S2) (probability $\ge 1-2\eta$ by the union bound) the terms are $\le \delta_t$, $=\rho_t$, $\le 0$. Sum over $t$; add $\sum_t \Dstruct_t$ for the second inequality.
+For each $t$, write $f^{K_L}_t - f^{\pi_t}_t = (f^{K_L}_t - \Vhi) + (\Vhi - \Vlow) + (\Vlow - f^{\pi_t}_t)$. By soundness the first term is at most $\delta_t$ and the third is at most $0$, while the middle term is $\rho_t$; summing gives the first inequality. Adding $\sum_t \Dstruct_t = \sum_t(f^{*}_t - f^{K_L}_t)$ gives the global statement.
 \end{proof}
 
-We are explicit that this is a \emph{decomposition}: the identity is the optimism-gap step of OFU analyses \citep{jaksch2010ucrl2}, not a new rate. Its role is to say what a \emph{sound} examiner regret means, namely an upper bound on the regret a bounded agent can actually reduce, $\CapReg_T$, with the unremovable structural cost $\sum_t \Dstruct_t$ displayed rather than hidden. The substance is whether soundness holds cheaply, which we now show turns on coverage.
+This is a decomposition, not a new rate: the identity is the optimism gap familiar from confidence-bound analyses \citep{jaksch2010ucrl2}. Its point is interpretive. Under soundness, the cheap self-report becomes an upper bound on the regret a bounded agent can actually drive down, with the unremovable structural cost shown rather than hidden.
 
-\paragraph{When experience covers the world, the certificate is tight.}
-Consider $K$ Bernoulli arms with $K_L \ge \log_2 K$, so $\PiK$ is all arms and $\Dstruct_t = 0$. Let $c_a(t) = \sqrt{2\log t / N_a(t-1)}$, $\Vhi = \max_a[\hat\mu_a + c_a(t)]$, $\Vlow = \hat\mu_{a_t} - c_{a_t}(t)$, with $\mathcal{L} = $ UCB1.
+\paragraph{When the agent can cover its world, the certificate is tight.}
+In a $K$-armed bandit whose arms the learner can all represent and try, the examiner needs no bias at all: the aspiration is the largest upper confidence bound and the guarantee the lower confidence bound of the played arm. By Hoeffding's inequality these are sound with vanishing slack, and the standard UCB1 analysis gives $\Rex_T = O(\sqrt{KT\log T})$ \citep{auer2002ucb}, so by Lemma~\ref{lem:bridge} the within-capacity regret matches the classical rate. \textbf{[cited]} Coverage, not cleverness, is what makes the slack vanish here, and coverage is exactly what a big world denies.
 
-\begin{proposition}[Coverable case: recovery of UCB1]
-\label{prop:bandit}
-The bandit examiner is sound with $\delta_t = 0$ at per-round failure probability $\le 2t^{-3}$, and $\Ex[\Rex_T] = O(\sqrt{KT\log T})$; hence by Lemma~\ref{lem:bridge}, $\Ex[\CapReg_T] = O(\sqrt{KT\log T})$ \citep{auer2002ucb}.
-\end{proposition}
+\section{No Free Self-Evaluation in a Big World}
+\label{sec:nofree}
 
-\begin{proof}
-Conditioned on $N_a(t-1)=n$, arm $a$'s rewards are i.i.d.\ in $[0,1]$ with mean $\mu_a$, so Hoeffding gives $\Pr(|\hat\mu_a - \mu_a| \ge c_a(t)) \le 2t^{-4}$; a union bound over $K \le t$ arms gives, w.p.\ $\ge 1-2t^{-3}$, $\mu_a \le \hat\mu_a + c_a(t)$ and $\hat\mu_a - c_a(t) \le \mu_a$ for all $a$, i.e.\ (S2) at the best arm and (S1) at $a_t$, with $\delta_t = 0$. As UCB1 pulls the upper-index maximizer, $\rho_t = 2c_{a_t}(t)$; grouping by arm with $\sum_{n\le N} n^{-1/2} \le 2\sqrt N$ and Cauchy--Schwarz ($\sum_a \sqrt{N_a(T)} \le \sqrt{KT}$) gives $\Rex_T \le 4\sqrt{2}\sqrt{KT\log T}$.
-\end{proof}
+We now show the central claim. When the world is larger than the agent can cover, a sound examiner can keep its self-report small only by trusting a bias, and that bias cannot be verified, so it can be wrong. Either way the agent pays.
 
-Here the learner pulls every arm, so experience eventually covers the world, the slack vanishes, and the honest self-report converges to the truth. This is the favourable regime; the big-world regime is the opposite one.
-
-\section{In a Big World, Honest Self-Evaluation Is Unavoidably Costly}
-\label{sec:price}
-
-When the world offers more to discover than the agent has time to probe, coverage fails and the certificate cannot be cheap, for any agent.
-
-\begin{theorem}[Price of self-evaluation under incomplete coverage]
-\label{thm:price}
-Fix $\epsilon \in (0,\tfrac12)$, $N \ge 2$, horizon $T < N$, and $K_L \ge \log_2 N$. Consider the family of $N$-armed Bernoulli bandits $\{\mu_i\}_{i=1}^N$ in which, under $\mu_i$, arm $i$ has mean $\tfrac12 + \epsilon$ and all other arms have mean $\tfrac12$ (so $f^{K_L}_{\mu_i} = f^{*}_{\mu_i} = \tfrac12 + \epsilon$ and $\Dstruct \equiv 0$). For \emph{any} agent $\mathcal{A} = (\mathcal{L},\mathcal{E})$ whose examiner is sound on the family with slack $(\delta_t)$ and failure probability $\eta$, there is an environment $\mu_{i^{*}}$ in the family on which, with probability at least $1-2\eta$,
-\begin{equation}
-\label{eq:price}
-\Rex_T \;=\; \sum_{t=1}^T \rho_t \;\ge\; \epsilon\,T - \Gamma_T,
-\qquad\text{and}\qquad
-\DynReg_T = \epsilon\,T .
-\end{equation}
-Consequently, on the worst-case environment, the examiner is either inconsistent ($\Gamma_T = \Omega(T)$) or carries linear cumulative examiner regret ($\Rex_T = \Omega(T)$): honest self-evaluation cannot be both consistent and small.
+\begin{theorem}[No free self-evaluation]
+\label{thm:nofree}
+Consider a family of $N$-armed bandits in which exactly one ``special'' arm pays $\tfrac12+\epsilon$ and the rest pay $\tfrac12$; which arm is special is unknown. Run any agent for a horizon $T$. Then on a worst-case member of the family, with high probability,
+\[
+\rho_t \;\ge\; \epsilon - \delta_t \quad\text{for all } t, \qquad\text{so}\qquad \Rex_T \;\ge\; \epsilon T - \sum_{t\le T}\delta_t,
+\]
+unless the examiner removes both of the following gaps:
+\begin{itemize}
+\item[(i)] \emph{a coverage gap}: if $T < N$ the learner leaves some arm untried, and the special arm can be placed there;
+\item[(ii)] \emph{a bias gap}: if the examiner's model class $\ModE$ cannot tell the special arm apart from an ordinary one, observing the others does not reveal it.
+\end{itemize}
+Removing (i) requires trying every arm ($T \ge N$); removing (ii) requires $\ModE$ to contain the truth, which the agent cannot check against arms it has not resolved. Consequently a consistent examiner ($\delta_t \to 0$) that reports $\rho_t \to 0$ in a big world must be relying on an unverified bias, and if that bias is wrong it is not sound.
 \end{theorem}
 
 \begin{proof}
-\emph{Null run and choice of $i^{*}$.} Let $\mu_0$ be the all-$\tfrac12$ bandit. Run $\mathcal{A}$ in $\mu_0$ and let $A_T$ be the (random) set of distinct arms pulled in $[1,T]$. Since one arm is pulled per step, $|A_T| \le T < N$, so there exists $i^{*} \in [N]\setminus A_T$.
+\emph{Coverage gap.} Let $\mu_0$ be the all-$\tfrac12$ bandit and run the agent in it. In $T$ steps it pulls at most $T$ distinct arms, so if $T < N$ some arm $i^{*}$ is never pulled. Let $\mu_{i^{*}}$ make arm $i^{*}$ special. Since the two worlds differ only at $i^{*}$, which is never pulled, the histories coincide and the examiner outputs the same numbers in both. Under $\mu_{i^{*}}$ the played policy is worth $\tfrac12$, so soundness forces the guarantee $\Vlow \le \tfrac12$ and the aspiration $\Vhi \ge (\tfrac12+\epsilon) - \delta_t$; hence $\rho_t \ge \epsilon - \delta_t$, and summing gives the bound. The agent also never finds the special arm, so its true regret is $\epsilon T$.
 
-\emph{Coupling.} Couple the runs in $\mu_0$ and $\mu_{i^{*}}$ on the same internal randomness. The two environments differ only at arm $i^{*}$, which is not pulled in the $\mu_0$ run; all pulled arms have identical reward law ($\mathrm{Bernoulli}(\tfrac12)$) in both. By induction on $t$, the action and observation sequences coincide, so arm $i^{*}$ is never pulled in $\mu_{i^{*}}$ either, and the history, hence the examiner output $(\Vhi,\Vlow)$, is identical to the $\mu_0$ run.
+\emph{Bias gap.} Suppose instead the learner does try every arm, but the examiner's class $\ModE$ asserts all arms share a common mean (a natural exchangeability bias). Having seen the ordinary arms average $\tfrac12$, an examiner that trusts $\ModE$ predicts the special arm at $\tfrac12$ as well, so it sets $\Vhi \approx \tfrac12 < (\tfrac12+\epsilon) - \delta_t$ and is \emph{unsound} on the world where that arm is special. To restore soundness it must widen the aspiration to cover the possibility, which returns it to a hedge of size $\epsilon$, i.e.\ $\rho_t \ge \epsilon - \delta_t$ again.
 
-\emph{Bounds under $\mu_{i^{*}}$.} The learner never pulls the optimal arm $i^{*}$, so $f^{\pi_t}_{\mu_{i^{*}},t} = \tfrac12$ and $\DynReg_T = \sum_t (\tfrac12+\epsilon - \tfrac12) = \epsilon T$. On the soundness event, (S1) gives $\Vlow \le \tfrac12$ and (S2) gives $\Vhi \ge f^{K_L}_{\mu_{i^{*}}} - \delta_t = \tfrac12 + \epsilon - \delta_t$, so $\rho_t \ge \epsilon - \delta_t$ for all $t$. Summing gives $\Rex_T \ge \epsilon T - \Gamma_T$, which is \eqref{eq:price}. The dichotomy follows: if $\Gamma_T = o(T)$ then $\Rex_T \ge \epsilon T - o(T) = \Omega(T)$, otherwise $\Gamma_T = \Omega(T)$. \textbf{[proved]}
+In both cases a sound examiner cannot also have $\rho_t < \epsilon - \delta_t$; escaping requires closing the coverage gap (try everything) or the bias gap (a correct, and here unverifiable, model class). \textbf{[proved]}
 \end{proof}
 
-The statement is worst-case over the family, in the manner of Le~Cam two-point lower bounds \citep{lai1985asymptotically}: there is an environment, not every environment, on which the agent both performs poorly and cannot honestly say so. Two features matter for the position. First, it holds for \emph{any} learner: exploration helps only up to the $T$ arms it can reach, and when $N > T$ some niche is always missed, so the obstruction is coverage, not carelessness. Second, it makes consistency's role explicit (a common worry about assumptions like (S3)): in a big world the agent cannot have both a consistent examiner and a vanishing self-report, so a small $\rho_t$ in such a setting should be read as overconfidence, not success.
+The reading is the position made precise. Self-evaluation in a big world is bought with one of two coins: \emph{exploration}, which buys coverage but is impossible when the world outruns the horizon, or \emph{prior knowledge}, which buys extrapolation but only if it happens to be right and which the agent cannot audit on what it has not seen. The examiner's power is exactly the bias it carries; that bias is necessary to judge a large world from limited experience, and it is double-edged, because a confident wrong bias produces a small but false self-report. A near-zero $\rho_t$ in a genuinely big world should therefore be read as unearned confidence, not as completed learning. This also makes the often-questioned consistency assumption honest: in a big world it cannot hold cheaply, and the theorem says exactly why.
 
-\paragraph{The capacity-allocation question.}
-Proposition~\ref{prop:bandit} and Theorem~\ref{thm:price} are the two sides of coverage, and between them sits a budgeting problem. Bits spent on the learner ($K_L$) widen $\PiK$ and let it represent and reach more of the world, shrinking the missed-coverage set; bits spent on the examiner ($K_E$) let it represent what coverage reveals and certify tighter. With $T < N$ no allocation removes the $\Omega(T)$ price, but the allocation governs how quickly coverage grows and how tight the certificate is once it does. Characterizing the optimal split $K_E^{*}$ as a function of how fast the world is discovered is, in our view, the central open problem the position raises.
+\paragraph{The budgeting question.} The favourable bandit and the worst-case family are the two sides of one coin: how much of the world the agent can resolve, by exploring or by correctly assuming. The total budget $K = K_L + K_E$ governs both, since bits given to the examiner buy a richer, more reliable bias while bits given to the learner buy reach and coverage. Characterizing the split that best trades exploration against bias, and doing so under genuine non-stationarity, is the central problem the position opens.
 
 \section{Estimating and Using Examiner Regret}
 \label{sec:practical}
 
-The construction is directly estimable, which is what makes the position more than descriptive. \textbf{[heuristic]} A practical examiner estimates the aspiration $\Vhi$ as an optimistic value, the upper quantile or maximum head of a value-function ensemble or a UCB-style $Q$-estimate, and the guarantee $\Vlow$ as a pessimistic value, the lower quantile or a conservative critic \citep{lu2021bitbybit,arumugam2024capacity}; $\rho_t$ is then the ensemble's value-uncertainty gap, computed online with no access to $V^{*}$. This gives three uses. As an \emph{exploration and learning-progress signal}, acting to reduce $\rho_t$ drives the agent toward states where aspiration and guarantee disagree, the lineage of compression- and learning-progress drives \citep{schmidhuber2010formal,oudeyer2007intrinsic} but in value units with a soundness target. As a \emph{model-agnostic comparison metric}, running different algorithms on one continual stream and comparing $\rho_t$ trajectories estimates which is nearer its own capacity-constrained optimum, without $V^{*}$. And because soundness reduces to the calibration of the ensemble, a practitioner can \emph{audit} whether a low $\rho_t$ is trustworthy or the empty report of Proposition~\ref{prop:nothing}. We do not run these experiments; we note the path because it is what would turn the position into a tool.
+The construction is directly estimable, which is what makes the position usable. \textbf{[heuristic]} An aspiration $\Vhi$ can be read off an optimistic value estimate, the upper head of a value-function ensemble or a UCB-style critic, and a guarantee $\Vlow$ off a pessimistic one, the lower head or a conservative critic \citep{lu2021bitbybit,arumugam2024capacity}; their gap is $\rho_t$, computed online with no access to $V^{*}$, and the ensemble's prior is the examiner's bias. Three uses follow. As an \emph{exploration signal}, acting to reduce $\rho_t$ steers the agent toward states where its optimism and pessimism disagree, a value-unit relative of learning-progress drives \citep{schmidhuber2010formal,oudeyer2007intrinsic}. As a \emph{comparison metric}, running different algorithms on one continual stream and comparing their $\rho_t$ trajectories estimates which is closer to its own capacity-constrained optimum without needing $V^{*}$. And because soundness is the calibration of the ensemble on what has been seen, a practitioner can \emph{audit} a low $\rho_t$, while Theorem~\ref{thm:nofree} warns that on the unseen no audit is possible. We do not run these experiments; we note the path because it turns the position into a tool.
 
 \section{Limitations}
-\label{sec:limits-disc}
+\label{sec:limits}
 
-\textbf{(L1) The content is in soundness, not in $\rho_t$} (Proposition~\ref{prop:nothing}); the intrinsic object certifies nothing alone, and soundness is extrinsic, requiring the examiner to relate outputs to value via, e.g., a posterior over a model class. The model-free part is only the self-report. \textbf{(L2) The bridge is a decomposition} (Lemma~\ref{lem:bridge} is the OFU optimism gap), not a new rate; its role is interpretive. \textbf{(L3) The positive, tight regime is shown only for the full-capacity stationary bandit} (Proposition~\ref{prop:bandit}); soundness of a capacity-bounded examiner under genuine non-stationarity, and the under-capacity case $\Dstruct_t > 0$, are not established. \textbf{[GAP]} \textbf{(L4) The lower bound is worst-case and coverage-driven}: Theorem~\ref{thm:price} exhibits a hard environment under $T < N$; it does not bound a fixed environment, and the favourable $T \ge N$ regime escapes it. \textbf{(L5) No formal learner--examiner coupling}: $\mathcal{L}$ and $\mathcal{E}$ are separate maps with no feedback channel, so the allocation $K_E^{*}$ is conceptual, with no mechanism in the present formalism. \textbf{(L6) The capacity model is coarse}, counting representable policies ($|\Theta_L| \le 2^{K_L}$) and ignoring computation. \textbf{(L7) Novelty over rate-distortion satisficing} \citep{arumugam2024capacity} is the explicit examiner module, the self-report-certifies-nothing thesis (Proposition~\ref{prop:nothing}), and the coverage lower bound (Theorem~\ref{thm:price}), rather than a new upper bound. \textbf{(L8) No experiments}; the practical recipe of Section~\ref{sec:practical} is untested.
+\textbf{(L1)} The content lives in soundness, not in $\rho_t$: Proposition~\ref{prop:nothing} is explicit that the self-report alone certifies nothing, and soundness is extrinsic, requiring the examiner to carry a model class and hence a prior. \textbf{(L2)} Lemma~\ref{lem:bridge} is a decomposition, the optimism gap relabeled, not a new rate; its value is conceptual. \textbf{(L3)} Our tight, positive result is shown only for the coverable bandit; soundness of a biased, capacity-bounded examiner under genuine non-stationarity, and the under-capacity case $\Dstruct_t > 0$, are not established here. \textbf{[GAP]} \textbf{(L4)} Theorem~\ref{thm:nofree} is a worst-case statement over a family, in the manner of two-point lower bounds \citep{lai1985asymptotically}; it does not bound a fixed environment, and the bias gap is shown for one natural exchangeability bias rather than for every $\ModE$. \textbf{(L5)} The learner and examiner are separate maps with no feedback channel, so the budgeting between them is conceptual, with no mechanism in the present formalism. \textbf{(L6)} The capacity model counts representable policies and ignores computation. \textbf{(L7)} Relative to capacity-limited Bayesian RL \citep{arumugam2024capacity}, which already uses within-capacity targets, the novelty is the explicit examiner, the self-report-certifies-nothing thesis, and the coverage-or-bias lower bound, not a new upper bound. \textbf{(L8)} There are no experiments; the recipe of Section~\ref{sec:practical} is untested.
 
 \section{Related Work}
 \label{sec:related}
 
-\textbf{Foundations and bounded rationality.} \citet{abel2023definition,abel2024dogmas,abel2020bounded} define and develop CRL and the bounded-rationality view; bounded optimality \citep{russell1995bounded}, computational rationality \citep{lewis2014computational}, and resource-rational analysis \citep{lieder2020resource} motivate measuring a bounded agent against its own resources, our comparator $f^{K_L}$. \textbf{Big-world hypothesis.} \citet{javed2025bigworld,lewandowski2025bigger}. \textbf{Learning progress.} \citet{schmidhuber2010formal,oudeyer2007intrinsic} give self-assessed drives; $\rho_t$ is a value-unit relative with a soundness target. \textbf{Capacity-bounded RL.} \citet{lu2021bitbybit} cast capacity in bits; \citet{arumugam2024capacity} build $K_E$-bounded rate-distortion posteriors with within-capacity targets analogous to $f^{K_L}$, the closest prior work. \textbf{Bayes-adaptive / universal RL.} \citet{guez2012bamcp,lidayan2025bampf,hutter2005aixi}. \textbf{Regret, calibration, certification.} OFU \citep{jaksch2010ucrl2,auer2002ucb}, PAC-MDP \citep{strehl2009pacmdp}, calibration \citep{foster1998calibration}, KWIK \citep{li2011kwik}, non-stationary regret \citep{wei2021master}, hindsight rationality \citep{morrill2021hindsight}. Across these the evaluator is external or fused with the policy; we make it an explicit, capacity-bounded module and ask what its self-report can be worth.
+\textbf{Foundations and bounded rationality.} \citet{abel2023definition,abel2024dogmas,abel2020bounded} define and develop CRL and the bounded-rationality view; bounded optimality \citep{russell1995bounded}, computational rationality \citep{lewis2014computational}, and resource-rational analysis \citep{lieder2020resource} motivate judging a bounded agent against its own resources, our comparator $f^{K_L}$. \textbf{Big-world hypothesis.} \citet{javed2025bigworld,lewandowski2025bigger}. \textbf{Learning progress.} \citet{schmidhuber2010formal,oudeyer2007intrinsic} give self-assessed drives; $\rho_t$ is a value-unit relative with a soundness target. \textbf{Capacity-bounded and Bayes-adaptive RL.} \citet{lu2021bitbybit} cast capacity in bits; \citet{arumugam2024capacity} build capacity-bounded posteriors with within-capacity targets, the closest prior work; BAMDP and AIXI \citep{guez2012bamcp,lidayan2025bampf,hutter2005aixi} supply the model-class examiner and its idealized limit. \textbf{Regret, calibration, certification.} Confidence-bound and PAC analyses \citep{jaksch2010ucrl2,auer2002ucb,strehl2009pacmdp}, calibration \citep{foster1998calibration}, KWIK's ``knows what it knows'' \citep{li2011kwik}, non-stationary regret \citep{wei2021master}, and hindsight rationality \citep{morrill2021hindsight} all bear on honest self-assessment; across them the evaluator is external or fused with the policy, whereas we make it an explicit, biased, capacity-bounded module and ask what its self-report is worth.
 
 \section{Discussion}
 \label{sec:discussion}
 
-We have argued that continual reinforcement learning has no external examiner, so the regret that matters is what a bounded internal examiner can certify, and that this self-evaluation is governed by coverage: tight when experience covers the world (Proposition~\ref{prop:bandit}), and unavoidably costly when the world outruns experience (Theorem~\ref{thm:price}), with the empty self-report ruled out by soundness (Proposition~\ref{prop:nothing}). The picture turns evaluation in CRL into a budgeting problem between acting and judging, and the object is directly estimable as a learning-progress and comparison signal. We claim no new algorithm or rate; the contribution is the position and a lower bound that gives it teeth, and the questions it sharpens, foremost how a well-designed joint agent should split its bits between acting and judging when neither can be made complete.
+Continual reinforcement learning has no examiner standing outside the agent, so the regret that matters is the one a bounded internal examiner can certify. We have argued, and made precise, that such self-evaluation is meaningful only under a soundness condition, that meeting it forces the examiner to be the more strongly biased module because judging counterfactuals needs a world model, and that in a big world this is never free: a small, trustworthy self-report demands either coverage the horizon does not allow or a prior the agent cannot verify. The picture turns evaluation in CRL into a budgeting problem between acting and judging, gives a directly estimable learning-progress and comparison signal, and warns against trusting an agent that reports it has finished learning. We claim no new algorithm or rate; the contribution is the position, a definition that carries it, and a lower bound that shows the price is real.
 
 \bibliography{main}
 \bibliographystyle{rlj}
