@@ -43,9 +43,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Meta-data (cover page) -- [TODO] tags mark items to finalize
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{[TODO: finalize title] Examiner Regret: Capacity-Constrained Self-Evaluation of Learning in Big Worlds}
+\title{TODO}
 
-\setrunningtitle{[TODO] Examiner Regret}
+\setrunningtitle{TODO}
 
 \author{Anonymous Authors\textsuperscript{1}}
 
@@ -55,32 +55,11 @@
 $^{1}$\textbf{Anonymous Institution}
 }
 
-\contribution{
-    \textbf{[TODO: review]} We define \emph{examiner regret}, an \emph{intrinsic} measure of learning that an agent computes from its own internal state, with no reference to an environment-supplied optimum. The agent is split into a \emph{learner} that acts and an \emph{examiner} that forecasts an aspiration and a guarantee on its own value, each holding a separate capacity budget in bits.
-    }
-    {
-    Examiner regret is defined without the true value (Definition~\ref{def:exreg}); the link to environment regret is a separate, conditional property (Theorem~\ref{thm:bridge}), not part of the definition.
-    }
+\contribution{TODO}{None}
 
-\contribution{
-    \textbf{[TODO: review]} We show that, when the examiner is \emph{sound}, examiner regret upper-bounds the agent's regret \emph{against the best policy it could itself represent} (the capacity-constrained optimum), with the irreducible structural gap to the global optimum displayed explicitly rather than hidden.
-    }
-    {
-    The bound (Theorem~\ref{thm:bridge}) targets the within-capacity optimum, not the global $V^{*}$; this is what a capacity-bounded agent can attain, in the sense of resource-rational and bounded-optimal analyses \citep{russell1995bounded,lieder2020resource}.
-    }
+\keywords{TODO}
 
-\contribution{
-    \textbf{[TODO: review]} We prove a separation: in a big world, no examiner of bounded capacity can drive examiner regret to zero while remaining sound, so self-certification of ``learning complete'' is impossible. The binding constraints are the learner's exploration and the examiner's capacity, exposing the allocation $K = K_L + K_E$ as a foundational question for continual RL.
-    }
-    {
-    The separation (Theorem~\ref{thm:ignorance}) is proved as an exact-indistinguishability result over a bandit family and holds for randomized examiners by coupling.
-    }
-
-\keywords{[TODO: finalize] continual reinforcement learning, regret, capacity-bounded agents, big-world hypothesis, self-evaluation, intrinsic motivation.}
-
-\summary{
-\textbf{[TODO: finalize summary.]} The best continual-learning agents never stop learning \citep{abel2023definition}, yet our standard yardstick, regret, presumes a fixed external optimum the agent can be measured against. Under the big-world hypothesis the agent is far smaller than its world, and that optimum is neither available nor, for a bounded agent, attainable. We take the opposite starting point: we define a measure of learning the agent computes about \emph{itself}. Splitting the agent into a learner that acts and an examiner that forecasts an aspiration $\Vhi_t$ and a guarantee $\Vlow_t$ on its own value, with separate bit budgets $K_L$ and $K_E$, we call the gap $\rho_t = \Vhi_t - \Vlow_t$ the \emph{examiner regret}. We study $\rho_t$ as an object in its own right, show that a \emph{sound} examiner's $\rho_t$ certifies the agent's regret against the best policy it could represent, and prove that in a big world no bounded examiner can honestly drive $\rho_t$ to zero. The contribution is a capacity-constrained, intrinsic notion of regret and the foundational question it raises: how should an agent split its bits between acting and judging?
-}
+\summary{TODO}
 
 \begin{document}
 
@@ -88,7 +67,7 @@ $^{1}$\textbf{Anonymous Institution}
 \maketitle
 
 \begin{abstract}
-\textbf{[TODO: finalize abstract.]} Regret measures learning against an optimum that, in every standard formulation, is supplied from outside the agent. Continual reinforcement learning under the big-world hypothesis denies the agent this object: the world is larger than the agent can represent, and the best agents never stop learning \citep{abel2023definition}. We propose \emph{examiner regret}, an intrinsic and capacity-constrained measure of learning. The agent is decomposed into a \emph{learner} that selects actions, holding $K_L$ bits, and an \emph{examiner} that forecasts an aspiration $\Vhi_t$ and a guarantee $\Vlow_t$ on the learner's value, holding $K_E$ bits; examiner regret is $\rho_t = \Vhi_t - \Vlow_t$, defined entirely from the agent's internal state. We treat $\rho_t$ as the primary object: we establish its intrinsic properties (Proposition~\ref{prop:intrinsic}), show that a \emph{sound} examiner's $\rho_t$ upper-bounds the agent's regret against the best policy it could itself represent while displaying the irreducible structural gap to the global optimum (Theorem~\ref{thm:bridge}), recover the classical $O(\sqrt{KT\log T})$ bandit rate as a special case, and prove that in a big world no bounded examiner can honestly drive $\rho_t$ to zero (Theorem~\ref{thm:ignorance}). The contribution is conceptual: an intrinsic, capacity-aware notion of regret that frames evaluation in continual RL as a problem of allocating bits between acting and judging.
+TODO
 \end{abstract}
 
 \section{Introduction}
