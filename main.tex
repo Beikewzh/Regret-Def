@@ -41,9 +41,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Meta-data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{Examiner Regret: Measuring Learning From the Inside in Big-World Continual Reinforcement Learning}
+\title{[TODO: finalize title] Examiner Regret: Measuring Learning From the Inside in Big-World Continual Reinforcement Learning}
 
-\setrunningtitle{Examiner Regret}
+\setrunningtitle{[TODO] Examiner Regret}
 
 \author{Anonymous Authors\textsuperscript{1}}
 
@@ -54,44 +54,40 @@ $^{1}$\textbf{Anonymous Institution}
 }
 
 \contribution{
-    We introduce \emph{examiner regret}, a regret notion defined purely from an agent's internal state, by decomposing the agent into a \emph{learner} (which acts) and an \emph{examiner} (which forecasts value bounds) with separate capacity budgets; we prove it upper-bounds true dynamic regret whenever the examiner is calibrated and consistent.
+    \textbf{[TODO: review]} We introduce \emph{examiner regret}, a regret notion defined purely from an agent's internal state, by decomposing the agent into a \emph{learner} (which acts) and an \emph{examiner} (which forecasts value bounds) with separate capacity budgets; we prove it upper-bounds true dynamic regret whenever the examiner is calibrated and consistent.
     }
     {
     The decomposition (Theorem~\ref{thm:master}) is an elementary identity; its value is conceptual, in making the acting/judging split and its capacity cost explicit.
     }
 
 \contribution{
-    We show that a single canonical examiner, the Bayesian posterior over a model class, specializes to UCB, PAC-MDP, BAMDP, and capacity-limited Bayesian RL, so existing regret notions are computable approximations of one object rather than separate definitions; we work the stochastic-bandit case in full and recover the classical $O(\sqrt{KT\log T})$ bound.
+    \textbf{[TODO: review]} We show that a single canonical examiner, the Bayesian posterior over a model class, specializes to UCB, PAC-MDP, BAMDP, and capacity-limited Bayesian RL, so existing regret notions are computable approximations of one object rather than separate definitions; we work the stochastic-bandit case in full and recover the classical $O(\sqrt{KT\log T})$ bound.
     }
     {
     The recovered bounds are not new; we re-derive them inside the framework to demonstrate non-vacuity.
     }
 
 \contribution{
-    We delimit when the bound provably collapses (Theorem~\ref{thm:ignorance}) and argue that in big worlds the binding constraints are the learner's exploration and the examiner's \emph{capacity}, not algorithmic cleverness, exposing capacity allocation $K=K_L+K_E$ as a foundational question for continual RL.
+    \textbf{[TODO: review]} We delimit when the bound provably collapses (Theorem~\ref{thm:ignorance}) and argue that in big worlds the binding constraints are the learner's exploration and the examiner's \emph{capacity}, not algorithmic cleverness, exposing capacity allocation $K=K_L+K_E$ as a foundational question for continual RL.
     }
     {
     The collapse (``contented ignorance'') is proved as an exact-indistinguishability result over a bandit family.
     }
 
-\keywords{continual reinforcement learning, regret, big-world hypothesis, capacity-bounded agents, evaluation.}
+\keywords{[TODO: finalize] continual reinforcement learning, regret, big-world hypothesis, capacity-bounded agents, evaluation.}
 
 \summary{
-Regret is the standard yardstick of learning, but every existing notion is defined against an environment-supplied optimum $V^{*}$ that must be specified externally. Under the big-world hypothesis (where the agent is far smaller than its world and, following the continual-RL view of \citet{abel2023definition}, never stops learning), no such external optimum is available, and standard regret is undefined or uncomputable. We propose \emph{examiner regret}: split the agent into a learner that acts and an examiner that forecasts an upper and a lower bound on policy value, each carrying a capacity budget in bits, and define regret as the gap between the two bounds. We show this gap upper-bounds true dynamic regret when the examiner is calibrated and consistent, that it recovers UCB, PAC-MDP, and Bayes-adaptive regret as instances of one posterior construction, and that in arbitrary big worlds it provably degrades to a diagnostic rather than a certificate. The contribution is a language that makes the split between acting and judging explicit and exposes capacity allocation as a foundational object for continual RL.
+\textbf{[TODO: finalize summary.]} Regret is the standard yardstick of learning, but every existing notion is defined against an environment-supplied optimum $V^{*}$ that must be specified externally. Under the big-world hypothesis (where the agent is far smaller than its world and, following the continual-RL view of \citet{abel2023definition}, never stops learning), no such external optimum is available, and standard regret is undefined or uncomputable. We propose \emph{examiner regret}: split the agent into a learner that acts and an examiner that forecasts an upper and a lower bound on policy value, each carrying a capacity budget in bits, and define regret as the gap between the two bounds. We show this gap upper-bounds true dynamic regret when the examiner is calibrated and consistent, that it recovers UCB, PAC-MDP, and Bayes-adaptive regret as instances of one posterior construction, and that in arbitrary big worlds it provably degrades to a diagnostic rather than a certificate. The contribution is a language that makes the split between acting and judging explicit and exposes capacity allocation as a foundational object for continual RL.
 }
 
 \begin{document}
 
-% NOTE: cover page, title, and abstract temporarily disabled for drafting.
-% To restore: uncomment \makeCover, \maketitle, and the abstract block below.
-%\makeCover
-%\maketitle
+\makeCover
+\maketitle
 
-\iffalse
 \begin{abstract}
-Regret measures learning by comparing an agent to an optimum $V^{*}$ that, in every standard formulation, is supplied from outside the agent through a model, a prior, or a fixed comparator class. The big-world hypothesis underlying continual reinforcement learning denies the agent any such external object: the world is far larger than the agent, and the best agents never stop learning. We propose \emph{examiner regret}, a regret defined entirely from the agent's internal state. We split the agent into a \emph{learner}, which selects actions, and an \emph{examiner}, which forecasts an upper bound and a lower bound on policy value; each module carries a separate capacity budget in bits. Examiner regret is the gap between the two bounds. We prove a master inequality (Theorem~\ref{thm:master}) showing that examiner regret upper-bounds true dynamic regret whenever the examiner is calibrated and consistent; we identify a single canonical examiner, the Bayesian posterior over a model class, of which UCB, PAC-MDP, and Bayes-adaptive regret are computable approximations; and we work the stochastic-bandit case in full, recovering the classical $O(\sqrt{KT\log T})$ rate. Outside structured settings the bound provably collapses, and we argue that in big worlds the binding constraints are the learner's exploration and the examiner's capacity rather than algorithmic cleverness. The contribution is conceptual: a language that makes the acting/judging split explicit and exposes capacity allocation, $K = K_L + K_E$, as foundational for continual RL.
+\textbf{[TODO: finalize abstract.]} Regret measures learning by comparing an agent to an optimum $V^{*}$ that, in every standard formulation, is supplied from outside the agent through a model, a prior, or a fixed comparator class. The big-world hypothesis underlying continual reinforcement learning denies the agent any such external object: the world is far larger than the agent, and the best agents never stop learning. We propose \emph{examiner regret}, a regret defined entirely from the agent's internal state. We split the agent into a \emph{learner}, which selects actions, and an \emph{examiner}, which forecasts an upper bound and a lower bound on policy value; each module carries a separate capacity budget in bits. Examiner regret is the gap between the two bounds. We prove a master inequality (Theorem~\ref{thm:master}) showing that examiner regret upper-bounds true dynamic regret whenever the examiner is calibrated and consistent; we identify a single canonical examiner, the Bayesian posterior over a model class, of which UCB, PAC-MDP, and Bayes-adaptive regret are computable approximations; and we work the stochastic-bandit case in full, recovering the classical $O(\sqrt{KT\log T})$ rate. Outside structured settings the bound provably collapses, and we argue that in big worlds the binding constraints are the learner's exploration and the examiner's capacity rather than algorithmic cleverness. The contribution is conceptual: a language that makes the acting/judging split explicit and exposes capacity allocation, $K = K_L + K_E$, as foundational for continual RL.
 \end{abstract}
-\fi
 
 \section{Introduction}
 \label{sec:intro}
