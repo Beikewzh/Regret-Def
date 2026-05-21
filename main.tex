@@ -1,369 +1,293 @@
 % RLJ main.tex Version 2026.1
-
 \documentclass[10pt]{article} % For LaTeX2e
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% AUTHOR: Select ONE option:
-%      [accepted]{rlj} --> for camera ready (after peer review, if accepted)
-%      {rlj}           --> for submission
-%      [preprint]{rlj} --> to de-anonymize and remove references to RLJ/RLC
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{rlj}           % Should be uncommented for submission
 %\usepackage[accepted]{rlj} % Should be uncommented for the camera-ready
 %\usepackage[preprint]{rlj} % Should be uncommented for preprint versions
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% WARNING: The following packages are already included in the
-%          rlj.sty style file:
-%
-%  1. fancyhdr  - For controlling header/footers
-%  2. natbib    - For formatting the bibliography
-%  3. enumitem  - To customize the appearance of lists
-%  4. fontenc (with option [T1]) - Allows for proper hyphenation and accents
-%  5. times     - Times new roman font
-%  6. ragged2e  - Used to justify text
-%  7. tcolorbox - Used to create boxes on cover page
-%  8. hyperref  - Configures hyperlinks throughout (e.g., links to references)
-%  9. xcolor    - Used to define custom colors for links and boxes
-%  10. amsmath  - Not used, but conflicts with lineno, so we include (and patch) it for authors
-%  11. etoolbox - Included in the amsmath + lineno patch
-%  12. lineno   - For adding line numbers when in submission
-%
-% You do not need to include them again in your main.tex.
-% Including them again may lead to conflicts or compilation errors.
-% Additionally, avoid loading packages that might conflict with these.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Recommended (but not required) packages
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{amssymb}            % Defines common symbols like \mathbb R
-\usepackage{mathtools}          % Extends amsmath, providing common math tools
-\usepackage{mathrsfs}           % Enables \mathscr, which can work in cases that \mathcal does not
-%\mathtoolsset{showonlyrefs}     % Only number equations that are referenced (optional)
+\usepackage{mathtools}          % Extends amsmath
+\usepackage{amsthm}             % Theorem environments
+\usepackage{mathrsfs}           % Enables \mathscr
 \usepackage{graphicx}           % For including images
-\usepackage{subcaption}         % Allows for the use of subfigures and subcaptions
-\usepackage[space]{grffile}     % For spaces in image names
+\usepackage{booktabs}           % Nicer tables
 \usepackage{url}                % For displaying URLs
-\usepackage{lipsum}             % For placeholder text
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% AUTHOR: Fill in the following meta-data
+% Theorem environments and macros
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
 
-% Enter the title of your paper:
-\title{Formatting Instructions for RLJ/RLC Submissions}
+\newcommand{\Ex}{\mathbb{E}}
+\newcommand{\Hist}{\mathcal{H}}
+\newcommand{\Acts}{\mathcal{A}}
+\newcommand{\States}{\mathcal{S}}
+\newcommand{\Models}{\mathcal{M}}
+\newcommand{\Refclass}{\Pi_{\mathrm{ref}}}
+\newcommand{\Vlow}{V^{\mathrm{low}}}
+\newcommand{\Vhi}{\smash{\tilde V}^{*}}
+\newcommand{\DynReg}{\mathrm{DynReg}}
+\newcommand{\Rex}{\mathcal{R}^{\mathrm{ex}}}
+\newcommand{\Rmax}{R_{\max}}
 
-% The "running title" will be displayed in the header on every-other page.
-% It is typically either the same as the title or a shorter version of the title.
-% Enter your running title here:
-\setrunningtitle{Enter Your Running Title Here}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Meta-data
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Examiner Regret: Measuring Learning From the Inside in Big-World Continual Reinforcement Learning}
 
-% WARNING: Authors must not appear in the submitted version. They should be hidden
-% as long as the rlj package is used without the [accepted] or [preprint] options.
-% Non-anonymous submissions will be rejected without review.
+\setrunningtitle{Examiner Regret}
 
-% Enter the author names below. 
-% NOTE: Denote affiliations using superscripts as in the provided example.
-% NOTE: Use \textscript{1,2,3} instead of $^{1,2,3}$.
-%       - Failure to do so will cause affiliation superscripts to appear on the cover page for camera-ready and preprint versions.
-\author{Marlos C. Machado\textsuperscript{1,2,3,$\dagger$}, Philip S. Thomas\textsuperscript{4,$\dagger$}, Lorem Ipsum\textsuperscript{4}}
+\author{Anonymous Authors\textsuperscript{1}}
 
-% NOTE: For camera-ready and preprint versions, the cover page includes author names but not affiliations.
-% It automatically removes the superscripts for affiliations.
-% If the automatic process breaks (e.g., if an author name should include a superscript), you can manually define the author string to appear on the cover page by uncommenting the following line.
-%\coverPageAuthor{Marlos C. Machado, Philip S. Thomas, Lorem Ipsum}
+\emails{anon@example.com}
 
-% Author emails, which can be clustered if they have shared endings as in this example
-\emails{machado@ualberta.ca, \ \{pthomas,lipsum\}@cs.umass.edu}
-
-% Author affiliations, in the order the occur
-% The inclusion of state/province, etc. is optional.
-% The inclusion of multiple affiliations is optional.
-%   - List multiple affiliations with comma-separated numbers as in the example.
 \affiliations{
-$^{1}$\textbf{Department of Computing Science, University of Alberta, Canada}\\
-$^{2}$\textbf{Alberta Machine Intelligence Institute (Amii)}\\
-$^{3}$\textbf{CIFAR AI Chair}\\
-$^{4}$\textbf{Manning College of Information and Computer Sciences, University of Massachusetts}
-% The following two lines are optional and can be commented out
-\par % If including additional comments like below, use \par to add some whitespace. 
-$^\dagger$ Additional comments can be added like this, e.g., indicating equal contribution
+$^{1}$\textbf{Anonymous Institution}
 }
 
 \contribution{
-    % Contribution
-    Provide a succinct but precise list of the contribution(s) of the paper. Use contextual notes to avoid implications of contributions more significant than intended and to clarify and situate the contribution relative to prior work (see the examples below). If there is no additional context, enter ``None''. Try to keep each contribution to a single sentence, although multiple sentences are allowed when necessary. If using complete sentences, include punctuation. If using a single sentence fragment, you may omit the concluding period. A single contribution can be sufficient, and there is no limit on the number of contributions. Submissions will be judged mostly on the contributions claimed on their cover pages and the evidence provided to support them. Major contributions should not be claimed in the main text if they do not appear on the cover page. Overclaiming can lead to a submission being rejected, so it is important to have well-scoped contribution statements on the cover page.
+    We introduce \emph{examiner regret}, a regret notion defined purely from an agent's internal state, by decomposing the agent into a \emph{learner} (which acts) and an \emph{examiner} (which forecasts value bounds) with separate capacity budgets; we prove it upper-bounds true dynamic regret whenever the examiner is calibrated and consistent.
     }
     {
-    % Caveat:
-    None
+    The decomposition (Theorem~\ref{thm:master}) is an elementary identity; its value is conceptual, in making the acting/judging split and its capacity cost explicit.
     }
 
 \contribution{
-    % Contribution
-    The submission template for submissions to RLJ/RLC 2026
+    We show that a single canonical examiner---the Bayesian posterior over a model class---specializes to UCB, PAC-MDP, BAMDP, and capacity-limited Bayesian RL, so existing regret notions are computable approximations of one object rather than separate definitions; we work the stochastic-bandit case in full and recover the classical $O(\sqrt{KT\log T})$ bound.
     }
     {
-    % Caveat:
-    Built from previous RLC/RLJ, ICLR, and TMLR submission templates
+    The recovered bounds are not new; we re-derive them inside the framework to demonstrate non-vacuity.
     }
 
 \contribution{
-    % Contribution
-    \textit{{[}Example of one contribution and corresponding contextual note for the paper ``Policy gradient methods for reinforcement learning with function approximation'' \citep{Sutton2000}.]}\\ This paper presents an expression for the policy gradient when using function approximation to represent the action-value function.
+    We delimit when the bound provably collapses (Proposition~\ref{prop:ignorance}) and argue that in big worlds the examiner's \emph{capacity}, not the learner's algorithm, is the binding constraint, exposing capacity allocation $K=K_L+K_E$ as a foundational question for continual RL.
     }
     {
-    % Context:
-    Prior work established expressions for the policy gradient without function approximation \citep{Williams1992}.
+    The collapse (``contented ignorance'') is proved for deterministic examiners; the stochastic case is conjectured.
     }
 
-% Include a list of keywords for the topic of the paper:
-\keywords{RLJ, RLC, formatting guide, style file, \LaTeX~template.} % Your keywords
+\keywords{continual reinforcement learning, regret, big-world hypothesis, capacity-bounded agents, evaluation.}
 
-% Define the summary that appears on the cover page.
-\summary{The summary appears on the cover page. Although it can be identical to the abstract, it does not have to be. One might choose to omit the stated contributions in the Summary, given that they will be stated in the box below. The original abstract may also be extended to two paragraphs. The authors should ensure that the contents of the cover page fit entirely on a single page. The cover page does \textbf{not} count towards the 8--12 page limit.
-
-\lipsum[1]
+\summary{
+Regret is the standard yardstick of learning, but every existing notion is defined against an environment-supplied optimum $V^{*}$ that must be specified externally. Under the big-world hypothesis---where the agent is far smaller than its world and, as in the continual-RL view of \citet{abel2023definition}, never stops learning---no such external optimum is available, and standard regret is undefined or uncomputable. We propose \emph{examiner regret}: split the agent into a learner that acts and an examiner that forecasts an upper and a lower bound on policy value, each carrying a capacity budget in bits, and define regret as the gap between the two bounds. We show this gap upper-bounds true dynamic regret when the examiner is calibrated and consistent, that it recovers UCB, PAC-MDP, and Bayes-adaptive regret as instances of one posterior construction, and that in arbitrary big worlds it provably degrades to a diagnostic rather than a certificate. The contribution is a language that makes the split between acting and judging explicit and exposes capacity allocation as a foundational object for continual RL.
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Begin document, create title and abstract
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
-\makeCover  % Create the cover page
-\maketitle  % Make the title section
+\makeCover
+\maketitle
 
 \begin{abstract}
-The abstract paragraph should be indented 1/2~inch on both left and right-hand margins. Use 10~point type, with a vertical spacing of 11~points. The word ``Abstract'' must be centered, in bold, and in point size 12. Two line spaces precede the abstract. The abstract must be limited to one paragraph.
+Regret measures learning by comparing an agent to an optimum $V^{*}$ that, in every standard formulation, is supplied from outside the agent through a model, a prior, or a fixed comparator class. The big-world hypothesis underlying continual reinforcement learning denies the agent any such external object: the world is far larger than the agent, and the best agents never stop learning. We propose \emph{examiner regret}, a regret defined entirely from the agent's internal state. We split the agent into a \emph{learner}, which selects actions, and an \emph{examiner}, which forecasts an upper bound and a lower bound on policy value; each module carries a separate capacity budget in bits. Examiner regret is the gap between the two bounds. We prove a master inequality (Theorem~\ref{thm:master}) showing that examiner regret upper-bounds true dynamic regret whenever the examiner is calibrated and consistent; we identify a single canonical examiner---the Bayesian posterior over a model class---of which UCB, PAC-MDP, and Bayes-adaptive regret are computable approximations; and we work the stochastic-bandit case in full, recovering the classical $O(\sqrt{KT\log T})$ rate. Outside structured settings the bound provably collapses, and we argue that in big worlds the binding constraint is the examiner's capacity, not the learner's algorithm. The contribution is conceptual: a language that makes the acting/judging split explicit and exposes capacity allocation, $K = K_L + K_E$, as foundational for continual RL.
 \end{abstract}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Section: Submission of papers to RLJ/RLC
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Submission of papers to RLJ/RLC}
-\label{sec:submission}
+\section{Introduction}
+\label{sec:intro}
 
-RLJ/RLC requires electronic submissions, processed by \url{https://openreview.net/}. See RLC's website for more instructions.
+Continual reinforcement learning (CRL) studies agents that learn in open-ended, evolving environments rather than converging to a fixed solution. \citet{abel2023definition} make this precise: CRL is the setting in which \emph{the best agents never stop learning}, in contrast to the classical view in which an agent's goal is to identify, once and for all, a policy maximizing long-run reward. This shift is motivated by the \emph{big-world hypothesis}~\citep{javed2025bigworld,lewandowski2025bigger}: even a stationary world can be effectively non-stationary to an agent whose representational capacity is far smaller than the world's complexity, so the agent must continually adapt.
 
-Fur submissions, use no options with the {\tt rlj} package to adjust the format for submission requirements, as follows:
-\begin{center}  
-    {\tt {\textbackslash}usepackage\{rlj\}}. 
-\end{center}
-If your paper is ultimately accepted, use option {\tt accepted} with the {\tt rlj} package to adjust the format to the camera ready requirements, as follows:
-\begin{center}  
-    {\tt {\textbackslash}usepackage[accepted]\{rlj\}}. 
-\end{center}
-To de-anonymize and remove mentions to RLJ/RLC (for example for posting to preprint servers), use the preprint option, as in 
+The principal instrument for certifying that an agent is learning is \emph{regret}, the cumulative gap between the agent's return and that of an optimal comparator. Yet every standard regret notion supplies its optimum from outside the agent. Expected regret $\sum_t (V^{*}-V^{\pi_t})$ requires a Markov decision process (MDP) with a well-defined $V^{*}$. Adversarial and hindsight regret require a comparator class $\Pi$ fixed in advance~\citep{morrill2021hindsight}. Bayesian regret requires a prior over models~\citep{russo2017ids}. Dynamic regret requires a known or estimable variation budget~\citep{wei2021master}. In each case the optimum is an external object the agent is measured against but cannot itself access.
+
+This is exactly what a big world denies. If the world is larger than the agent can represent and the agent never stops learning, then a fixed $V^{*}$ is either undefined (the comparator depends on the unbounded future of the stream) or uncomputable (it requires a model the agent cannot hold). The community's foundational definition of CRL embraces never-stopping learning~\citep{abel2023definition,abel2024dogmas}, but the standard yardstick for it still presumes a stopping point. We see this as a gap: \emph{we lack a notion of regret that an agent embedded in a big world could, even in principle, evaluate about itself.}
+
+\paragraph{Present study.}
+We propose measuring learning from the inside. We decompose the agent into two modules with disjoint capacity budgets: a \emph{learner} $\mathcal{L}$ that selects actions, and an \emph{examiner} $\mathcal{E}$ that forecasts an upper bound $\Vhi_t$ and a lower bound $\Vlow_t$ on policy value. \emph{Examiner regret} is $\rho_t := \Vhi_t - \Vlow_t$, the agent's own estimate of the gap between the best it believes achievable and what it believes it currently achieves. Our contributions are: (i) a definition of examiner regret and a master inequality (Theorem~\ref{thm:master}) showing $\rho_t$ upper-bounds true dynamic regret whenever the examiner is calibrated and consistent; (ii) a single canonical examiner---the Bayesian posterior over a model class---of which UCB, PAC-MDP, BAMDP, and capacity-limited Bayesian RL are computable approximations, demonstrated by working the bandit case in full (Section~\ref{sec:bandit}); and (iii) a delimitation of when the bound collapses (Proposition~\ref{prop:ignorance}), with the consequence that in big worlds the binding constraint is examiner \emph{capacity}, exposing the allocation $K = K_L + K_E$ as a foundational question. We make no claim to a new algorithm or a tight bound beyond prior work; the contribution is a language for thinking about evaluation in CRL.
+
+\section{Setting and Definitions}
+\label{sec:defs}
+
+\paragraph{Setting.} An agent interacts with an environment over a single, never-resetting stream. We make no MDP, POMDP, or stationarity assumption; this is the big-world regime. Rewards are bounded, $r_t \in [0, \Rmax]$, and we measure value over a look-ahead window of $H$ steps. We seek a \emph{definition} of regret computable from the agent's internal state, together with the conditions under which it certifies learning.
+
+\begin{definition}[Stream and history]
+\label{def:stream}
+A \emph{stream} is a sequence $\{(o_t, r_t, a_t)\}_{t \ge 0}$ of observations $o_t \in \mathcal{O}$, rewards $r_t \in [0,\Rmax]$, and actions $a_t \in \Acts$. The \emph{history} at time $t$ is $h_t := (o_0, r_0, a_1, \dots, a_t, o_t, r_t)$, and $\Hist_t$ is the set of histories of length $t$. By the Ionescu--Tulcea theorem the conditional kernels extend to a measure $\mu$ on $(\mathcal{O}\times\mathbb{R}\times\Acts)^{\infty}$.
+\end{definition}
+
+\begin{definition}[Policy and value]
+\label{def:value}
+A \emph{policy} is a map $\pi : \Hist \to \Delta(\Acts)$. Its \emph{value} at $h_t$ is
+\begin{equation}
+\label{eq:value}
+f^{\pi}_t \;:=\; \Ex_{\mu, \pi}\!\left[\, \sum_{s=t+1}^{t+H} r_s \;\middle|\; h_t \right],
+\end{equation}
+the expectation taken over the environment's randomness and the policy's internal randomness, conditional on $h_t$.
+\end{definition}
+
+\begin{definition}[Reference class and reference optimum]
+\label{def:ref}
+A \emph{reference class} $\Refclass \subseteq \{\pi : \Hist \to \Delta(\Acts)\}$ fixes the comparator. The \emph{reference optimum} is $f^{*}_t := \sup_{\pi \in \Refclass} f^{\pi}_t$.
+\end{definition}
+
+The choice of $\Refclass$ \emph{is} the choice of what counts as learning: constant-action policies (bandit regret), stationary policies (MDP regret), policies expressible in $K_L$ bits (capacity-bounded regret), or behavioural deviations of the current policy (hindsight rationality~\citep{morrill2021hindsight}).
+
+\begin{definition}[Learner--examiner agent]
+\label{def:agent}
+An \emph{agent} is a pair $\mathcal{A} = (\mathcal{L}, \mathcal{E})$. The \emph{learner} $\mathcal{L} : \Hist_t \to \Delta(\Acts)$ emits the policy $\pi_t$ and is parametrized in $\Theta_L$ with $|\Theta_L| \le 2^{K_L}$. The \emph{examiner} $\mathcal{E} = (U, L)$, with $U, L : \Hist_t \to \mathbb{R}$, emits the ceiling $\Vhi_t := U(h_t)$ and floor $\Vlow_t := L(h_t)$, and is parametrized in $\Theta_E$ with $|\Theta_E| \le 2^{K_E}$. The \emph{total capacity} is $K := K_L + K_E$ bits. The two modules have disjoint codomains: the learner emits actions, the examiner emits value bounds.
+\end{definition}
+
+\begin{definition}[Examiner regret]
+\label{def:exreg}
+$\rho_t := \Vhi_t - \Vlow_t$, with cumulative form $\Rex_T := \sum_{t=1}^{T}\rho_t$.
+\end{definition}
+
+\begin{definition}[Calibrated and consistent examiner]
+\label{def:calib}
+The examiner is \emph{$(\delta_t,\eta)$-calibrated} on $[1,T]$ if, with probability at least $1-\eta$, for all $t \le T$,
+\begin{align}
+\text{(C1)}\quad & \Vlow_t \le f^{\pi_t}_t, &
+\text{(C2)}\quad & \Vhi_t \ge f^{*}_t - \delta_t, \quad \delta_t \ge 0, \label{eq:calib}
+\end{align}
+and \emph{consistent} if, in addition, (C3) $\Gamma_T := \sum_{t=1}^{T}\delta_t = o(T)$.
+\end{definition}
+
+Condition (C3) is essential. Without it, the trivial examiner $\Vhi_t = \Rmax H$, $\Vlow_t = 0$ satisfies (C1)--(C2) yet carries no information; its slack is $\delta_t = \Theta(1)$, so $\Gamma_T = \Theta(T)$ and (C3) excludes it. Requiring (C3) forces $\rho_t$ to track genuine learning rather than constant ignorance.
+
+\paragraph{The canonical examiner.}
+Definitions~\ref{def:agent}--\ref{def:calib} say \emph{what} an examiner must satisfy, not \emph{how} to build one. There is one canonical construction. Let $\nu_t \in \Delta(\Models)$ be a posterior over a model class $\Models$, updated from $h_t$, and set
+\begin{equation}
+\label{eq:canonical}
+\Vhi_t = \Ex_{M \sim \nu_t}\!\big[V^{*}_M\big], \qquad \Vlow_t = \Ex_{M \sim \nu_t}\!\big[V^{\pi_t}_M\big].
+\end{equation}
+Then $\rho_t = \Ex_{M\sim\nu_t}[V^{*}_M - V^{\pi_t}_M]$ is the posterior value gap. Every computable examiner below is an approximation of \eqref{eq:canonical} under a particular $\Models$ and a tractable surrogate for $\nu_t$. The framework is therefore not a catalogue of unrelated estimators: it is one object with many approximations.
+
+\section{The Master Inequality}
+\label{sec:master}
+
+\begin{theorem}[Examiner regret decomposition]
+\label{thm:master}
+Let $\mathcal{A} = (\mathcal{L},\mathcal{E})$ act on a stream with reference class $\Refclass$, and let $\mathcal{E}$ be $(\delta_t,\eta)$-calibrated on $[1,T]$. Then with probability at least $1-2\eta$,
+\begin{equation}
+\label{eq:master}
+\DynReg_T \;:=\; \sum_{t=1}^{T}\big(f^{*}_t - f^{\pi_t}_t\big) \;\le\; \Rex_T + \Gamma_T.
+\end{equation}
+If $\mathcal{E}$ is also consistent (C3), then $\DynReg_T \le \Rex_T + o(T)$.
+\end{theorem}
+
+\begin{proof}
+\emph{Step 1 (identity).} For each $t$, insert and cancel the two examiner outputs:
+\begin{equation*}
+f^{*}_t - f^{\pi_t}_t = \underbrace{\big(f^{*}_t - \Vhi_t\big)}_{\text{(i)}} + \underbrace{\big(\Vhi_t - \Vlow_t\big)}_{\text{(ii)}} + \underbrace{\big(\Vlow_t - f^{\pi_t}_t\big)}_{\text{(iii)}}.
+\end{equation*}
+This is an algebraic identity; the inserted $\Vhi_t$ and $\Vlow_t$ cancel.
+
+\emph{Step 2 (bound each term).} On the event that (C1) and (C2) hold: term (i) $\le \delta_t$ by (C2); term (ii) $= \rho_t$ by Definition~\ref{def:exreg}; term (iii) $\le 0$ by (C1). Hence $f^{*}_t - f^{\pi_t}_t \le \delta_t + \rho_t$.
+
+\emph{Step 3 (sum, union bound).} Summing over $t = 1,\dots,T$ gives $\DynReg_T \le \Gamma_T + \Rex_T$ on the joint event. By Definition~\ref{def:calib} the joint event of (C1) and (C2) holds with probability at least $1-2\eta$ (union bound over the two events). The consistency corollary substitutes $\Gamma_T = o(T)$.
+\end{proof}
+
+The inequality separates two contributions: the learner drives $\Rex_T$ down by acting better, and the examiner drives $\Gamma_T$ down by judging more accurately. Both modules must learn---which is precisely the never-stopping picture of \citet{abel2023definition}, now made into two coupled never-stopping problems.
+
+\paragraph{Definition sanity checks.}
+\emph{Operational meaning:} $\rho_t$ is the agent's self-estimated reward gap, in reward units, between the best policy it can recognize and the policy it runs. \emph{Reward-shift invariance:} under $r \mapsto r+c$ both $\Vhi_t$ and $\Vlow_t$ shift by $cH$, so $\rho_t$ is unchanged; under $r \mapsto \lambda r$, $\rho_t \mapsto \lambda \rho_t$, scaling linearly as regret should. \emph{Special case:} for $|\States|=1$, $H=1$, the definition reduces to bandit regret (Section~\ref{sec:bandit}). \emph{Non-vacuity:} (C3) excludes the trivial examiner, and $\rho_t > 0$ exactly when the agent believes it can still improve. One well-posedness caveat: $f^{*}_t$ need not be attained for infinite $\Refclass$; Theorem~\ref{thm:master} uses only $f^{*}_t \le \Vhi_t + \delta_t$, so the upper bound is unaffected, while the lower-bound program of Section~\ref{sec:limits} uses a compact $\Refclass$ or an $\epsilon$-net.
+
+\section{Worked Case: the Stochastic Bandit}
+\label{sec:bandit}
+
+We work the simplest case in full to show the framework recovers a classical bound and is not vacuous.
+
+\paragraph{Setting.} $K$ arms, $a \in [K]$, reward $r \in \{0,1\}$ with $\Pr(r=1\mid a) = \mu_a$; one state, $H=1$. Let $\Refclass = \{\pi^{(a)}: a \in [K]\}$ be the constant-arm policies, so $f^{*}_t = \mu^{*} := \max_a \mu_a$ and $f^{\pi_t}_t = \mu_{a_t}$. Write $N_a(t)$ and $\hat\mu_a(t)$ for the pull count and empirical mean after $t$ rounds.
+
+\paragraph{Examiner and learner.} With $c_a(t) := \sqrt{2\log t / N_a(t-1)}$, set
+\begin{equation*}
+U(h_t) = \max_a\big[\hat\mu_a(t-1) + c_a(t)\big], \qquad L(h_t) = \hat\mu_{a_t}(t-1) - c_{a_t}(t),
+\end{equation*}
+and let the learner be UCB1, $a_t = \arg\max_a [\hat\mu_a(t-1) + c_a(t)]$.
+
+\begin{proposition}[Calibration of the bandit examiner]
+\label{prop:bandit}
+The examiner above satisfies (C1) and (C2) with $\delta_t = 0$, each with per-round failure probability at most $2t^{-3}$.
+\end{proposition}
+
+\begin{proof}
+Fix $t$ and arm $a$. Conditioned on $N_a(t-1)=n$, the rewards of arm $a$ are i.i.d.\ in $[0,1]$ with mean $\mu_a$. Hoeffding's inequality gives
+\begin{equation*}
+\Pr\!\big(|\hat\mu_a(t-1) - \mu_a| \ge c_a(t) \mid N_a(t-1)=n\big) \le 2\exp(-2 n\, c_a(t)^2) = 2\exp(-4\log t) = 2t^{-4}.
+\end{equation*}
+A union bound over $a \in [K]$ (with $K \le t$ after the first $K$ rounds) gives, with probability at least $1-2t^{-3}$, simultaneously for all $a$: $\mu_a \le \hat\mu_a(t-1) + c_a(t)$ and $\hat\mu_a(t-1) - c_a(t) \le \mu_a$. Taking the maximizing arm in the first inequality yields $\mu^{*} \le \max_a[\hat\mu_a(t-1)+c_a(t)] = \Vhi_t$, i.e.\ (C2) with $\delta_t=0$. Taking $a=a_t$ in the second yields $\Vlow_t \le \mu_{a_t} = f^{\pi_t}_t$, i.e.\ (C1).
+\end{proof}
+
+\begin{corollary}[Recovery of UCB1]
+\label{cor:ucb}
+$\Ex[\Rex_T] = O(\sqrt{KT\log T})$, hence by Theorem~\ref{thm:master}, $\Ex[\DynReg_T] = O(\sqrt{KT\log T})$, recovering the bound of \citet{auer2002ucb}.
+\end{corollary}
+
+\begin{proof}
+By Proposition~\ref{prop:bandit}, $\delta_t=0$ and $\Gamma_T=0$, so Theorem~\ref{thm:master} gives $\DynReg_T \le \Rex_T$ on an event of probability at least $1 - \sum_t 2t^{-3} = 1 - O(1)$. Because the learner is UCB1, the chosen arm is the maximizer of the upper index, so $\Vhi_t = \hat\mu_{a_t}(t-1) + c_{a_t}(t)$, and
+\begin{equation*}
+\rho_t = \big[\hat\mu_{a_t}(t-1)+c_{a_t}(t)\big] - \big[\hat\mu_{a_t}(t-1) - c_{a_t}(t)\big] = 2c_{a_t}(t) = 2\sqrt{\tfrac{2\log t}{N_{a_t}(t-1)}}.
+\end{equation*}
+Summing and grouping by arm, then using $\sum_{n=1}^{N}1/\sqrt{n} \le 2\sqrt{N}$ and Cauchy--Schwarz ($\sum_a \sqrt{N_a(T)} \le \sqrt{K\sum_a N_a(T)} = \sqrt{KT}$),
+\begin{equation*}
+\Rex_T \le 2\sqrt{2\log T}\sum_{a=1}^{K}\sum_{n=1}^{N_a(T)}\frac{1}{\sqrt n} \le 4\sqrt{2\log T}\sum_{a=1}^{K}\sqrt{N_a(T)} \le 4\sqrt{2}\,\sqrt{KT\log T}. \qedhere
+\end{equation*}
+\end{proof}
+
+Examiner regret here is literally twice the UCB confidence width, and Theorem~\ref{thm:master} reproduces the classical analysis. Our contribution is to name this object and detach it from the specific algorithm: the same recipe---choose $\Models$, derive $(U,L)$, verify (C1)--(C3) by concentration---applies whenever such bounds exist.
+
+\section{Further Cases and the Canonical View}
+\label{sec:cases}
+
+The bandit recipe instantiates other settings as approximations of the canonical posterior \eqref{eq:canonical}; Table~\ref{tab:reductions} summarizes. \textbf{Finite MDPs (PAC-MDP).} With $\Models$ the tabular MDPs and $\Refclass$ the stationary policies, take $U$ to be the optimistic value of an R-MAX/MBIE confidence MDP and $L$ an empirical value minus a Hoeffding radius; the analysis of \citet{strehl2009pacmdp} gives (C1)--(C2) with $\delta_t = \epsilon$ outside a polynomial number of ``unknown'' steps, after which $\delta_t \to 0$, giving (C3). \textbf{[cited]} the conversion of a mistake-count bound into a per-step $\delta_t$ is routine but we omit it. \textbf{Bayes-adaptive MDPs.} With $\Models$ a parametric MDP family and $\nu_t$ the exact posterior, \eqref{eq:canonical} is used directly; consistency follows from posterior contraction and the bound matches Bayesian regret~\citep{russo2017ids,lidayan2025bampf}. \textbf{Capacity-limited.} Replacing $\nu_t$ with a rate-distortion projection yields the construction of \citet{arumugam2024capacity}. \textbf{Universal limit.} Taking $\Models$ to be all computable environments and $\nu_t$ the Solomonoff posterior recovers an AIXI-style ideal examiner~\citep{hutter2005aixi}: uncomputable, the $K_E\to\infty$ endpoint.
+
+\begin{table}[t]
+\caption{Existing regret notions as choices of model class and examiner in the canonical construction~\eqref{eq:canonical}. They are approximations of one object, not separate definitions.}
+\label{tab:reductions}
 \begin{center}
-    {\tt {\textbackslash}usepackage[preprint]\{rlj\}}. 
+\resizebox{\textwidth}{!}{%
+\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+Setting & Model class $\Models$ & Examiner $(U,L)$ & Recovers \\
+\midrule
+Stochastic bandit & Bernoulli arms & Hoeffding UCB / LCB & $O(\sqrt{KT\log T})$ \citep{auer2002ucb} \\
+Finite MDP & tabular MDPs & R-MAX optim.\ / emp.\ LCB & PAC-MDP \citep{strehl2009pacmdp} \\
+Bayes-adaptive MDP & parametric MDPs & posterior $V^{*}, V^{\pi}$ & Bayes regret \citep{russo2017ids} \\
+Capacity-limited & rate-dist.\ proj. & projected posterior & \citep{arumugam2024capacity} \\
+Universal limit & computable envs & Solomonoff posterior & AIXI \citep{hutter2005aixi} \\
+\bottomrule
+\end{tabular}%
+}
 \end{center}
-
-\subsection{Style}
-Papers to be submitted to RLJ/RLC must be prepared according to the instructions presented here.
-
-Authors are required to use the RLJ/RLC \LaTeX{} style files obtainable at the RLJ/RLC websites (as both a .zip file and a link to an Overleaf project). 
-%Please make sure you use the current files and not previous versions. 
-Changing the style files, font, font size, margins, line spacing, or appearance of sections and subsections may be grounds for rejection.
-
-\subsection{Retrieval of style files}
-
-The style files for RLJ/RLC are available online on the RLJ/RLC website. The file \verb+rlj.pdf+ contains these instructions and illustrates the various formatting requirements your RLC paper must satisfy. Submissions must be made using \LaTeX{} and the style files \verb+rlj.sty+ and \verb+rlj.bst+ (to be used with \LaTeX{}2e). The file \verb+rlj.tex+ may be used as a ``shell'' for writing your paper. All you have to do is replace the author, title, abstract, and text of the paper with your own.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Section: Citations, figures, tables, references, equations
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Citations, figures, tables, references, equations}
-\label{sec:others}
-
-These instructions apply to everyone, regardless of the formatter being used.
-
-\subsection{Citations within the text}
-\label{sec:citations}
-Citations within the text should be based on the \texttt{natbib} package and include the authors' last names and year (with the ``et~al.'' construct for more than two authors). When the authors or the publication are included in the sentence, the citation should not be in parenthesis, using \verb|\citet{}| (as in ``See the work of \citet{sutton1998introduction} for more information.''). Otherwise, the citation should be in parenthesis using \verb|\citep{}| (as in ``Reinforcement learning is defined not by characterizing learning methods, but by characterizing a learning \textit{problem} \citep{sutton1998introduction}.'').
-
-The corresponding references are to be listed in alphabetical order of authors, in the \textbf{References} section. As to the format of the references themselves, any style is acceptable as long as it is used consistently.
-
-\subsection{Footnotes}
-\label{sec:footnotes}
-Indicate footnotes with a number\footnote{This is an example of a footnote.} in the text. Place the footnotes at the bottom of the page on which they appear. Precede the footnote with a horizontal rule of 2~inches. When following punctuation, footnotes should be placed after the punctuation (e.g., commas and periods).\footnote{This is a second example of a footnote.}
-
-\subsection{Figures}
-\label{sec:figures}
-All artwork must be neat, clean, and legible when printed. Lines should be dark enough for purposes of reproduction. The figure number and caption always appear after the figure. Place one line space before the figure caption, and one line space after the figure. The figure caption is lowercase (except for the first word and proper nouns); figures are numbered consecutively.
-
-Make sure the figure caption does not get separated from the figure. Leave sufficient space to avoid splitting the figure and figure caption. Ensure that figures are always referenced in the text before they appear, or on the same page that they appear. This will be ensured if the figure occurs after its first reference in the source. For example, see Figure \ref{fig:example}.
-
-% This figure is after it was first referenced, and so latex will ensure it appears on the same page that it is referenced or after.
-\begin{figure}[ht]
-    \begin{center}
-        \fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
-    \end{center}
-    \caption{Sample figure caption.}
-    \label{fig:example}
-\end{figure}
-
-You may use color figures. However, it is best for the figure captions and the paper body to make sense if the paper is printed either in black/white or in color.
-
-You may use subfigures, as shown in Figure \ref{fig:subfigureExample}.
-
-\begin{figure}[htbp]
-    \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \centering
-        %\includegraphics[width=\textwidth]{image1}
-        \fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}} % Replace this line with the line above, where image1 is your image.
-        \caption{First subfigure}
-        \label{fig:sub1}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
-        \centering
-        %\includegraphics[width=\textwidth]{image2}
-        \fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}} % Replace this line with the line above, where image2 is your image.
-        \caption{Second subfigure}
-        \label{fig:sub2}
-    \end{subfigure}
-    \caption{An example using subfigures.}
-    \label{fig:subfigureExample}
-\end{figure}
-
-\subsection{Tables}
-\label{sec:tables}
-Tables must be centered, neat, clean and legible. Do not use hand-drawn tables. The table number and title always appear before the table.\footnote{There was a typo in these instructions for RLC 2026, and so failure to follow this policy should not be held against submissions.} See Table~\ref{tab:exampleTable}. Place one line space before the table title, one line space above the table title, and one line space after the table. Tables are numbered consecutively.
-
-\begin{table}[htbp]
-    \caption{Sample table caption}
-    \begin{center}
-        \begin{tabular}{ll}
-            \multicolumn{1}{l}{\bf PART}  &\multicolumn{1}{l}{\bf DESCRIPTION}
-            \\ \hline \\
-            Actor         &Stores and updates the policy \\
-            Critic        &Stores and updates a value function \\
-        \end{tabular}
-    \end{center}
-    %\caption{Sample table caption}
-    \label{tab:exampleTable}
 \end{table}
 
-\subsection{Equations}
-\label{sec:equations}
-Equations can be included inline or using \texttt{equation}, \texttt{gather}, or \texttt{align} blocks. When using \texttt{align} blocks, place the alignment character {\tt\&} after equality or inequality symbols so that it is visually clear where each expression (which may span more than one line) begins and ends, as in the following example. 
-\begin{align}
-    \nonumber\Pr(A_2=a_2) =& \sum_{s_0 \in \mathcal S} \Pr(S_0{=}s_0) \sum_{a_0 \in \mathcal A} \Pr(A_0{=}a_0|S_0{=}s_0) \sum_{s_1 \in \mathcal S} \Pr(S_1{=}s_1|S_0{=}s_0,A_0{=}a_0)\\
-    \nonumber&\times \!\!\! \sum_{a_1 \in \mathcal A} \Pr(A_1{=}a_1|S_1{=}s_1)\sum_{s_2 \in \mathcal S}\Pr(S_2{=}s_2|S_1{=}s_1,A_1{=}a_1)\Pr(A_2{=}a_2|S_2{=}s_2)\\
-    %
-    \label{eq:secondActionPr}
-    \nonumber=&\sum_{s_0 \in \mathcal S} d_0(s_0) \sum_{a_0 \in \mathcal A} \pi(s_0,a_0)\sum_{s_1 \in \mathcal S} p(s_0,a_0,s_1) \sum_{a_1 \in \mathcal A} \pi(s_1,a_1) \sum_{s_2 \in \mathcal S}p(s_1,a_1,s_2)\\ 
-    %
-    &\times\pi(s_2,a_2),
-\end{align}
-where $\times$ denotes scalar multiplication split across multiple lines. 
+\section{When the Bound Collapses, and Why It Matters}
+\label{sec:limits}
 
-You may use the style of your choice when referencing expressions by number, including the following forms: 
-\begin{itemize}
-    \item In \eqref{eq:secondActionPr}, there is no summation over $a_2$ because it is defined on the left side of the equation.\footnote{This format is sometimes preferred because often referenced expressions are inequalities or definitions, not equations. Notice the use of \texttt{eqref} in place of \texttt{ref} in this example.}
-    \item In Equation~\ref{eq:secondActionPr}, there is no summation over $a_2$ because it is defined on the left side of the equation.
-    \item In Eq.~\ref{eq:secondActionPr}, there is no summation over $a_2$ because it is defined on the left side of the equation.
-\end{itemize}
-You may number all lines of all equations, some lines of each equation (typically one line per equation), or only the equations that are referenced.\footnote{To number some lines of each equation use \texttt{\textbackslash nonumber} to suppress numbers for some of the lines, as in this document. To number only the referenced equations, uncomment the line in main.tex: \texttt{\textbackslash mathtoolsset\{showonlyrefs\}}. Note that there may be conflicts between showonlyrefs and both autoref and cref.} 
-%
-The default behavior is to number all lines of all equations and we strongly encourage (but do not require) authors to number all lines of all equations for initial submissions to allow reviewers to easily reference specific lines.
+The framework is conditional, and we state its scope honestly. There are three regimes. In the \emph{tight} regime (stationary or structured), (C1)--(C3) hold with $\delta_t \to 0$ via Hoeffding, PAC-MDP, or posterior contraction, and Theorem~\ref{thm:master} matches known rates. In the \emph{loose} regime (bounded non-stationarity), (C1)--(C2) hold with $\delta_t$ controlled by a variation budget~\citep{wei2021master}, giving a valid but loose bound. In the \emph{diagnostic} regime (arbitrary big world), no finite-capacity examiner can guarantee (C2) against a rich $\Refclass$; Theorem~\ref{thm:master} no longer applies, and $\rho_t$ remains a computable trajectory of the agent's self-perceived gap---a diagnostic, not a certificate. This last regime is not a defect: it is exactly what the big-world hypothesis predicts. The following capacity bound makes the obstruction precise.
 
+\begin{proposition}[Contented ignorance]
+\label{prop:ignorance}
+Let $\mathcal{E}$ be a deterministic examiner with $|\Theta_E| \le 2^{K_E}$, and let $\Refclass$ index $N > 2^{K_E}$ candidate optima whose values are spread over an interval of width $\epsilon$. Then there exist two environments inducing the same history distribution under a fixed learner, on which $\mathcal{E}$ must emit the same ceiling $\Vhi_t$ while the true optima differ; hence on at least one of them $\delta_t \ge \epsilon/4$ for all $t$, so $\Gamma_T = \Omega(\epsilon T)$ and consistency (C3) fails.
+\end{proposition}
 
+\begin{proof}[Proof idea]
+A pigeonhole argument: $\mathcal{E}$ has at most $2^{K_E}$ internal states but faces $N > 2^{K_E}$ environments that are statistically identical along the fixed learner's trajectory (constructed as $K$-armed Bernoulli problems differing only in an arm the learner never pulls). Two collide and induce the same examiner output; the single emitted ceiling cannot lie within $\epsilon/4$ of both true optima, so $\delta_t \ge \epsilon/4$ on at least one. Summing gives $\Gamma_T = \Omega(\epsilon T)$. \textbf{[proved]} for deterministic $\mathcal{E}$; the stochastic-examiner version requires a Le~Cam two-point argument over observed trajectories and is \textbf{[conjectured]}.
+\end{proof}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Section: Final instructions
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Final instructions}
-\label{sec:final}
-Do not change any aspects of the formatting parameters in the style files. In particular, do not modify the width or length of the rectangle the text should fit into, and do not change font sizes (except perhaps in the \textbf{References} section; see below). Please note that pages should be numbered for submissions, but not for camera-ready versions.
+The reading is sharp: in a big world the binding constraint on examiner regret is the examiner's \emph{capacity}, not the learner's algorithm. No amount of cleverness in $\mathcal{L}$ rescues a $\Vhi_t$ that $\mathcal{E}$ lacks the bits to compute. This motivates the central open question.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Section: Preparing files
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Preparing PostScript or PDF files}
-\label{sec:prep}
-We recommend preparing your manuscript using the provided Overleaf project, which will automatically construct a PDF file for submission. This file can be downloaded by clicking the ``Menu'' button in the top left, and then selecting ``PDF'' at the top of the menu that appears.
+\paragraph{The capacity-allocation question.}
+With total budget $K = K_L + K_E$, giving more bits to the learner widens the policy class but degrades certification; giving more to the examiner tightens the bound but restricts what the learner can express. We conjecture that the optimal split $K_E^{*}$ depends on environment complexity and is generally interior. Characterizing $K_E^{*}$ for structured big worlds is, in our view, the core theoretical problem this framework opens, and it is distinctively a \emph{continual} question: in a fixed task one can afford a one-time examiner, but under never-ending non-stationarity the examiner must keep paying for itself.
 
-If you are not using Overleaf, please prepare PostScript or PDF files with paper size ``US Letter'', and not, for example, ``A4''. The -t letter option on dvips will produce US Letter files.
+\section{Related Work}
+\label{sec:related}
 
-Consider directly generating PDF files using \verb+pdflatex+ (especially if you are a MiKTeX user). PDF figures must be substituted for EPS figures, however.
+\textbf{Foundations of CRL.} \citet{abel2023definition} define CRL via agents that never stop learning; \citet{abel2024dogmas,abel2025rethinking} develop the surrounding foundations. Our examiner regret is a candidate yardstick aligned with that view---internal, never-terminating, and capacity-aware. \textbf{Big-world hypothesis.} \citet{javed2025bigworld} and \citet{lewandowski2025bigger} argue the agent is far smaller than its world; our capacity split formalizes one consequence for evaluation. \textbf{Bayes-adaptive and universal RL.} BAMDP~\citep{guez2012bamcp,lidayan2025bampf} supplies the canonical examiner~\eqref{eq:canonical}; AIXI~\citep{hutter2005aixi} is its uncomputable limit. \textbf{Capacity-bounded RL.} \citet{lu2021bitbybit} cast capacity in bits; \citet{arumugam2024capacity} build rate-distortion-projected posteriors, our canonical $K_E$-bounded examiner. \textbf{Non-stationary regret.} \citet{wei2021master} give an optimal black-box dynamic-regret reduction. \textbf{Calibration and PAC.} \citet{foster1998calibration} establish online calibration; KWIK~\citep{li2011kwik} formalizes the ``knows what it knows'' property behind examiner surprise-gating; \citet{strehl2009pacmdp} provide value bounds meeting (C1)--(C2). \textbf{Hindsight rationality.} \citet{morrill2021hindsight} measure regret against a deviation class; our $\Refclass$ generalizes their comparator and makes the certifier explicit. Across all of these the evaluator is implicit or fused with the policy; our distinction is to make the examiner a first-class, capacity-bounded module.
 
-Otherwise, please generate your PostScript and PDF files with the following commands:
-\begin{verbatim}
-dvips mypaper.dvi -t letter -Ppdf -G0 -o mypaper.ps
-ps2pdf mypaper.ps mypaper.pdf
-\end{verbatim}
+\section{Discussion}
+\label{sec:discussion}
 
-\subsection{Margins in LaTeX}
-\label{sec:margins}
-Most of the margin problems come from figures positioned by hand using \verb+\special+ or other commands. We suggest using the command \verb+\includegraphics+ from the graphicx package. Always specify the figure width as a multiple of the line width as in the example below using .eps graphics
-\begin{verbatim}
-   \usepackage[dvips]{graphicx} ...
-   \includegraphics[width=0.8\linewidth]{myfile.eps}
-\end{verbatim}
-or % Apr 2009 addition
-\begin{verbatim}
-   \usepackage[pdftex]{graphicx} ...
-   \includegraphics[width=0.8\linewidth]{myfile.pdf}
-\end{verbatim}
-for .pdf graphics. See Section~4.4 in the graphics bundle documentation (\url{http://www.ctan.org/tex-archive/macros/latex/required/graphics/grfguide.ps})
+Our contribution is a language. Learner and examiner play different roles, pay separate capacity costs, and learn in different ways; making the split explicit recovers existing regret notions as instances of one posterior decomposition (Table~\ref{tab:reductions}), exposes the capacity-allocation question $K=K_L+K_E$, and yields a diagnostic $\rho_t$ usable even where formal bounds collapse. The framework opens a concrete program: characterize $K_E^{*}$ for structured big worlds; design examiners for settings lacking one; complete the stochastic contented-ignorance bound; and test empirically whether separating actor and critic capacity, rather than sharing it, improves continual-RL benchmarks at fixed total parameter count. We claim no new algorithm and no tight bound beyond prior work; the value is in the questions the decomposition makes askable, and in giving continual RL a yardstick that, like its agents, never presumes a stopping point.
 
-A number of width problems arise when LaTeX cannot properly hyphenate a line. Please give LaTeX hyphenation hints using the \verb+\-+ command.
-
-\subsubsection*{Broader Impact Statement}
-\label{sec:broaderImpact}
-In this optional section, RLJ/RLC encourages authors to discuss possible repercussions of their work, notably any potential negative impact that a user of this research should be aware of. 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Appendices
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\appendix
-
-\section{The first appendix}
-\label{sec:appendix1}
-This is an example of an appendix. 
-
-\noindent \textbf{Note:} Appendices appear before the references and are viewed as part of the ``main text'' and are subject to the 8--12 page limit, are peer reviewed, and can contain content central to the claims of the paper. 
-
-\section{The second appendix}
-\label{sec:appendix2}
-This is an example of a second appendix. If there is only a single section in the appendix, you may simply call it ``Appendix'' as follows:
-
-\section*{Appendix}
-% No label, since this can't be referenced meaningfully with \ref{}.
-This format should only be used if there is a single appendix (unlike in this document).
-
-\subsubsection*{Acknowledgments}
-\label{sec:ack}
-Use unnumbered third level headings for the acknowledgments. All acknowledgments, including those to funding agencies, go at the end of the paper. Only add this information once your submission is accepted and deanonymized. The acknowledgments do not count towards the 8--12 page limit.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% NOTE: THIS MARKS THE END OF THE "MAIN TEXT"
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Bibliography
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliography{main}
 \bibliographystyle{rlj}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% AUTHOR: If your paper has no supplementary materials, you may 
-%         comment out the line below, which creates the title for
-%         the supplementary materials.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\beginSupplementaryMaterials
-
-Content that appears after the references are not part of the ``main text,'' have no page limits, are not necessarily reviewed, and should not contain any claims or material central to the paper. 
-%
-If your paper includes supplementary materials, use the \begin{center}
-    {\tt {\textbackslash}beginSupplementaryMaterials} 
-\end{center}
-command as in this example, which produces the title and disclaimer above. 
-%
-If your paper does not include supplementary materials, this command can be removed or commented out.
 
 \end{document}
