@@ -106,34 +106,19 @@ $\rho_t = \Vhi - \Vlow \ge 0$, with $\Rex_T = \sum_{t=1}^T \rho_t$. It depends o
 \section{A Worked Case: The Examiner in a Bandit}
 \label{sec:bandit}
 
-The simplest world in which the definitions become concrete has no state at all. A multi-armed bandit is the stream of Section~\ref{sec:defs} with $|\mathcal{S}|=1$ and $H=1$. We use it for two reasons: it is the standard sanity check for any value-based definition, and it makes ``a behaviour the learner never tried'' as transparent as possible, namely an arm it never pulled.
+The simplest world in which the definitions become concrete has no state: a multi-armed bandit is the stream of Section~\ref{sec:defs} with $|\mathcal{S}|=1$ and $H=1$. There are $N$ arms; pulling arm $i$ returns a reward $r\in\{0,1\}$ with unknown mean $\mu_i$, so $\Rmax=1$. Every arm pays $\tfrac12$ except one \emph{special} arm with mean $\mu^\star=\tfrac12+\epsilon$. With $H=1$ the value of ``pull arm $i$'' is just $\mu_i$, the best representable behaviour is ``pull the best arm,'' so the within-capacity optimum is $f^{K_L}_t=\mu^\star$ and the structural gap is $\Dstruct_t=0$.
 
-\paragraph{Setting.} There are $N$ arms; pulling arm $i$ returns a reward $r\in\{0,1\}$ with unknown mean $\mu_i$, so $\Rmax=1$. Every arm pays $\tfrac12$ except a single \emph{special} arm with $\mu_{i^\star}=\tfrac12+\epsilon$, and the agent acts on one never-resetting stream. Write $\hat\mu_i$ for the empirical mean of arm $i$, $n_i$ for its pull count, and $c_i=\sqrt{2\ln t/n_i}$ for the confidence half-width, with $c_i$ at its maximum for an arm never pulled.
-
-\paragraph{The definitions become arithmetic.} With $H=1$ the value of the policy ``pull arm $i$'' (Definition~\ref{def:basic}) is the arm mean, $f^{\pi}_t=\mu_i$. If every arm is representable, the within-capacity optimum (Definition~\ref{def:capcomp}) is $f^{K_L}_t=\mu^\star=\tfrac12+\epsilon$ and the structural gap vanishes, $\Dstruct_t=0$. The learner $\mathcal{L}$ selects the played arm $a_t$; the examiner $\mathcal{E}$ (Definition~\ref{def:agent}) reads its two numbers off the same counters,
+\paragraph{The examiner's two numbers.} Let $n_i$ be how many times arm $i$ has been pulled and $\hat\mu_i$ its average reward so far. By Hoeffding's inequality the average of $n_i$ rewards in $[0,1]$ deviates from the true mean $\mu_i$ by more than $c$ with probability at most $2e^{-2 n_i c^2}$; setting $c_i=\sqrt{2\ln t / n_i}$ makes this probability $2t^{-4}$, small enough to hold simultaneously over all arms and all times $t$, which is why this is the standard radius \citep{auer2002ucb}. The examiner takes an optimistic ceiling over all arms and a pessimistic floor on the played arm $a_t$,
 \[
-\Vhi=\max_i\big(\hat\mu_i+c_i\big),
-\qquad
-\Vlow=\hat\mu_{a_t}-c_{a_t},
+\Vhi=\max_i\big(\hat\mu_i+c_i\big), \qquad \Vlow=\hat\mu_{a_t}-c_{a_t},
 \]
-an optimistic ceiling over \emph{all} arms and a pessimistic floor on the \emph{played} arm, with inductive bias $\ModE$ equal to the concentration rule that lets $c_i$ shrink with data. The examiner regret (Definition~\ref{def:exreg}) is then the confidence width,
-\[
-\rho_t=\Vhi-\Vlow=\max_i\big(\hat\mu_i+c_i\big)-\big(\hat\mu_{a_t}-c_{a_t}\big),
-\]
-which uses only counts and empirical means, never $\mu$ or $\mu^\star$. These are not new objects: $\sum_t(f^{K_L}_t-f^{\pi_t}_t)=\sum_t(\mu^\star-\mu_{a_t})$ is the classical pseudo-regret and $\sum_t\rho_t=O(\sqrt{NT\log T})$ is the standard UCB confidence-width sum \citep{auer2002ucb,lai1985asymptotically}.
+so the examiner regret $\rho_t=\Vhi-\Vlow$ (Definition~\ref{def:exreg}) is the confidence width. It is computed only from the observed counts $n_i$ and averages $\hat\mu_i$; it never uses the hidden means $\mu_i$ or $\mu^\star$.
 
-\paragraph{Where honesty lives.} Call the examiner \emph{sound} if its floor is a true floor, $\Vlow\le f^{\pi_t}_t$, and its ceiling a true ceiling, $\Vhi\ge f^{K_L}_t-\delta_t$; by Hoeffding both hold with high probability, with slack $\delta_t$ the failure margin that vanishes as counts grow. The mechanism is one line: an arm never pulled keeps $c_i$ at its maximum, so its optimistic index stays high and the ceiling $\Vhi$ cannot fall. The examiner is structurally forbidden from reporting ``no room to improve'' about an arm it has not inspected; a dishonest examiner is exactly one that discards this and assumes the unseen arm is ordinary.
+\paragraph{It reduces to the textbook quantities.} The agent's regret against its within-capacity optimum is $\sum_t(f^{K_L}_t-f^{\pi_t}_t)=\sum_t(\mu^\star-\mu_{a_t})$, the classical pseudo-regret of the bandit literature \citep{lai1985asymptotically}. This is the quantity an outside analyst computes to score the agent, and it does use $\mu^\star$; the agent's own $\rho_t$ does not. Summing the confidence widths gives $\sum_t\rho_t=O(\sqrt{NT\log T})$, the standard UCB regret rate \citep{auer2002ucb}. So the examiner is nothing exotic here: its two numbers are UCB's own upper and lower indices, and the certificate it provides is the familiar UCB bound, renamed.
 
-\paragraph{Three behaviours (Figure~\ref{fig:bandit}).} First, a self-report alone certifies nothing: a trivial examiner reporting $\rho_t\equiv0$ pairs equally with a good (UCB) learner and a bad (fixed-arm) learner, identical reports but opposite true regret (panel~A). Second, when the world is coverable ($N=5$), a sound $\sum_t\rho_t$ stays above the true within-capacity regret throughout, a valid if loose certificate of what remains removable (panel~B). Third, when the world outruns the horizon ($N>T$) and the special arm is placed out of reach, a sound examiner honestly keeps $\rho_t$ large, signalling uncovered ground, while a biased examiner that assumes a shared mean collapses $\rho_t$ toward zero and reports a false ``done'' even as true regret climbs at rate $\epsilon$ (panel~C). This last case is the price the position pays in a big world: an honest, vanishing self-report is not free.
+\paragraph{Why it stays honest, and the price.} An arm never pulled has $n_i=0$, so its radius $c_i$ stays at its maximum and its optimistic index stays high: the ceiling $\Vhi$ cannot fall, and the examiner cannot claim ``no room to improve'' about an arm it has not inspected. That keeps a small $\rho_t$ trustworthy when the agent can cover its arms. But when there are more arms than steps ($N>T$), some arm is never pulled, and if the special arm hides there the examiner must keep $\rho_t\ge\epsilon$: it cannot honestly certify it is done. An honest, vanishing self-report is therefore not free in a big world.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{examiner_bandit_demo.pdf}
-\caption{The examiner in a bandit. \textbf{(A)} Two agents with the identical self-report $\sum_t\rho_t=0$ differ arbitrarily in true regret. \textbf{(B)} In a coverable world the sound certificate $\sum_t\rho_t$ upper-bounds the true within-capacity regret. \textbf{(C)} When the world outruns the horizon, a sound examiner keeps $\rho_t$ large (honest), while a biased examiner drives $\rho_t$ below the true regret (unearned confidence).}
-\label{fig:bandit}
-\end{figure}
-
-\paragraph{How to use it.} The bandit shows the three intended uses without any external optimum. As a \emph{monitor}, $\rho_t$ is an online read of self-assessed room to improve; as a \emph{comparison metric}, two algorithms on one stream are ranked by which $\rho_t$ shrinks faster toward its capacity-constrained optimum; and as an \emph{audit}, a low $\rho_t$ is trustworthy exactly on the covered region, with the big-world case above marking when no audit is possible and apparent convergence should instead trigger exploration or external testing.
+\paragraph{How to use it.} Without any external optimum, $\rho_t$ serves as an online \emph{monitor} of self-assessed room to improve; comparing the $\rho_t$ of two algorithms on one stream \emph{ranks} which is nearer its own reachable optimum; and a low $\rho_t$ can be \emph{audited} on the covered arms, with the big-world case marking when no audit is possible and apparent convergence should trigger more exploration rather than trust.
 
 \bibliography{main}
 \bibliographystyle{rlj}
