@@ -1,0 +1,414 @@
+% RLC main.bib Version 2026.1
+
+@book{sutton1998introduction,
+    title={Reinforcement Learning: {A}n Introduction},
+    author={Sutton, Richard S. and Barto, Andrew G.},
+	publisher={The MIT Press},
+	year={1998},
+	address={Cambridge, MA},
+}
+
+@inproceedings{abel2023definition,
+    author = {Abel, David and Barreto, Andr\'e and Van Roy, Benjamin and Precup, Doina and van Hasselt, Hado and Singh, Satinder},
+    title = {A Definition of Continual Reinforcement Learning},
+    booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+    year = {2023},
+}
+
+@inproceedings{abel2024dogmas,
+    author = {Abel, David and Barreto, Andr\'e and Precup, Doina and van Hasselt, Hado and Singh, Satinder},
+    title = {Three Dogmas of Reinforcement Learning},
+    booktitle = {Reinforcement Learning Conference (RLC)},
+    year = {2024},
+}
+
+@inproceedings{abel2025rethinking,
+    author = {Abel, David and others},
+    title = {Rethinking the Foundations for Continual Reinforcement Learning},
+    booktitle = {Reinforcement Learning Conference (RLC)},
+    year = {2025},
+    note = {arXiv:2504.08161},
+}
+
+@article{auer2002ucb,
+    author = {Auer, Peter and Cesa-Bianchi, Nicol\`o and Fischer, Paul},
+    title = {Finite-time Analysis of the Multiarmed Bandit Problem},
+    journal = {Machine Learning},
+    volume = {47},
+    pages = {235--256},
+    year = {2002},
+}
+
+@article{arumugam2024capacity,
+    author = {Arumugam, Dilip and Van Roy, Benjamin},
+    title = {Bayesian Reinforcement Learning with Limited Cognitive Load},
+    journal = {Open Mind},
+    year = {2024},
+}
+
+@article{foster1998calibration,
+    author = {Foster, Dean P. and Vohra, Rakesh V.},
+    title = {Asymptotic Calibration},
+    journal = {Biometrika},
+    volume = {85},
+    number = {2},
+    pages = {379--390},
+    year = {1998},
+}
+
+@inproceedings{guez2012bamcp,
+    author = {Guez, Arthur and Silver, David and Dayan, Peter},
+    title = {Efficient {B}ayes-Adaptive Reinforcement Learning using Sample-Based Search},
+    booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+    year = {2012},
+}
+
+@book{hutter2005aixi,
+    author = {Hutter, Marcus},
+    title = {Universal Artificial Intelligence: Sequential Decisions Based on Algorithmic Probability},
+    publisher = {Springer},
+    year = {2005},
+}
+
+@phdthesis{javed2025bigworld,
+    author = {Javed, Khurram},
+    title = {Real-Time Reinforcement Learning for Achieving Goals in Big Worlds},
+    school = {University of Alberta},
+    year = {2025},
+}
+
+@inproceedings{jaksch2010ucrl2,
+    author = {Jaksch, Thomas and Ortner, Ronald and Auer, Peter},
+    title = {Near-optimal Regret Bounds for Reinforcement Learning},
+    journal = {Journal of Machine Learning Research},
+    volume = {11},
+    pages = {1563--1600},
+    year = {2010},
+}
+
+@inproceedings{lewandowski2025bigger,
+    author = {Lewandowski, Alex and others},
+    title = {The World Is Bigger: A Computationally-Embedded Perspective on the Big World Hypothesis},
+    booktitle = {Reinforcement Learning and Decision Making (RLDM)},
+    year = {2025},
+}
+
+@article{li2011kwik,
+    author = {Li, Lihong and Littman, Michael L. and Walsh, Thomas J. and Strehl, Alexander L.},
+    title = {Knows What It Knows: A Framework for Self-Aware Learning},
+    journal = {Machine Learning},
+    volume = {82},
+    number = {3},
+    pages = {399--443},
+    year = {2011},
+}
+
+@inproceedings{lidayan2025bampf,
+    author = {Lidayan, Aly and Dennis, Michael and Russell, Stuart},
+    title = {{BAMDP} Shaping: A Unified Framework for Intrinsic Motivation and Reward Shaping},
+    booktitle = {International Conference on Learning Representations (ICLR)},
+    year = {2025},
+}
+
+@article{lu2021bitbybit,
+    author = {Lu, Xiuyuan and Van Roy, Benjamin and Dwaracherla, Vikranth and Ibrahimi, Morteza and Osband, Ian and Wen, Zheng},
+    title = {Reinforcement Learning, Bit by Bit},
+    journal = {arXiv preprint arXiv:2103.04047},
+    year = {2021},
+}
+
+@inproceedings{morrill2021hindsight,
+    author = {Morrill, Dustin and D'Orazio, Ryan and Lanctot, Marc and Wright, James R. and Bowling, Michael and Greenwald, Amy R.},
+    title = {Efficient Deviation Types and Learning for Hindsight Rationality in Extensive-Form Games},
+    booktitle = {International Conference on Machine Learning (ICML)},
+    year = {2021},
+}
+
+@article{russo2017ids,
+    author = {Russo, Daniel and Van Roy, Benjamin},
+    title = {Learning to Optimize via Information-Directed Sampling},
+    journal = {Operations Research},
+    volume = {66},
+    number = {1},
+    pages = {230--252},
+    year = {2017},
+}
+
+@article{strehl2009pacmdp,
+    author = {Strehl, Alexander L. and Li, Lihong and Littman, Michael L.},
+    title = {Reinforcement Learning in Finite {MDP}s: {PAC} Analysis},
+    journal = {Journal of Machine Learning Research},
+    volume = {10},
+    pages = {2413--2444},
+    year = {2009},
+}
+
+@inproceedings{wei2021master,
+    author = {Wei, Chen-Yu and Luo, Haipeng},
+    title = {Non-stationary Reinforcement Learning without Prior Knowledge: An Optimal Black-box Approach},
+    booktitle = {Conference on Learning Theory (COLT)},
+    year = {2021},
+}
+
+@inproceedings{sutton2011horde,
+    author = {Sutton, Richard S. and Modayil, Joseph and Delp, Michael and Degris, Thomas and Pilarski, Patrick M. and White, Adam and Precup, Doina},
+    title = {Horde: A Scalable Real-time Architecture for Learning Knowledge from Unsupervised Sensorimotor Interaction},
+    booktitle = {International Conference on Autonomous Agents and Multiagent Systems (AAMAS)},
+    year = {2011},
+}
+
+@article{lai1985asymptotically,
+    author = {Lai, T. L. and Robbins, Herbert},
+    title = {Asymptotically Efficient Adaptive Allocation Rules},
+    journal = {Advances in Applied Mathematics},
+    volume = {6},
+    number = {1},
+    pages = {4--22},
+    year = {1985},
+}
+
+@phdthesis{abel2020bounded,
+    author = {Abel, David},
+    title = {Concepts in Bounded Rationality: Perspectives from Reinforcement Learning},
+    school = {Brown University},
+    year = {2020},
+}
+
+@article{lewis2014computational,
+    author = {Lewis, Richard L. and Howes, Andrew and Singh, Satinder},
+    title = {Computational Rationality: Linking Mechanism and Behavior Through Bounded Utility Maximization},
+    journal = {Topics in Cognitive Science},
+    volume = {6},
+    number = {2},
+    pages = {279--311},
+    year = {2014},
+}
+
+@article{russell1995bounded,
+    author = {Russell, Stuart J. and Subramanian, Devika},
+    title = {Provably Bounded-Optimal Agents},
+    journal = {Journal of Artificial Intelligence Research},
+    volume = {2},
+    pages = {575--609},
+    year = {1995},
+}
+
+@article{lieder2020resource,
+    author = {Lieder, Falk and Griffiths, Thomas L.},
+    title = {Resource-Rational Analysis: Understanding Human Cognition as the Optimal Use of Limited Computational Resources},
+    journal = {Behavioral and Brain Sciences},
+    volume = {43},
+    year = {2020},
+}
+
+@article{schmidhuber2010formal,
+    author = {Schmidhuber, J\"urgen},
+    title = {Formal Theory of Creativity, Fun, and Intrinsic Motivation (1990--2010)},
+    journal = {IEEE Transactions on Autonomous Mental Development},
+    volume = {2},
+    number = {3},
+    pages = {230--247},
+    year = {2010},
+}
+
+@article{oudeyer2007intrinsic,
+    author = {Oudeyer, Pierre-Yves and Kaplan, Fr\'ed\'eric and Hafner, Verena V.},
+    title = {Intrinsic Motivation Systems for Autonomous Mental Development},
+    journal = {IEEE Transactions on Evolutionary Computation},
+    volume = {11},
+    number = {2},
+    pages = {265--286},
+    year = {2007},
+}
+
+@inproceedings{Sutton2000,
+	author="R. S. Sutton and D. McAllester and S. Singh and Y. Mansour",
+	title="Policy Gradient Methods for Reinforcement Learning with Function Approximation",
+	booktitle="Advances in Neural Information Processing Systems 12",
+	year="2000",
+	pages="1057--1063",
+	}
+
+@article{Williams1992,
+	author="R. J. Williams",
+	title="Simple Statistical Gradient-Following Algorithms for Connectionist Reinforcement Learning",
+	year="1992",
+	Journal="Machine Learning",
+	volume="8",
+	pages="229--256",
+	}
+
+@inproceedings{precup2001offpolicy,
+    author = {Precup, Doina and Sutton, Richard S. and Dasgupta, Sanjoy},
+    title = {Off-Policy Temporal-Difference Learning with Function Approximation},
+    booktitle = {International Conference on Machine Learning (ICML)},
+    year = {2001},
+}
+
+@inproceedings{konda2000actorcritic,
+    author = {Konda, Vijay R. and Tsitsiklis, John N.},
+    title = {Actor-Critic Algorithms},
+    booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+    year = {2000},
+}
+
+@inproceedings{pinto2018asymmetric,
+    author = {Pinto, Lerrel and Andrychowicz, Marcin and Welinder, Peter and Zaremba, Wojciech and Abbeel, Pieter},
+    title = {Asymmetric Actor Critic for Image-Based Robot Learning},
+    booktitle = {Robotics: Science and Systems (RSS)},
+    year = {2018},
+}
+
+@inproceedings{filos2022modelvalue,
+    author = {Filos, Angelos and V\'ertes, Eszter and Marinho, Zita and Farquhar, Gregory and Borsa, Diana and Friesen, Abram and Behbahani, Feryal and Schaul, Tom and Barreto, Andr\'e and Osindero, Simon},
+    title = {Model-Value Inconsistency as a Signal for Epistemic Uncertainty},
+    booktitle = {International Conference on Machine Learning (ICML)},
+    year = {2022},
+}
+
+@article{kearns2002e3,
+    author = {Kearns, Michael and Singh, Satinder},
+    title = {Near-Optimal Reinforcement Learning in Polynomial Time},
+    journal = {Machine Learning},
+    volume = {49},
+    number = {2--3},
+    pages = {209--232},
+    year = {2002},
+}
+
+@article{brafman2002rmax,
+    author = {Brafman, Ronen I. and Tennenholtz, Moshe},
+    title = {{R-MAX}: A General Polynomial Time Algorithm for Near-Optimal Reinforcement Learning},
+    journal = {Journal of Machine Learning Research},
+    volume = {3},
+    pages = {213--231},
+    year = {2002},
+}
+
+@inproceedings{azar2017minimax,
+    author = {Azar, Mohammad Gheshlaghi and Osband, Ian and Munos, R\'emi},
+    title = {Minimax Regret Bounds for Reinforcement Learning},
+    booktitle = {International Conference on Machine Learning (ICML)},
+    year = {2017},
+}
+
+@inproceedings{kakade2002cpi,
+    author = {Kakade, Sham and Langford, John},
+    title = {Approximately Optimal Approximate Reinforcement Learning},
+    booktitle = {International Conference on Machine Learning (ICML)},
+    year = {2002},
+}
+
+@inproceedings{osband2013psrl,
+    author = {Osband, Ian and Russo, Daniel and Van Roy, Benjamin},
+    title = {(More) Efficient Reinforcement Learning via Posterior Sampling},
+    booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+    year = {2013},
+}
+
+@article{suttonprecupsingh1999,
+    author = {Sutton, Richard S. and Precup, Doina and Singh, Satinder},
+    title = {Between {MDPs} and Semi-{MDPs}: A Framework for Temporal Abstraction in Reinforcement Learning},
+    journal = {Artificial Intelligence},
+    volume = {112},
+    number = {1--2},
+    pages = {181--211},
+    year = {1999},
+}
+
+@article{modayil2014nexting,
+    author = {Modayil, Joseph and White, Adam and Sutton, Richard S.},
+    title = {Multi-Timescale Nexting in a Reinforcement Learning Robot},
+    journal = {Adaptive Behavior},
+    volume = {22},
+    number = {2},
+    pages = {146--160},
+    year = {2014},
+}
+
+@article{silver2021reward,
+    author = {Silver, David and Singh, Satinder and Precup, Doina and Sutton, Richard S.},
+    title = {Reward Is Enough},
+    journal = {Artificial Intelligence},
+    volume = {299},
+    pages = {103535},
+    year = {2021},
+}
+
+@article{dohare2024plasticity,
+    author = {Dohare, Shibhansh and Hernandez-Garcia, J. Fernando and Lan, Qingfeng and Rahman, Parash and Mahmood, A. Rupam and Sutton, Richard S.},
+    title = {Loss of Plasticity in Deep Continual Learning},
+    journal = {Nature},
+    volume = {632},
+    pages = {768--774},
+    year = {2024},
+}
+
+@phdthesis{ring1994continual,
+    author = {Ring, Mark B.},
+    title = {Continual Learning in Reinforcement Environments},
+    school = {University of Texas at Austin},
+    year = {1994},
+}
+
+@article{simon1955behavioral,
+    author = {Simon, Herbert A.},
+    title = {A Behavioral Model of Rational Choice},
+    journal = {Quarterly Journal of Economics},
+    volume = {69},
+    number = {1},
+    pages = {99--118},
+    year = {1955},
+}
+
+@article{borkar1997twotimescale,
+    author = {Borkar, Vivek S.},
+    title = {Stochastic Approximation with Two Time Scales},
+    journal = {Systems \& Control Letters},
+    volume = {29},
+    number = {5},
+    pages = {291--294},
+    year = {1997},
+}
+
+@inproceedings{osband2016bootstrapped,
+    author = {Osband, Ian and Blundell, Charles and Pritzel, Alexander and Van Roy, Benjamin},
+    title = {Deep Exploration via Bootstrapped {DQN}},
+    booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+    year = {2016},
+}
+
+@inproceedings{kumar2020cql,
+    author = {Kumar, Aviral and Zhou, Aurick and Tucker, George and Levine, Sergey},
+    title = {Conservative Q-Learning for Offline Reinforcement Learning},
+    booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+    year = {2020},
+}
+
+@inproceedings{jin2021pessimism,
+    author = {Jin, Ying and Yang, Zhuoran and Wang, Zhaoran},
+    title = {Is Pessimism Provably Efficient for Offline {RL}?},
+    booktitle = {International Conference on Machine Learning (ICML)},
+    year = {2021},
+}
+
+@inproceedings{pathak2017curiosity,
+    author = {Pathak, Deepak and Agrawal, Pulkit and Efros, Alexei A. and Darrell, Trevor},
+    title = {Curiosity-Driven Exploration by Self-Supervised Prediction},
+    booktitle = {International Conference on Machine Learning (ICML)},
+    year = {2017},
+}
+
+@inproceedings{burda2019rnd,
+    author = {Burda, Yuri and Edwards, Harrison and Storkey, Amos and Klimov, Oleg},
+    title = {Exploration by Random Network Distillation},
+    booktitle = {International Conference on Learning Representations (ICLR)},
+    year = {2019},
+}
+
+@inproceedings{bellemare2016count,
+    author = {Bellemare, Marc G. and Srinivasan, Sriram and Ostrovski, Georg and Schaul, Tom and Saxton, David and Munos, R\'emi},
+    title = {Unifying Count-Based Exploration and Intrinsic Motivation},
+    booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+    year = {2016},
+}
