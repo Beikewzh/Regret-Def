@@ -65,6 +65,7 @@ $^{1}$\textbf{Anonymous Institution}
 
 \begin{abstract}
 TODO
+
 \end{abstract}
 
 \section{Introduction}
@@ -83,7 +84,7 @@ We take the agent-centric, big-world view of continual reinforcement learning. T
 
 We work over a single, never-resetting stream of experience, with no Markov, episodic, or stationarity structure assumed. We want a measure of learning the agent can compute from its own state, a condition under which that measure is trustworthy, and the limit beyond which it cannot be.
 
-\paragraph{Assumptions.} \textbf{(A1)} rewards are bounded, $r_s \in [0,\Rmax]$. \textbf{(A2)} value is measured over a fixed $H$-step look-ahead. \textbf{(A3)} the learner is capacity-bounded, representing policies within $K_L$ bits, which fixes the representable set $\PiK$. \textbf{(A4)} the examiner is a predictive model carrying an inductive bias, a model class $\ModE$ (a concentration rule or a prior), that lets it forecast the value of behaviours not yet tried. \textbf{(A5)} guarantees are high-probability statements over the randomness of the stream.
+\paragraph{Assumptions.} \textbf{(A1)} rewards are bounded, $r_s \in [0,\Rmax]$. \textbf{(A2)} value is measured over a fixed $H$-step look-ahead. \textbf{(A3)} the learner is capacity-bounded, representing policies within $K_L$ bits, which fixes the representable set $\PiK$. \textbf{(A4)} the examiner is a predictive model carrying an inductive bias, a model class $\ModE$ (a concentration rule or a prior), that lets it forecast the value of behaviours not yet tried. %\textbf{(A5)} guarantees are high-probability statements over the randomness of the stream.
 
 The four definitions below build up in order: the value of a behaviour (Def.~\ref{def:basic}), the best the agent could itself achieve (Def.~\ref{def:capcomp}), the split of the agent into an acting \emph{learner} and a grading \emph{examiner} (Def.~\ref{def:agent}), and the self-grade those two produce (Def.~\ref{def:exreg}).
 
@@ -120,9 +121,9 @@ so the examiner regret $\rho_t=\Vhi-\Vlow$ (Definition~\ref{def:exreg}) is the c
 
 \paragraph{A sanity check: it matches what the field already trusts.} A new definition should reduce to known quantities in a known case, and here it does, in three steps. \emph{First}, the agent's regret against its own best arm is $\sum_t(f^{K_L}_t-f^{\pi_t}_t)=\sum_t(\mu^\star-\mu_{a_t})$, the classical bandit pseudo-regret \citep{lai1985asymptotically}; computing it needs the hidden $\mu^\star$, so only an outside analyst can. \emph{Second}, the agent's own self-grade $\sum_t\rho_t$ needs no hidden mean, and it grows at the rate $O(\sqrt{NT\log T})$: each pull of an arm adds a width $\sqrt{2\ln t/n_i}$, the widths of an arm pulled $n_i$ times sum to about $2\sqrt{2 n_i\ln T}$, and summing over arms with $\sum_i n_i=T$ and Cauchy--Schwarz gives the bound, which is exactly the standard UCB rate \citep{auer2002ucb}. \emph{Third}, and this is the point, when the examiner is sound the self-computable $\sum_t\rho_t$ sits above the true pseudo-regret: the agent certifies how far it is from its best arm \emph{without ever knowing which arm that is}. The examiner is nothing exotic here; its two numbers are UCB's own upper and lower confidence bounds, renamed.
 
-\paragraph{Why it stays honest, and the price.} An arm never pulled has $n_i=0$, so its radius $c_i$ stays at its maximum and its optimistic index stays high: the ceiling $\Vhi$ cannot fall, and the examiner cannot claim ``no room to improve'' about an arm it has not inspected. That keeps a small $\rho_t$ trustworthy when the agent can cover its arms. But when there are more arms than steps ($N>T$), some arm is never pulled, and if the special arm hides there the examiner must keep $\rho_t\ge\epsilon$: it cannot honestly certify it is done. An honest, vanishing self-report is therefore not free in a big world.
+An arm never pulled has $n_i=0$, so its radius $c_i$ stays at its maximum and its optimistic index stays high: the ceiling $\Vhi$ cannot fall, and the examiner cannot claim ``no room to improve'' about an arm it has not inspected. That keeps a small $\rho_t$ trustworthy when the agent can cover its arms. But when there are more arms than steps ($N>T$), some arm is never pulled, and if the special arm hides there the examiner must keep $\rho_t\ge\epsilon$: it cannot honestly certify it is done. An honest, vanishing self-report is therefore not free in a big world.
 
-\paragraph{How to use it.} Without any external optimum, $\rho_t$ serves as an online \emph{monitor} of self-assessed room to improve; comparing the $\rho_t$ of two algorithms on one stream \emph{ranks} which is nearer its own reachable optimum; and a low $\rho_t$ can be \emph{audited} on the covered arms, with the big-world case marking when no audit is possible and apparent convergence should trigger more exploration rather than trust.
+Without any external optimum, $\rho_t$ serves as an online \emph{monitor} of self-assessed room to improve; comparing the $\rho_t$ of two algorithms on one stream \emph{ranks} which is nearer its own reachable optimum; and a low $\rho_t$ can be \emph{audited} on the covered arms, with the big-world case marking when no audit is possible and apparent convergence should trigger more exploration rather than trust.
 
 \bibliography{main}
 \bibliographystyle{rlj}
