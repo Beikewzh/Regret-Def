@@ -1,0 +1,63 @@
+% =====================================================================
+% Section 3: No Free Lunch for Examiners
+% Outline (Wes):
+%   - Thm: any examiner can fail.
+%   - Hypothesis classes discussion (which biases M_E avoid the bias gap?)
+%   - Two-part structure: (i) a trivial self-report carries no guarantee,
+%     (ii) even a sound examiner cannot drive rho_t to zero in a big world.
+% =====================================================================
+
+\section{No Free Lunch for Examiners}
+\label{sec:nofree}
+
+The certificate of Lemma~\ref{lem:bridge} costs something. This section makes the cost precise. First, without soundness the self-report is meaningless. Second, even with soundness, in a big world $\rho_t$ cannot be driven to zero by any procedure.
+
+\subsection{A self-report carries no guarantee}
+\label{sec:nothing}
+
+\begin{proposition}[Self-report is empty]
+\label{prop:nothing}
+There exists an examiner with $\rho_t\equiv 0$ for every learner and every $\mu$. Consequently, two agents with identical self-report $\rho_t\equiv 0$ can satisfy $f^{K_L}_t-f^{\pi_t}_t=0$ for all $t$ in one case and $f^{K_L}_t-f^{\pi_t}_t\ge c>0$ for all $t$ in the other.
+\end{proposition}
+
+\begin{proof}
+Take $\Vhi=\Vlow=0$, which is $\Filt$-measurable and gives $\rho_t\equiv 0$ independent of $(\mathcal{L},\mu)$. Pair it with a learner playing a within-capacity optimum, and with one playing a policy of value $f^{K_L}_t-c$ at each $t$; both report $\rho_t\equiv0$. \textbf{[proved]}
+\end{proof}
+
+Hence no guarantee can be read from $\rho_t$ alone. Trust requires the soundness condition of Definition~\ref{def:sound}, which is why we treat ``the examiner is learning'' as the operative assumption.
+
+\subsection{The price: no free self-evaluation in a big world}
+\label{sec:price}
+
+Coverage is what a big world denies. The obstruction is information, not computation, and it is exactly non-identifiability.
+
+\begin{lemma}[Indistinguishability and its price]
+\label{lem:indist}
+Let $\mu,\mu'$ satisfy $\Pr_\mu=\Pr_{\mu'}$ on $\Filt$. Then under \textnormal{(A6)} every agent output has the same law under $\mu$ and $\mu'$, and for any world functional $\theta$ and any $\Filt$-measurable estimator $\hat\theta$,
+\[
+\max_{\nu\in\{\mu,\mu'\}}\Ex_\nu\big|\hat\theta-\theta(\nu)\big|\;\ge\;\tfrac12\,\big|\theta(\mu)-\theta(\mu')\big|.
+\]
+\end{lemma}
+
+\begin{proof}
+An $\Filt$-measurable map is a function of $h_t$, whose law is identical under $\mu,\mu'$; hence its push-forward law is identical \textbf{[proved]}. The inequality is Le~Cam's two-point bound with $\TV(\Pr_\mu,\Pr_{\mu'})=0$ on $\Filt$ \citep{tsybakov2009} \textbf{[cited]}.
+\end{proof}
+
+\begin{theorem}[No free self-evaluation]
+\label{thm:nofree}
+Consider the family of $N$-armed bandits in which one arm pays $\tfrac12+\epsilon$ and the rest pay $\tfrac12$, with the special arm unknown, run for horizon $T$. On a worst-case member, with probability at least $1-\alpha$, a sound examiner has
+\[
+\rho_t\;\ge\;\epsilon-\delta_t \ \text{ for all } t,\qquad \Rex_T\;\ge\;\epsilon T-\sum_{t\le T}\delta_t,
+\]
+unless it closes (i) a \emph{coverage gap}, $T\ge N$ so that every arm is pulled, or (ii) a \emph{bias gap}, $\ModE$ distinguishes the special arm from an ordinary one.
+\end{theorem}
+
+\begin{proof}
+\emph{Coverage gap.} If $T<N$ the learner pulls at most $T<N$ distinct arms, so some arm $i^{*}$ is unpulled. Let $\mu_0$ be all-$\tfrac12$ and $\mu_{i^{*}}$ make $i^{*}$ special; the two differ only at $i^{*}$, so $\Pr_{\mu_0}=\Pr_{\mu_{i^{*}}}$ on $\Filt$. By Lemma~\ref{lem:indist} with $\theta=f^{K_L}$, the examiner emits the same $(\Vhi,\Vlow)$ in both, while $f^{K_L}$ differs by $\epsilon$. Under $\mu_{i^{*}}$ the played value is $\tfrac12$, so the floor forces $\Vlow\le\tfrac12$ and the ceiling forces $\Vhi\ge(\tfrac12+\epsilon)-\delta_t$; hence $\rho_t\ge\epsilon-\delta_t$, and the true regret is $\epsilon T$.
+\emph{Bias gap.} If instead every arm is pulled but $\ModE$ maps the special-arm world and an ordinary world to a common forecast, an examiner trusting $\ModE$ sets $\Vhi\approx\tfrac12<(\tfrac12+\epsilon)-\delta_t$ and is unsound where that arm is special; restoring the ceiling forces a hedge of size $\epsilon$, i.e.\ $\rho_t\ge\epsilon-\delta_t$. \textbf{[proved]}
+\end{proof}
+
+\paragraph{Reading rules.} Two consequences follow. First, the bound holds over all $\Filt$-measurable procedures, so no computational budget escapes it: extra compute tightens estimates only within what $\Filt$ and $\ModE$ determine. Second, a consistent examiner ($\delta_t\to 0$) reporting $\rho_t\to 0$ in a big world is, by Theorem~\ref{thm:nofree}, relying on an unverified $\ModE$, so a near-zero $\rho_t$ is unearned confidence, not completed learning. The impossibility direction is not novel: gaps (i) and (ii) are the explore-or-assume dichotomy and the realizability requirement \citep{kearns2002e3,brafman2002rmax,azar2017minimax,lai1985asymptotically}. We use it to price the position.
+
+\paragraph{Hypothesis-class discussion.}
+Theorem~\ref{thm:nofree} suggests reading $\ModE$ as a model class whose generalization properties determine whether the bias gap can be closed on a given family. Characterizing which $\ModE$ avoid the bias gap on which $\mu$-families is the natural follow-up; we mark it as a gap in Section~\ref{sec:limits}.

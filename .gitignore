@@ -1,0 +1,50 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+
+# LaTeX backups & swap files
+*.bak
+*.bak2
+*.swp
+*~
+
+# Build output (regenerated from sources)
+main.pdf
+main_check.pdf
+
+# Auxiliary "check" copies (scratch compile targets)
+main_check.tex
+main_check.*
+backup.tex
+texput.log
+bib.log
+
+# Code (generators / demos for figures)
+*.py
+__pycache__/
+.ipynb_checkpoints/
+
+# Raster images (we ship vector PDFs of figures)
+*.png
+*.jpg
+*.jpeg
+
+# Discussion / critique memos (not part of the submission)
+*.md
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/

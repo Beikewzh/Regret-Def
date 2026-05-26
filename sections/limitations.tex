@@ -1,0 +1,8 @@
+% =====================================================================
+% Section 6: Limitations
+% =====================================================================
+
+\section{Limitations}
+\label{sec:limits}
+
+The content lives in Definition~\ref{def:sound}, not in $\rho_t$, and soundness is extrinsic, requiring $\ModE$ and hence a prior. Lemma~\ref{lem:bridge} is a decomposition, the optimism gap relabeled, not a new rate. Proposition~\ref{prop:bandit} is tight only in the coverable bandit; soundness of a biased, capacity-bounded examiner under non-stationarity, and the under-capacity case $\Dstruct_t>0$, are not established \textbf{[GAP]}. Figure~\ref{fig:bandit} is an illustration on a synthetic bandit, not a general guarantee. Theorem~\ref{thm:nofree} and Lemma~\ref{lem:indist} are worst-case two-point statements and not themselves novel, and we do not characterize which $\ModE$ avoid the bias gap on which families. The out-learning principle is a design argument, not a theorem that an off-policy examiner attains soundness faster than the learner attains optimality \textbf{[GAP]}. We propose one coupling -- $\rho_t$ as intrinsic reward -- but do not analyse the joint dynamics.
