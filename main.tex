@@ -72,6 +72,120 @@ TODO
 \section{Introduction}
 \label{sec:intro}
 
+
+
+
+\textbf{Intro}
+\begin{itemize}
+    \item Continual learning considers a general stream of experience
+    \item Question: How do we measure performance on arbitrary experience?
+    \item Background about standard regret notions. Stochastic, adversarial, ... 
+    \item These don't work in general. We need something new.
+    \item We propose ``perceived regret" as a general notion. Give definition.    
+\end{itemize}
+
+\textbf{Content}
+\begin{itemize}
+    \item Formal definitions and assumptions
+    \item Assumption 1,2: Upper bound on true value. Lower bound on the true value.
+    \item Assumption 3: Examiner is learning.
+    Lots of possibilities to write about. Why do we need this (vacuous upper bounds)?
+    \item Local notion of perceived regret. i.e. w.r.t. a smaller class of 
+    \item No free lunch. 
+    \item Limited capacity learner and examiner. 
+    \item Exploration and intrinsic motivation
+    \item Practical usage and experiments
+    \item 
+\end{itemize}
+
+
+\section{Formal Definitions and Assumptions}
+
+\paragraph{Definition} The true value at time $t$ is defined as (expectatation over future). 
+
+
+\paragraph{Definition}
+The agent maintains estimates of two quantities: an \emph{aspiration} $\tilde{V}^*_t$ (``the highest value it thinks is achievable'') and a \emph{lower confidence value} $V^{\mathrm{low}}_t$ (``the value it is confident its policy achieves''). We define the \textbf{perceived regret} as $\rho_t := \tilde{V}^*_t - V^{\mathrm{low}}_t.$ 
+
+The following assumptions make this quantity non-trivial:
+
+\begin{assumption}[Valid lower bound]\label{a:lb}
+$V^{\mathrm{low}}_t \leq V^{\pi_t}$ for all $t$. The lower confidence value actually is a lower bound on the true policy value. 
+\end{assumption}
+
+
+\begin{assumption}[Optimism]\label{a:optimistic}
+$\tilde{V}^*_t \geq V^{*}_t$ for all $t$. The agent overestimates the optimal value in the environment. While a strong assumption, we can relax this condition to give different guarantees on the performance of the agent. 
+\end{assumption}
+
+
+\begin{proposition}[Consistency]\label{prop:consistency}  Under these two assumptions, $\rho_t$ upper bounds the true regret: 
+\[
+\rho_t = \underbrace{(\tilde{V}^*_t - V^*)}_{\geq\, 0} + \underbrace{(V^* - V^{\pi_t})}_{\text{true regret}} + \underbrace{(V^{\pi_t} - V^{\mathrm{low}}_t)}_{\geq\, 0} \;\;\geq\;\; V^* - V^{\pi_t}.
+\]
+    
+\end{proposition}
+
+
+Then, driving $\rho_t \to 0$ also causes the true regret to vanish, making this definition a meaningful notion of regret. 
+Additionally, these quantities are estimated exclusively from the agent's past stream of experience, without reference to external quantities from the environment.
+
+
+\subsection{Assumption: The Examiner Learns}
+
+
+
+\section{No Free Lunch for Examiners}
+\begin{itemize}
+    \item Thm: Any examiner can fail. 
+    \item Hypothesis classes discussion? 
+    \item 
+\end{itemize}
+
+
+
+\section{Perceived regret in practice}
+General outline how it can be used and computed. 
+Procedure how to use it in practice.
+\begin{itemize}
+    \item Basic success story. Bandits with UCB, fixed env. 
+    \item Success in nonstationary env.
+    \item Bandit with added actions. 
+    \item (2player adversarial. Rock-paper-scissors.) 
+    \item Failure case: Perceived regret goes to 0 but learner is not done. e.g. examiner thinks bandit is stationary but it's not.  
+    \item Failure case: Perceived regret is nonzero but learner has the optimal policy. e.g. examiner thinks bandit is nonstationary but it is stationary.
+\end{itemize}
+
+
+\subsection{Relative capacity between learner and examiner}
+\begin{itemize}
+    \item Fix learner and env. Vary capacity of examiner.
+    \item Simplest setting: action/state aggregation. \item Linear function approx. Vary rank of features.
+    \item Experiment in bandit: Learner has full representation. Examiner is aggregate. We expect examiner to fail. 
+    Can do reverse case too, then examiner should succeed (might be tricky because of faster generalization).
+\end{itemize}
+
+
+\subsection{Exploration and intrinsic motivation}
+(Optional)
+\begin{itemize}
+    \item Add reward bonus to the examiner's reward to measure intrinsic motivation.
+    \item Measure the learner with this. 
+\end{itemize}
+
+
+\section{}
+
+
+
+
+\newpage
+
+
+
+
+
+
 Reinforcement learning grades an agent from outside, against an optimum $V^{*}$ that a model, a prior, or a fixed comparator supplies \citep{lai1985asymptotically,jaksch2010ucrl2}. This is sound when the world is small enough to model. Continual reinforcement learning (CRL) assumes the opposite \citep{ring1994continual,abel2023definition}: under the big-world hypothesis the agent is far smaller than its environment, cannot represent or retain a fixed optimal solution, and never stops learning \citep{javed2025bigworld,lewandowski2025bigger,dohare2024plasticity}. Formally, two failures follow. At run time the agent has no estimator of $V^{*}$ that is measurable with respect to its own experience, and even given $V^{*}$ the quantity $V^{*}-f^{\pi_t}_t$ is the wrong objective, since a capacity-bounded agent should be compared to the best policy it can itself represent rather than to one it can never express \citep{simon1955behavioral,russell1995bounded,lieder2020resource,abel2024dogmas}.
 
 Our position is that a continual agent's only honest measure of progress is one it computes from its own stream, and that to be trustworthy that measure must be produced by a module that out-learns the policy it grades. We make the measure explicit. Alongside the acting learner $\mathcal{L}$, an internal examiner $\mathcal{E}$ outputs an aspiration $\Vhi$ for the value it believes attainable and a guarantee $\Vlow$ for the value it is sure of, and the examiner regret is the gap $\rho_t=\Vhi-\Vlow\ge 0$. We make four formal claims. The self-report certifies nothing on its own (Proposition~\ref{prop:nothing}). A soundness condition makes $\rho_t$ an upper bound on the regret the agent can reduce (Lemma~\ref{lem:bridge}). In a coverable world this bound recovers the classical confidence-bound theory exactly (Proposition~\ref{prop:bandit}). And in a big world the bound cannot be driven to zero by any procedure, because the missing comparator is non-identifiable from the agent's stream (Lemma~\ref{lem:indist}, Theorem~\ref{thm:nofree}). The consequence is a design principle: the examiner must out-learn the learner, since estimating $\Vhi$ requires predicting the value of policies never executed. We claim no new rate; a bandit runs as the worked example throughout.
