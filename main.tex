@@ -27,18 +27,32 @@
 \newtheorem{lemma}{Lemma}
 \newtheorem{proposition}{Proposition}
 
+
 \newcommand{\Ex}{\mathbb{E}}
 \renewcommand{\Pr}{\mathbb{P}}
 \newcommand{\ModE}{\mathcal{M}_E}
 \newcommand{\PiK}{\Pi_{K_L}}
-\newcommand{\Vlow}{V^{\mathrm{lo}}_t}
-\newcommand{\Vhi}{V^{\mathrm{hi}}_t}
+
 \newcommand{\Rex}{\mathcal{R}^{\mathrm{ex}}}
 \newcommand{\Rmax}{R_{\max}}
 \newcommand{\Dstruct}{\Delta^{\mathrm{str}}}
 \newcommand{\Filt}{\mathcal{F}_t}
 \newcommand{\TV}{\mathrm{TV}}
 
+\newcommand{\Vlow}{V^{\ell}}
+\newcommand{\Vhi}{\tilde{V}^*}
+
+
+\newcommand{\Obs}{\mathcal{O}}
+\newcommand{\Actions}{\mathcal{A}}
+\newcommand{\Env}{\mathcal{E}}
+\newcommand{\Rew}{\mathcal{R}}
+\newcommand{\Tr}{\mathcal{P}}
+\newcommand{\Hist}{\mathcal{H}}
+\newcommand{\Reals}{\mathbb{R}}
+
+
+\newcommand{\wes}[1]{ {\color{blue} #1}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Meta-data (cover page) -- fill in the TODO fields
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -98,14 +112,45 @@ TODO
     \item 
 \end{itemize}
 
+Continual learning imagines an agent interacting with its world and learning from its stream of experience. 
 
 \section{Formal Definitions and Assumptions}
 
-\paragraph{Definition} The true value at time $t$ is defined as (expectatation over future). 
+We first define the environment and how an agent interacts with it. The environment is framed to allow maximal flexibility and impose minimal constraints on an agent's associated stream of experience. 
 
+\wes{reorganize possibly}
+\begin{definition}[Environment] The \textbf{environment} $\Env$ is defined by a tuple $(\Obs, \Actions, \Rew, \Tr, \gamma)$. The observation space $\Obs$ and action space $\Actions$ serve as the agent-environment interface. $\Rew:  \Hist \times \Actions \rightarrow \Reals$ is the \textit{reward function} and $\gamma : \Hist \times \Actions$ is the \textit{discount function}, which together define the objective to maximize. Finally, $\Tr: \Hist \times \Actions \rightarrow \Obs$ defines the \textit{observation function}. \wes{maybe add something about observations}
+\end{definition}
+
+
+This definition aims to capture complex streams of experience. In particular, we allow the rewards $\Rew$ and transitions $\Tr$ to depend on the entire history in an arbitrary fashion. In this way, it encompasses a large class of environments, including non-Markovian transition dynamics of any order, adaptive (or adversarial) environments and nonstationarity. 
+In particular, we can model ``big worlds" \wes{add cite}, where the agent's computational capacity is tiny compared to the complexity of the world. From the perspective of the agent, the world may appear highly nonstationary and the agent cannot hope to accurately model its full complexity. 
+
+This environment definition does not encompass certain settings such as continuous time environments or variable number of observations between actions. We can easily extend our proposed regret definitions to these settings but focus on this setup for simplicity.
+
+We first define the true value and regret for an agent at a given time in a world. These quantities are unknowable to the agent but area useful to develop the theory. 
+
+
+\begin{definition}[True Value]
+\wes{maybe call this ``environment value"}
+The\textbf{true value} at time $t$ is defined as $V_t = \Ex[\sum_t]$ which is the expectation over future according to the environment's dynamics. 
+
+\end{definition}
+
+\begin{definition}[True Regret]
+    
+\end{definition}
+
+\paragraph{Definition} The true regret at time $t$ is defined as $\Ex[\sum_t]$ (expectation over future). 
+
+
+
+
+With the basic setting outlined, we can defined our proposed notion of regret. 
+We consider an \textit{examiner} $\chi$ that receives the same data
 
 \paragraph{Definition}
-The agent maintains estimates of two quantities: an \emph{aspiration} $\tilde{V}^*_t$ (``the highest value it thinks is achievable'') and a \emph{lower confidence value} $V^{\mathrm{low}}_t$ (``the value it is confident its policy achieves''). We define the \textbf{perceived regret} as $\rho_t := \tilde{V}^*_t - V^{\mathrm{low}}_t.$ 
+The \textit{examiner} $\chi$ maintains estimates of two quantities: an \emph{aspiration} $\tilde{V}^*_t$ (``the highest value it thinks is achievable'') and a \emph{lower confidence value} $V^{\mathrm{low}}_t$ (``the value it is confident the learner achieves''). We define the \textbf{perceived regret} as $\rho^\chi_t := \Vhi_t - \Vlow_t.$ 
 
 The following assumptions make this quantity non-trivial:
 
@@ -119,19 +164,37 @@ $\tilde{V}^*_t \geq V^{*}_t$ for all $t$. The agent overestimates the optimal va
 \end{assumption}
 
 
-\begin{proposition}[Consistency]\label{prop:consistency}  Under these two assumptions, $\rho_t$ upper bounds the true regret: 
+\begin{proposition}[Consistency]\label{prop:consistency}  Under these two assumptions, $\rho^\chi_t$ upper bounds the true regret: 
 \[
-\rho_t = \underbrace{(\tilde{V}^*_t - V^*)}_{\geq\, 0} + \underbrace{(V^* - V^{\pi_t})}_{\text{true regret}} + \underbrace{(V^{\pi_t} - V^{\mathrm{low}}_t)}_{\geq\, 0} \;\;\geq\;\; V^* - V^{\pi_t}.
+\rho^\chi_t = \underbrace{(\Vhi_t - V^*)}_{\geq\, 0} + \underbrace{(V^* - V^{\pi_t})}_{\text{true regret}} + \underbrace{(V^{\pi_t} - \Vlow_t)}_{\geq\, 0} \;\;\geq\;\; V^* - V^{\pi_t}.
 \]
     
 \end{proposition}
 
 
-Then, driving $\rho_t \to 0$ also causes the true regret to vanish, making this definition a meaningful notion of regret. 
+Thus, driving $\rho^\chi_t \to 0$ also causes the true regret to vanish, making this definition a meaningful notion of regret.  
 Additionally, these quantities are estimated exclusively from the agent's past stream of experience, without reference to external quantities from the environment.
 
 
+With only these two minimal assumptions, we cannot guarantee that $\rho^\chi_t$ is useful. We may get $\rho^\chi_t$ is an upper bound but never goes to zero, even if the learner finds the optimal policy. Consider the following example.
+\vspace{-4mm}
+\paragraph{Example: Vacuous upper bound.} Suppose the reward is bounded in $[0, R_{max}]$. Then, suppose we have an examiner $\chi_{bad}$ that outputs $\rho^{\chi_{bad}}_t = R_{max}  / (1-\gamma)$ at every step $t$. This quantity is an upper bound on the true value (and true regret) but does not depend on the data at all. Crucially, no matter how well the learner does, the bound will never decrease and $\rho_t$ is not a useful performance measure.
+
+Ideally, we want the examiner to refine its estimates of $\rho^\chi_t$ as it receives more information. In other words, we want an examiner that \textit{learns}. This is a tricky requirement and how to frame this theoretically is discussed in the following section.
+
 \subsection{Assumption: The Examiner Learns}
+
+\begin{itemize}
+    \item Have we pushed back the problem to the examiner? How to define learning for the examiner?
+    \item Link to generalization? 
+    \item Can give some examples how to frame it...?
+\end{itemize}
+
+The examiner is faced with a learning problem of its own. 
+
+
+
+In the next section, we discuss why it would be impossible to define a ``universal" examiner, capable of accurately judging all agents. 
 
 
 
@@ -144,9 +207,13 @@ Additionally, these quantities are estimated exclusively from the agent's past s
 
 
 
+
+
+
 \section{Perceived regret in practice}
 General outline how it can be used and computed. 
 Procedure how to use it in practice.
+100 seeds experiments
 \begin{itemize}
     \item Basic success story. Bandits with UCB, fixed env. 
     \item Success in nonstationary env.
@@ -174,7 +241,7 @@ Procedure how to use it in practice.
 \end{itemize}
 
 
-\section{}
+\section{Conclusion}
 
 
 
