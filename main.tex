@@ -15,6 +15,7 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{url}
+\usepackage{subcaption}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Theorem environments and macros
@@ -344,9 +345,28 @@ In the next section, we illustrate some simple experiments where the appropriate
 
 
 \section{Perceived regret in practice}
-General outline how it can be used and computed. 
+General outline how it can be used and computed.
 Procedure how to use it in practice.
 100 seeds experiments
+
+\begin{figure}[t]
+\centering
+\begin{subfigure}[t]{0.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{image/fig1_stationary.pdf}
+    \caption{Stationary world: $\rho_t$ vs.\ true regret across agents and examiners.}
+    \label{fig:stationary}
+\end{subfigure}
+\hfill
+\begin{subfigure}[t]{0.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{image/fig2_switching.pdf}
+    \caption{Switching world: $\rho_t$ vs.\ true regret across agents and examiners.}
+    \label{fig:switching}
+\end{subfigure}
+\caption{Perceived regret $\rho_t$ compared to true regret for good and bad examiners on good and bad agents. (a) Stationary bandit; (b) switching (non-stationary) bandit.}
+\label{fig:practice_main}
+\end{figure}
 \begin{itemize}
     \item Basic success story. Bandits with UCB, fixed env. 
     \item Success in nonstationary env.

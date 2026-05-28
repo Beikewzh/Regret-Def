@@ -36,6 +36,9 @@ bib.log
 __pycache__/
 .ipynb_checkpoints/
 
+# Raw experiment data
+*.npz
+
 # Raster images (we ship vector PDFs of figures)
 *.png
 *.jpg
@@ -43,6 +46,9 @@ __pycache__/
 
 # Discussion / critique memos (not part of the submission)
 *.md
+
+# Do not track the experiments folder; figures used in the paper live under image/
+experiments/
 
 # Editor / OS
 .DS_Store
