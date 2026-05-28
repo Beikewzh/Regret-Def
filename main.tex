@@ -168,7 +168,7 @@ We first define the environment and how an agent interacts with it. The environm
 
 
 \begin{definition}[Agent and Policy]
-    The \textbf{agent} chooses actions according to a \textbf{policy} $\pi$, defined as a mapping from histories to actions $\pi : \Hist \rightarrow \Actions$.  
+    The \textbf{agent} $\Lambda$ chooses actions according to a \textbf{policy} $\pi$, defined as a mapping from histories to actions $\pi : \Hist \rightarrow \Actions$.  
 \end{definition}
 With this definition of a policy, it encompasses any algorithm that modifies the decision-making process based on past data, including memory-based policies or even parameter updates. 
 
@@ -255,7 +255,7 @@ We seek an examiner that refine its estimates of $\rho^\chi_t$ as it receives mo
 
 
 The examiner is faced with a learning problem of its own. 
-Given the stream of observations, rewards and actions, it must estimate $\Vhi$ and $\Vlow$, the upper and lower bounds, and produce the regret estimate $\rho^\chi_t$. 
+Given the stream of observations, rewards and actions, it must estimate $\Vhi$ and $\Vlow$ and produce the regret estimate $\rho^\chi_t$. 
 
 Broadly-speaking, we desire to have an examiner $\chi$ that produces valid (in the sense of Prop. \ref{prop:valid}) estimates while keeping the bounds as tight as possible. 
 Whenever the agent is learning effectively $\rho^\chi_t$ should decrease and, if the agent has an optimal policy, the examiner should output $\rho^\chi_t=0$.
@@ -268,8 +268,23 @@ Suppose the true values of all policies are bounded in $[0, V_{max}]$. We define
 
 \begin{theorem}[No Free Lunch for Examiners] For any non-vacuous examiner $\chi$ and any history of experience $h \in \Hist$, there exists an environment $\mathcal{E}$ consistent with the history such that the perceived regret estimate $\rho^\chi_t$ is an invalid upper bound on the true regret.
 \wes{Could rephrase it}
-The only examiner $\chi$ that produces valid perceived regret estimates (satisfying 
-\end{theorem}
+The only examiner $\chi$ that produces valid perceived regret estimates (satisfying assumptions \ref{a:lb} and \ref{a:optimistic}) for any history $h \in \Hist$, any environment $\Env$ and any agent outputs the vacuous bound $V_{max}$  at all steps.
+
+\end{theorem})
+\begin{proof}
+    We proceed by contradiction and show that any examiner that produces a non-vacuous bound will be invalid in some situations. Suppose that the examiner $\chi$ produces a non-vacuous bound $\rho^\chi(h) < V_{max}$, where we make the perceived regret's dependence on the history explicit. 
+    The agent may receive a 
+    Since we consider a genea
+
+    \textit{Sketch:} The agent's true value under its policy $\pi$ is $V^{\pi}=0$ but $\sup_{\pi'} V^{\pi'} = V^{max}$.
+    This occurs if the agent's policy
+    
+    Thus 
+    \wes{consider how to change this for stochasticity. By picking a uniform policy, you can avoid bad actions maybe? or we assume deterministic history-based policy? }
+\end{proof}
+
+
+
 \wes{what about randomness? Maybe forget about it for nwo}
 \wes{maybe change the form of the thm}
 
