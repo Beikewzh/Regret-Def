@@ -246,6 +246,7 @@ We seek an examiner that refine its estimates of $\rho^\chi_t$ as it receives mo
 
 
 \section{No Free Lunch for Examiners}
+\label{sec:nfl}
 % \begin{itemize}
 %     \item What do we want in a vague sense?
 %     \item Thm: Any examiner can fail. 
@@ -369,34 +370,51 @@ In the next section, we illustrate some simple experiments where the appropriate
 \section{Perceived regret in practice}
 \label{sec:practice}
 
+We now illustrate how perceived regret behaves in practice when the examiner's inductive bias is, or is not, matched to the world. We use multi-armed bandit testbeds chosen because the optimal learner and the true regret are both known, so $\rho^\chi_t$ can be read directly against ground truth. The stationary testbed has $K{=}10$ Bernoulli arms with fixed means; the switching testbed uses the same arm set but resamples the means at four equally spaced segment boundaries (dotted lines in our figures). Throughout, our expectation is the one suggested by the theory of Section~\ref{sec:nfl}: an examiner yields a valid and tight $\rho^\chi_t$ exactly when its modelling assumptions match the structure that actually matters in the stream, and it fails in a predictable direction when they do not.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{image/fig12_combined.pdf}
+\caption{Perceived regret $\rho^\chi_t$ versus true regret on the agent--examiner grid, in (a) the stationary $K{=}10$ Bernoulli bandit and (b) the switching variant whose arm means resample at four equally spaced boundaries (dotted lines). Each world is paired with a \emph{good} agent and a \emph{bad} agent, and each agent is assessed by a \emph{good} examiner whose assumptions match the world and a \emph{bad} examiner whose assumptions are mismatched. Curves are mean regret per step over $100$ seeds; shaded bands are $95\%$ bootstrap intervals.}
+\label{fig:practice_main}
+\end{figure}
 
-\begin{itemize}
-    \item Basic success story. Bandits with UCB, fixed env. 
-    \item Success in nonstationary env.
-    \item Bandit with added actions. 
-    \item (2player adversarial. Rock-paper-scissors.) 
-    \item Failure case: Perceived regret goes to 0 but learner is not done. e.g. examiner thinks bandit is stationary but it's not.  
-    \item Failure case: Perceived regret is nonzero but learner has the optimal policy. e.g. examiner thinks bandit is nonstationary but it is stationary.
-\end{itemize}
+\textbf{Matched examiners track true regret.} In the stationary world (Figure~\ref{fig:practice_main}a), the good examiner's $\rho^\chi_t$ decays toward zero on the UCB1 agent, mirroring the true regret to within the shaded interval, and plateaus near the true sub-optimality gap on the $\varepsilon$-greedy agent. The bad examiner, which freezes its aspiration $\Vhi$ at a vacuous upper bound, produces a flat $\rho^\chi_t$ on the good agent and is uninformative about whether learning has occurred. In the switching world (Figure~\ref{fig:practice_main}b), the matched sliding-window examiner produces $\rho^\chi_t$ spikes at each segment change and recovers between switches, tracking the true regret of SW-UCB; the same examiner correctly reports persistent regret for UCB1, whose stationarity assumption prevents it from re-adapting.
 
+\textbf{Mismatched examiners fail in predictable ways.} A stationarity-assuming examiner run in the switching world drifts toward zero between switches even when the underlying agent is incurring large true regret, producing an optimistic but \emph{invalid} assessment. Conversely, an overly nonstationary examiner inflates $\rho^\chi_t$ on agents that have already converged, paying a constant gap to the true regret. These two regimes are the practical face of the no-free-lunch result: validity (Assumptions~\ref{a:lb}--\ref{a:optimistic}) and tightness can each be lost when the examiner's bias is incompatible with the stream.
 
 \subsection{Relative capacity between learner and examiner}
-\begin{itemize}
-    \item Fix learner and env. Vary capacity of examiner.
-    \item Simplest setting: action/state aggregation. \item Linear function approx. Vary rank of features.
-    \item Experiment in bandit: Learner has full representation. Examiner is aggregate. We expect examiner to fail. 
-    Can do reverse case too, then examiner should succeed (might be tricky because of faster generalization).
-\end{itemize}
+\label{sec:capacity}
 
+The examples above vary the examiner's \emph{dynamics} assumption. A second, orthogonal axis is \emph{representational capacity}: how finely the examiner, or the agent, resolves the action space. We probe this with action aggregation, letting an examiner (or agent) distinguish only $G$ groups of arms, from $G{=}1$ (all arms pooled) to $G{=}10$ (per-arm). We expect $\rho^\chi_t$ to remain valid and tight only when the examiner is at least as fine-grained as the distinctions that drive regret in the world; when the agent is the coarser party, we expect $\rho^\chi_t$ to remain valid and to expose the agent's structural limitation. Figure~\ref{fig:capacity} confirms both expectations in the switching world; the stationary counterpart, where the effect is milder, is deferred to Appendix~\ref{app:capacity_stationary}.
 
-\subsection{Exploration and intrinsic motivation}
-(Optional)
-\begin{itemize}
-    \item Add reward bonus to the examiner's reward to measure intrinsic motivation.
-    \item Measure the learner with this. 
-    \item We can define a new objective that only considers the intrinsic motivation.
-\end{itemize}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{image/fig4_capacity_forward.pdf}\\[6pt]
+\includegraphics[width=\textwidth]{image/fig4_capacity_reverse.pdf}
+\caption{Relative capacity in the switching bandit, one panel per resolution $G$. \textbf{Top (forward).} A full SW-UCB agent assessed by an examiner that resolves only $G$ action groups: the per-arm examiner ($G{=}10$) spikes with the true regret at every switch, while a coarse examiner ($G{<}10$) is blind to within-group changes and \emph{under-reports}, with $\rho^\chi_t$ falling below the true regret (red region) and thus violating validity. \textbf{Bottom (reverse).} An agent restricted to $G$ action groups assessed by a full per-arm examiner: $\rho^\chi_t$ stays valid and plateaus just above the structural sub-optimality gap (labelled) that the restricted agent cannot close, while the full-resolution agent drives both regrets toward zero. Red: true regret; blue: $\rho^\chi_t$; mean over $100$ seeds.}
+\label{fig:capacity}
+\end{figure}
+
+\textbf{An under-resolved examiner under-reports (forward).} When the agent has full resolution but the examiner aggregates arms (Figure~\ref{fig:capacity}, top), only the per-arm examiner reacts to the within-segment changes that the agent must track: its $\rho^\chi_t$ spikes in lockstep with the true regret at each switch. As $G$ shrinks, the examiner increasingly cannot see the relevant distinctions, and its $\rho^\chi_t$ stays flat and dips \emph{below} the true regret---an optimistic, invalid assessment that would wrongly certify the agent as near-optimal. This is exactly the failure of the lower-bound/optimism assumptions when the examiner's representation is too coarse for the world.
+
+\textbf{An under-resolved agent reveals a structural gap (reverse).} When the examiner has full resolution but the agent is restricted to $G$ groups (Figure~\ref{fig:capacity}, bottom), the limitation is the agent's. Here $\rho^\chi_t$ remains a valid upper bound and settles just above the residual sub-optimality gap that the coarse agent provably cannot close; the labelled gaps grow as $G$ decreases, and only the full-resolution agent ($G{=}10$) drives perceived and true regret toward zero. Perceived regret thus does what we want of an evaluation signal: it attributes the persistent regret to the agent's capacity rather than masking it.
+
+\subsection{Comparing learners with a fixed examiner}
+\label{sec:learner_comparison}
+
+A natural use of perceived regret is model selection without ground truth: given a single sufficiently powerful examiner, can we rank a pool of learners by their $\rho^\chi_t$ and recover the ranking we would obtain from the (unavailable) true regret? We run five bandit learners---SW-UCB, D-UCB, EXP3.S, UCB1 and Thompson sampling---in the switching world, each assessed by one matched examiner, and compare their perceived and true regret over $100$ seeds. We expect $\rho^\chi_t$ to upper-bound the true regret for every learner and, more importantly, to preserve their \emph{relative} ordering.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{image/fig5_learner_comparison.pdf}
+\caption{Perceived regret as a stream-only comparison metric across learners in the switching bandit. \textbf{(a)} For each learner, $\rho^\chi_t$ (blue) tracks and upper-bounds the oracle true regret (red); dotted lines mark segment switches. \textbf{(b)} Final perceived versus true regret over $5\times100$ (learner, seed) pairs: the strong rank correlation (Spearman $\rho_S = 0.85$) shows that ranking learners by $\rho^\chi_t$ recovers the true ordering without access to ground truth.}
+\label{fig:learner_comparison}
+\end{figure}
+
+Both expectations hold. Per learner, $\rho^\chi_t$ tracks the true regret from above throughout learning, spiking and recovering with each switch (Figure~\ref{fig:learner_comparison}a). Aggregating to a single number per run, the final perceived and true regret are strongly rank-correlated across all $5\times100$ (learner, seed) pairs (Spearman $\rho_S = 0.85$, Figure~\ref{fig:learner_comparison}b), so the examiner orders the learners correctly even though it never observes the true regret. The residual scatter sits almost entirely above the diagonal, consistent with $\rho^\chi_t$ acting as a conservative (valid) proxy rather than an unbiased estimate.
+
+\textbf{A recipe for unknown streams.} Together these experiments suggest a simple procedure for using perceived regret when the world is unknown: (i) instantiate a small, diverse pool of examiners whose inductive biases bracket plausible world dynamics and resolutions; (ii) report $\rho^\chi_t$ from each examiner alongside the agent's behaviour; and (iii) treat agreement across examiners as evidence of meaningful regret estimates, and disagreement as a diagnostic that the examiner pool---not necessarily the agent---requires revisiting.
 
 
 \section{Discussion and Limitations}
@@ -424,6 +442,22 @@ If we view the agent as part of the world, meaning the world has access to the a
 
 
 
+
+\newpage
+
+\appendix
+
+\section{Capacity in the stationary world}
+\label{app:capacity_stationary}
+
+We repeat the capacity probe of Section~\ref{sec:capacity} in the stationary $K{=}10$ Bernoulli bandit, where the effect is milder because there are no switches to expose a coarse examiner. Figure~\ref{fig:capacity_stationary} shows both directions. In the forward case, once UCB1 has identified the optimal arm the examiner's aggregation barely matters: all resolutions $G$ converge to nearly the same small $\rho^\chi_t$, since the only distinction that drives regret---optimal versus sub-optimal arm---is preserved under every grouping (the early-transient separation is visible in the inset). In the reverse case, a capacity-restricted agent again plateaus at the structural sub-optimality gap induced by its grouping, and the full examiner's $\rho^\chi_t$ tracks that gap from above. The stationary world therefore exercises the same mechanism as Figure~\ref{fig:capacity} but without the non-stationary stress that makes an under-resolved examiner visibly invalid.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{image/fig3_capacity.pdf}
+\caption{Relative capacity in the stationary bandit. \textbf{(a)} Forward: a full UCB1 agent assessed by an examiner that aggregates arms into $G$ groups; all $G$ converge to the same small $\rho^\chi_t$ once the optimal arm is found (inset: early transient). \textbf{(b)} Reverse: an agent restricted to $G$ groups assessed by a full examiner; $\rho^\chi_t$ plateaus just above each structural gap (labelled). Red: true regret; coloured: $\rho^\chi_t$ per $G$; mean over $100$ seeds with $95\%$ intervals.}
+\label{fig:capacity_stationary}
+\end{figure}
 
 \newpage
 
