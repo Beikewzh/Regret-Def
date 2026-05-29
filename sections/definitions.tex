@@ -4,7 +4,7 @@ We first define the environment and how an agent interacts with it. The environm
 
 \wes{reorganize possibly}
 
-\begin{definition}[Environment] The \textbf{environment} $\Env$ is defined by a tuple $(\Obs, \Actions, \Rew, \Tr, \gamma)$. The observation space $\Obs$ and action space $\Actions$ serve as the agent-environment interface. We let $\mathcal{H}$ be the space of histories, sequences $h_t =\{o_0, a_0, r_1 , o_1, ..., a_{t-2}, r_{t-1},o_{t-1} \}$ for any $t \in \mathbb{N}$. Next, $\Rew:  \Hist \times \Actions \rightarrow \Reals$ is the \textit{reward function} and $\gamma : \Hist \times \Actions$ is the \textit{discount function}, which together define the objective to maximize. Finally, $\Tr: \Hist \times \Actions \rightarrow \Obs$ defines the \textit{observation function}. \wes{maybe add something about observations}
+\begin{definition}[Environment] The \textbf{environment} $\Env$ is defined by a tuple $(\Obs, \Actions, \Rew, \Tr, \gamma)$. The observation space $\Obs$ and action space $\Actions$ serve as the agent-environment interface. We let $\mathcal{H}$ be the space of histories, sequences $h_t =\{o_0, a_0, r_1 , o_1, ..., a_{t-2}, r_{t-1},o_{t-1} \}$ for any $t \in \mathbb{N}$. Next, $\Rew:  \Hist \times \Actions \rightarrow \Reals$ is the \textit{reward function} and $\gamma : \Hist \times \Actions$ is the \textit{discount function}, which together define the objective to maximize. Finally, $\Tr: \Hist \times \Actions \rightarrow \Obs$ defines the \textit{observation function}, producing the agent's next observation. 
 \end{definition}
 
 
@@ -14,9 +14,10 @@ We first define the environment and how an agent interacts with it. The environm
 With this definition of a policy, it encompasses any algorithm that modifies the decision-making process based on past data, including memory-based policies or even parameter updates. 
 
 The agent and environment interact in sequence, alternating between the environment producing an observation/reward and the agent choosing an action. These two steps can depend on the entire history of observations, rewards and actions up to that point in time. 
+The standard environment transition function from state to state in MDPs or POMDPs is implicitly defined through $\Rew$ and $\Tr$ as they depend on the history, we do not need to explicitly assume the existence of a ground-truth environment state.
 
-
-These definitions aims to capture complex streams of experience. In particular, we allow the rewards $\Rew$ and transitions $\Tr$ to depend on the entire history in an arbitrary fashion. In this way, it encompasses a large class of environments, including non-Markovian transition dynamics of any order, adaptive (or adversarial) environments and nonstationarity. 
+These definitions aims to capture complex streams of experience. In particular, we allow the rewards $\Rew$ and observations $\Tr$ to depend on the entire history in an arbitrary fashion. 
+In this way, it encompasses a large class of environments, including non-Markovian transition dynamics of any order, adaptive (or adversarial) environments and nonstationarity. 
 In particular, we can model ``big worlds" \wes{add cite}, where the agent's computational capacity is tiny compared to the complexity of the world. From the perspective of the agent, the world may appear highly nonstationary and the agent cannot hope to accurately model its full complexity. 
 
 

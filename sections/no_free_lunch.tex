@@ -36,18 +36,22 @@ The only examiner $\chi$ that produces valid perceived regret estimates (satisfy
     and that the examiner $\chi$ produces a non-vacuous bound $\rho^\chi(h) < \rho_{bound}(h)$, where we make the perceived regret's dependence on the history explicit. 
     We will show that $V^{\pi} \le V_{unif}$ and $\sup_{\pi'} V^{\pi'} = V^{max}$. This will imply $V^*- V^\pi > \rho^\chi $  (perceived regret does not bound the true regret), establishing the contradiction.
 
-    The agent has history $h$ and has a distribution over its next action. Let $a_{min}$ be the action with minimal probability (this exists since the action space is discrete).
+  
 
-    We let $a_{min}$ have associated reward $\Rew(h, a_{min}) = R_{max}$ and 
-    Have it go to a ``heaven" state. ALl other actions lead to 0 rewards forever.
-    
-    We produce an environment $\Env$ that generates the desired bounds. 
-    
-    We assign 
-    Suppose the environment is such that t
-    First, for any $V^\pi $
-    
-    
+    Given history $h$, we produce an environment $\Env_{bad}$ that generates the desired bounds. 
+        
+    The agent produces a distribution over its next action given its history. Let $a_{min}$ be the action with minimal probability (this exists since the action space is discrete).
+    To define $\Env_{bad}$,
+    we let $a_{min}$ have associated reward $\Rew(h, a_{min}) = R_{max}$ and 
+    lead to a future where a unique optimal action at each step receives $R_{max}$. 
+    Thus, the optimal policy has value $V_{max}$. Note that this optimal policy assigns probability 1 to $a_{min}$ for the immediate next action. 
+    All other actions lead to 0 rewards forever.
+    We also define $\Env_{bad}$ such that its observation function $\Tr$ leads to 
+    \wes{...?}
+
+    The uniform random policy will have associated value $V_{unif}(h)=1/|\Actions| {R_{max}} + V_{unif}(h || a_{min}, R_{max},o' )$, where $a || b$ denotes the concatenation of history $a$ followed by $b$. This expressions is due to the fact that one action has reward $R_{max}$ and other actions leads to 0 reward forever.
+    Then, t
+
     \textit{Sketch:} The idea is that given the history $h=\{o_0, ..., a_{t-2}, r_{t-1}, o_{t-1}\}$, no matter what the agent's distribution is over the next action, there is a world where it will incur 
     . The past does not inform the future when considering an arbitrary world.
     
@@ -78,7 +82,7 @@ As such, it is expected that similar no-free-lunch theorems apply to the examine
 This means there are no ``universally" best examiners---we must make do with the examiners we believe are best fit for the environment at hand and cannot give general guarantees on their evaluation performance. 
 Next, we discuss some choices of modeling biases we may endow the examiner with and reasonable criteria we could expect. 
 
-\wes{should the examiner see internals of the agent?}
+% \wes{should the examiner see internals of the agent?}
 
 
 
