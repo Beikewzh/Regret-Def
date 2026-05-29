@@ -1,7 +1,7 @@
 \begin{figure}[t!]
 \centering
 \includegraphics[width=\textwidth]{image/fig12_combined.pdf}
-\caption{Perceived regret $\rho^\chi_t$ versus true regret on the agent/examiner grid, in (a) a stationary and (b) a switching bounded-Gaussian bandit (vertical lines: switching times). Each world pairs a good (matched) and a bad (mismatched) examiner with a well-adapted and a poorly-adapted agent. Curves are the mean over $100$ seeds; shaded bands are $95\%$ bootstrap intervals.}
+\caption{Learning curves for perceived regret $\rho^\chi_t$ and true regret for agent/examiner combinations in (a) a stationary bandit and (b) a nonstationary bandit (vertical lines: switching times). Each world pairs a good (matched) and a bad (mismatched) examiner with a near-optimal and a poor learning agent. Curves are the mean over $100$ seeds; shaded bands are $95\%$ bootstrap intervals.}
 \label{fig:practice_main}
 \end{figure}
 
@@ -9,45 +9,41 @@
 \section{Perceived regret in practice}
 \label{sec:practice}
 
-In this section, we conduct simple experiments to illustrate how perceived regret can be used in practice and modeling 
+In this section, we conduct simple experiments to illustrate how perceived regret can be used in practice and the effect of an examiner's modeling choices.
 
-We use a multi-armed Gaussian bandit where the optimal policy and the true regret are both known, so $\rho^\chi_t$ can be assessed against ground truth. 
-We begin by conducting simple experiments to illustrate how the choice of examiner and its modeling biases impacts the perceived regret.
-
+We consider a multi-armed Gaussian bandit where the optimal policy and the true regret are both known, so $\rho^\chi_t$ can be assessed against ground truth. 
+We begin by conducting simple experiments to explore how the choice of examiner and its modeling biases impacts the perceived regret.
 % We begin by showing how two instructive scenarios: an examiner reports a valid and tight $\rho^\chi_t$ when its assumptions match the environment's structure, and it may fail when they do not.
 % Throughout, our expectation follows the theory of Section~\ref{sec:nfl}: an examiner reports a valid and tight $\rho^\chi_t$ when its assumptions match the environment's structure, and it may fail when they do not.
-Complete experimental details are deferred to Appendix~\ref{app:details}. 
+We consider two different environments: a stationary bandit and a nonstationary bandit, where the optimal action switches at regular intervals.
+In each one, we run a \emph{good} examiner, whose modeling assumptions match the world's dynamics, and a \emph{bad} examiner, whose assumptions are mismatched. More precisely, the good examiner for the nonstationary environment is also aware of the switches but the bad examiner mistakenly assumes the environment is stationary. The good/bad examiners are defined in the reverse manner for the stationary environment.
+Each examiner is run on two agents, one that is near-optimal in that environment and one that learns poorly.
+Complete experimental details are in Appendix~\ref{app:details}. 
 
-\textbf{A good examiner converges to the true regret.} In each world we run a \emph{good} examiner, whose modeling assumptions match the world's dynamics, and a \emph{bad} examiner, whose assumptions are mismatched.
- 
 
-\wes{say something about what these agent and examiners are}
-the precise agents and examiners are listed in Appendix~\ref{app:details}.
-When the examiner is good, its perceived regret behaves as Proposition~\ref{prop:valid} predicts: it stays above the true regret. Furthermore, it shrinks as the agent learns. 
+\textbf{A good examiner converges to the true regret.} 
+% \wes{say something about what these agent and examiners are}
+% the precise agents and examiners are listed in Appendix~\ref{app:details}.
+When the examiner is good, its perceived regret is valid  in the sense of Proposition~\ref{prop:valid}: it stays above the true regret. Furthermore, it shrinks as the agent learns. 
 In the stationary world (Figure~\ref{fig:practice_main}a), the good examiner's $\rho^\chi_t$ decays toward zero on the converging agent and settles at the residual sub-optimality gap on the agent that keeps exploring, tracking the true regret from above in both cases. 
 In the switching world (Figure~\ref{fig:practice_main}b), the good examiner is reset-aware: its $\rho^\chi_t$ spikes at each change and recovers between changes, following the true regret of the agent that re-adapts, and it reports persistent regret for the agent that wrongly assumes the world is static.
 
 \textbf{Failure modes of a bad examiner.} 
-There are two primary ways an examiner can fail.
+There are two primary ways an examiner can fail.\\
 \textit{Invalid upper bound.} 
 An examiner can produce a perceived regret lower than the true regret. 
-We this case in the switching world and with the bad examiner on UCB1: the bad examiner assumes stationarity and keeps stale data, so its lower confidence value $\Vlow_t$ is held too high and its aspiration $\Vhi_t$ too low; its $\rho^\chi_t$ then drifts toward zero between changes and falls \emph{below} the true regret even while the agent is incurring large regret. 
-This breaks the optimism assumption (Assumption~\ref{a:optimistic}), so the perceived regret is no longer valid and would wrongly certify the agent as near-optimal.
-% The bad examiner fails in the direction its mismatch dictates, and it can stop being an upper bound at all. 
-% In the switching world, a bad examiner that assumes stationarity keeps stale data, so its lower confidence value $\Vlow_t$ is held too high and its aspiration $\Vhi_t$ too low; its $\rho^\chi_t$ then drifts toward zero between changes and falls \emph{below} the true regret even while the agent is incurring large regret. 
+We observe this in the switching world with the bad examiner on UCB1: the bad examiner assumes stationarity and keeps stale data, so its lower confidence value $\Vlow_t$ is held too high and its aspiration $\Vhi_t$ too low; its $\rho^\chi_t$ then drifts toward zero between changes and falls \emph{below} the true regret even while the agent is incurring large regret. 
+This breaks the optimism assumption (Assumption~\ref{a:optimistic}), so the perceived regret is no longer valid and would wrongly certify the agent as near-optimal.\\
 \textit{Non-decreasing upper bound.} The examiner may produce a perceived regret that is larger than the true regret and never decrease it. 
 While not as dire as producing invalid regret bounds, this is also unsatisfying since it wrongly suggests that the agent can keep improving even though its policy may be optimal. 
-This failure case is illustrated in the the stationary world with the UCB1 agent. The examiner's perceived regret plateaus at a high value even though the agent achieves near-zero regret. This occurs since it mistakenly models the bandit as being nonstationary, when it is not.
+This failure case is illustrated in the the stationary world with the UCB1 agent. The examiner's perceived regret plateaus at a high value even though the agent achieves near-zero regret. This occurs since it mistakenly models the bandit as being nonstationary when it is not.
 
-Read together, the success and failure cases showcase the practical side of the no-free-lunch result of Section~\ref{sec:nfl}: an examiner is informative only when it carries the right prior knowledge about the world and may be misleading when it does not. 
+Taken together, the success and failure cases showcase the practical side of the no-free-lunch result of Section~\ref{sec:nfl}: an examiner is informative only when it carries the appropriate prior knowledge about the world and may be misleading when it does not. 
 We further explore these considerations across another axis, varying the relative representational capacity of agent and examiner (results in Appendix~\ref{app:capacity}).
 
 \subsection{Comparing learners with a fixed examiner}
 \label{sec:learner_comparison}
-
-
-
-In a large, non-stationary world we rarely have access to the true regret, yet we still want to compare candidate learners from a single stream of experience \citep{javed2025bigworld}. Perceived regret offers a stream-only surrogate: given an examiner, we can rank a pool of learners by their $\rho^\chi_t$. By using the same examiner, we can get a consistent measure of performance across different agents.
+In a complex world, we rarely have access to the true regret, yet we still want to compare candidate learners from a single stream of experience \citep{javed2025bigworld}. Perceived regret offers a stream-only surrogate: given an examiner, we can rank a pool of learners by their $\rho^\chi_t$ value. By using the same examiner, we can get a consistent measure of performance across different agents.
 
 
 We show an example where, using a good examiner, this recovers the ranking the true regret would give. We run several standard bandit learners in the switching world under a single good examiner, and we expect $\rho^\chi_t$ to upper-bound each learner's true regret and, more importantly, to preserve their relative order.
@@ -73,7 +69,7 @@ The margin is thus a property of the data the agent collects, not of its perform
 \label{sec:intrinsic}
 
 
-The examiner has so far been a passive scorer, but its uncertainty can also drive the agent. We add to the agent's reward an intrinsic bonus equal to the examiner's per-arm confidence width, scaled by $\beta$, with no other novelty signal, and study a switching world whose action set grows over time. Treating an uncertainty estimate as an exploration bonus is the basis of count-based and optimism-driven exploration and of intrinsic motivation more broadly \citep{strehl2009pacmdp, jaksch2010ucrl2, oudeyer2007intrinsic, lidayan2025bampf}; here the estimate is supplied by the examiner rather than the agent, which lets us ask whether a good examiner can double as a useful uncertainty metric.
+The examiner has so far been a passive scorer, but its uncertainty can also drive the agent. We add to the agent's reward an intrinsic bonus equal to the examiner's per-arm confidence width, scaled by $\beta$, with no other novelty signal, and study a switching world whose action set grows over time. Treating an uncertainty estimate as an exploration bonus is the basis of count-based and optimism-driven exploration and of intrinsic motivation more broadly \citep{strehl2009pacmdp, auer2008near, oudeyer2007intrinsic, lidayan2025bampf}; here the estimate is supplied by the examiner rather than the agent, which lets us ask whether a good examiner can double as a useful uncertainty metric.
 
 
 It can, when the examiner is good. A reset-aware examiner's uncertainty rises again at each change and prompts the agent to re-explore exactly when the world has shifted, which lowers cumulative regret well below the no-bonus baseline and speeds recovery after each switch (Figure~\ref{fig:intrinsic_quality}). The benefit is not unconditional, however: because the bonus persists, an examiner that keeps reporting uncertainty after the agent has converged will keep pushing it to explore and so erode performance, the familiar tension that an intrinsic bonus must eventually decay or be annealed \citep{lidayan2025bampf}. In our setting this appears as an over-exploration regime once $\beta$ is too large, which we report in Appendix~\ref{app:intrinsic_ablation}.
