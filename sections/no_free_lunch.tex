@@ -48,10 +48,10 @@ This guess depends on the various modeling biases baked into the examiner.
 For example, the examiner may assume that the world is Markovian and produce its estimates in accordance with this assumption. This may be correct in certain environments and incorrect in others. 
 The examiner's inductive bias also matters as the agent may enter previously unseen parts of the world and thus the examiner's generalization properties matter too.
 
-Overall, we see that the examiner faces a learning problem at least as difficult as supervised learning, combining standard predictions on examples with a temporal and decision-making component. 
+Overall, we see that the examiner faces a learning problem at least as difficult as supervised learning, combining prediction on new examples with a temporal and decision-making component. 
 As such, it is expected that similar no-free-lunch theorems apply to the examiner. 
 This means there are no ``universally" best examiners---we must make do with the examiners we believe are best fit for the environment at hand and cannot give general guarantees on their evaluation performance. 
-Next, we discuss some choices of modeling biases we may endow the examiner with and reasonable criteria we could expect. 
+Next, we discuss some choices of modeling biases for the examiner with and how we can evaluate them.
 
 % \wes{should the examiner see internals of the agent?}
 
