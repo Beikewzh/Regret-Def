@@ -31,12 +31,6 @@ In the switching world (Figure~\ref{fig:practice_main}b), the good examiner is r
 \label{sec:learner_comparison}
 
 
-\begin{figure}[t!]
-\centering
-\includegraphics[width=\textwidth]{image/fig_examiner_quality.pdf}
-\caption{Examiner quality as the bonus source ($\beta=1$). \textbf{(a)} cumulative true regret: the single good (reset-aware) examiner and an ensemble of three weak examiners both fall well below the no-bonus reference, while the vacuous examiner runs off the top of the axis (annotated). \textbf{(b)} per-step true regret: the good and ensemble examiners re-adapt after each change, whereas the vacuous examiner's uniform bonus saturates the reward and pins regret near the random-policy level.}
-\label{fig:intrinsic_quality}
-\end{figure}
 
 In a large, non-stationary world we rarely have access to the true regret, yet we still want to compare candidate learners from a single stream of experience \citep{javed2025bigworld}. Perceived regret offers a stream-only surrogate: given an examiner, we can rank a pool of learners by their $\rho^\chi_t$. By using the same examiner, we can get a consistent measure of performance across different agents.
 
@@ -72,3 +66,10 @@ It can, when the examiner is good. A reset-aware examiner's uncertainty rises ag
 In practice we do not know the true dynamics, so we cannot guarantee a perfectly matched examiner, but we usually have some partial knowledge. Averaging a small, diverse pool of reasonable but imperfect examiners turns that partial knowledge into a robust bonus: an ensemble of three weak examiners reduces regret almost as much as the single oracle examiner, without knowing when or how the world changes (Figure~\ref{fig:intrinsic_quality}). What must be avoided is an examiner with no real knowledge of the world: a vacuous examiner whose uncertainty is uniform across arms carries no exploration signal, and as $\beta$ grows its bonus saturates the reward until learning collapses to the random-policy level (Figure~\ref{fig:intrinsic_quality}). A single weak examiner is often sufficient on its own, but it is not guaranteed to be, and Appendix~\ref{app:intrinsic_ablation} shows one whose mis-calibration degrades sharply; the ensemble is therefore best understood as a hedge against a poorly chosen examiner rather than as a free improvement over a good one.
 
 These observations suggest a simple procedure for unknown streams: instantiate a small, diverse pool of examiners whose biases bracket plausible dynamics and resolutions, report $\rho^\chi_t$ from each alongside the agent's behaviour, and treat agreement across the pool as evidence of meaningful estimates and disagreement as a sign that the pool, not necessarily the agent, needs revisiting.
+
+\begin{figure}[t!]
+\centering
+\includegraphics[width=\textwidth]{image/fig_examiner_quality.pdf}
+\caption{Examiner quality as the bonus source ($\beta=1$). \textbf{(a)} cumulative true regret: the single good (reset-aware) examiner and an ensemble of three weak examiners both fall well below the no-bonus reference, while the vacuous examiner runs off the top of the axis (annotated). \textbf{(b)} per-step true regret: the good and ensemble examiners re-adapt after each change, whereas the vacuous examiner's uniform bonus saturates the reward and pins regret near the random-policy level.}
+\label{fig:intrinsic_quality}
+\end{figure}
