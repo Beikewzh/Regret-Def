@@ -30,7 +30,7 @@ Continual reinforcement learning imagines an agent interacting with its world an
 The agent chooses actions to accumulate as much reward as possible and improve its future reward. Without external knowledge about the world, how can we know if the agent is effectively learning? 
 We discuss how we can evaluate a continual reinforcement learning agent from its own stream of experience.
 
-\paragraph{Learning in Any World.} Our setting considers an agent interacting with a general environment. The agent takes actions $a_t$ based on its history and the environment produces rewards and observations $(r_t, o_t)$ based on the entire history.  
+\paragraph{Learning in Any World.} Our setting considers an agent interacting with a general environment. The agent takes actions $a_t$ based on its observation history and the environment produces rewards and observations $(r_t, o_t)$ based on the entire interaction history.  
 No assumptions are placed on the form of the environment; it is not necessarily a MDP, POMDP, etc. Thus, we allow the agent to interact with an arbitrary stream of experience $\{o_0, r_0, a_1, o_1, r_1, a_2, o_2, r_2,...\}$ with the goal of developing an evaluation procedure for intelligent agents that can 
 ``continue to adapt over the course of lifelong streams of experience." \citep{silver2025welcome}.
 

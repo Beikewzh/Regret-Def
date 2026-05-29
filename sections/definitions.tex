@@ -2,7 +2,7 @@
 
 We first define the environment and how an agent interacts with it. The environment is framed to allow maximal flexibility and impose minimal constraints on an agent's associated stream of experience. 
 
-\wes{reorganize possibly}
+% \wes{reorganize possibly}
 
 \begin{definition}[Environment] The \textbf{environment} $\Env$ is defined by a tuple $(\Obs, \Actions, \Rew, \Tr, \gamma)$. The observation space $\Obs$ and action space $\Actions$ serve as the agent-environment interface. We let $\mathcal{H}$ be the space of histories, sequences $h_t =\{o_0, a_0, r_1 , o_1, ..., a_{t-2}, r_{t-1},o_{t-1} \}$ for any $t \in \mathbb{N}$. Next, $\Rew:  \Hist \times \Actions \rightarrow \Reals$ is the \textit{reward function} and $\gamma : \Hist \times \Actions$ is the \textit{discount function}, which together define the objective to maximize. Finally, $\Tr: \Hist \times \Actions \rightarrow \Obs$ defines the \textit{observation function}, producing the agent's next observation. 
 \end{definition}
@@ -28,7 +28,7 @@ We first define the true value and regret for an agent at a given time in a worl
 
 
 \begin{definition}[True Value and Optimal Value]
-\wes{maybe call this ``environment value"}
+% \wes{maybe call this ``environment value"}
 The \textbf{true value} at time $t$ of policy $\pi$ is defined as $V_t^\pi = \Ex_{\substack{o_i \sim \Tr, r_i \sim \Rew, a_i \sim \pi \\ \text{ for } i \in \{1, 2, ...\} }}[\sum_{i=0}^\infty \gamma^i \Rew(H_{t+i}, A_{t+i}) | H_t=h]$ which is the expectation over the future according to the environment's dynamics and rewards, given the past history $h$. 
 Then, the \textbf{optimal value} is defined as $V^*_t =\sup_\pi V^\pi_t$
 \end{definition}
