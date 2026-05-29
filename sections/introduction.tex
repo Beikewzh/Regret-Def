@@ -47,7 +47,7 @@ What if the agent had chosen past actions according to a different policy $\pi$ 
 Concretely, $V^*$ is the sum of rewards that \textit{would have been accumulated} by the best policy from a given set $\Pi$ if it had been run in the past. 
 For example, in classic adversarial bandits, $\Pi$ is the set of policies that always choose a single action.
 Then, to achieve low hindsight regret (usually termed ``external regret"), the agent has to do (almost) as well as having chosen the best fixed action in hindsight.
-In nonstationary settings or MDPs, it is more difficult to define $\Pi$ without making low regret impossible to achieve \wes{add cite}.
+In nonstationary settings or MDPs, it is more difficult to define $\Pi$ without making low regret impossible to achieve \citep{even2004experts, even2009online}.
 
 Some works propose other notions of regret to allow for nonstationarity in the problem settings. These include adaptive regret, tracking regret, dynamic regret among others \wes{add cites}.
 At a high-level, all these regret definitions limit the amount of nonstationarity to make the problem tractable, with the exact restrictions varying from one to the other. 
