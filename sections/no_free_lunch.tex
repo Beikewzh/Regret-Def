@@ -25,18 +25,14 @@ We say that a perceived regret $\rho$ is \textit{vacuous} if $\rho > \rho_{bound
 
 
 \begin{theorem}[No Free Lunch for Examiners] 
-% For any non-vacuous examiner $\chi$ and any history of experience $h \in \Hist$, there exists an environment $\mathcal{E}$ consistent with the history such that the perceived regret estimate $\rho^\chi_t$ is an invalid upper bound on the true regret.
-% \wes{Could rephrase it}
 The only examiner $\chi$ that produces valid perceived regret estimates (satisfying assumptions \ref{a:lb} and \ref{a:optimistic}) for any history $h \in \Hist$, any environment $\Env$ and any agent outputs a vacuous perceived regret $\rho^\chi > \rho_{bound}$  at all steps.
-
 \end{theorem})
+
 \begin{proof}
     We proceed by contradiction and show that, given a history $h$ and an agent policy $\pi$, any examiner that produces a non-vacuous bound will be invalid in some environments. 
     Suppose we have an agent with history $h=\{o_0, ..., a_{t-2}, r_{t-1}, o_{t-1}\}$.
     and that the examiner $\chi$ produces a non-vacuous bound $\rho^\chi(h) < \rho_{bound}(h)$, where we make the perceived regret's dependence on the history explicit. 
     We will show that $V^{\pi} \le V_{unif}$ and $\sup_{\pi'} V^{\pi'} = V^{max}$. This will imply $V^*- V^\pi > \rho^\chi $  (perceived regret does not bound the true regret), establishing the contradiction.
-
-  
 
     Given history $h$, we produce an environment $\Env_{bad}$ that generates the desired bounds. 
         
@@ -64,9 +60,8 @@ The only examiner $\chi$ that produces valid perceived regret estimates (satisfy
 % \wes{look at offline RL lower bounds for inspiration on proofs?}
 
 
-Similar to no-free-lunch theorems in supervised learning, which tell us that over all data distributions, no model can outperform random guessing on the population loss, we find that it is impossible to produce valid non-vacuous bounds on all environments. 
-
-where we cannot expect a learning algorithm to generalize well for all data distributions, we cannot expect the examiner to accurately assess any learner. 
+Similar to no-free-lunch theorems in supervised learning, which tell us that over all data distributions, no model can outperform random guessing on the population loss, we find that it is impossible to produce valid non-vacuous bounds on all environments. x  
+% where we cannot expect a learning algorithm to generalize well for all data distributions, we cannot expect the examiner to accurately assess any learner. 
 The examiner must make some guess about the structure of the environment to account for possible futures and their associated rewards.  
 This guess depends on the various modeling biases baked into the examiner. 
 For example, the examiner may assume that the world is Markovian and produce its estimates in accordance with this assumption. This may be correct in certain environments and incorrect in others. 
