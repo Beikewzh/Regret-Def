@@ -27,10 +27,8 @@
 %     \item 
 % \end{itemize}
 Continual reinforcement learning imagines an agent interacting with its world and learning from its stream of experience. 
-The agent chooses actions to accumulate as much reward as possible and improve its future reward. 
-To this agent, the only
-A questions arises: how can we measure the performance of a continual reinforcement learning agent from its stream of experience? 
-
+The agent chooses actions to accumulate as much reward as possible and improve its future reward. Without external knowledge about the world, how can we know if the agent is effectively learning? 
+We discuss how we can evaluate a continual reinforcement learning agent from its own stream of experience.
 
 \paragraph{Learning in Any World.} Our setting considers an agent interacting with a general environment. The agent takes actions $a_t$ based on its history and the environment produces rewards and observations $(r_t, o_t)$ based on the entire history.  
 No assumptions are placed on the form of the environment; it is not necessarily a MDP, POMDP, etc. Thus, we allow the agent to interact with an arbitrary stream of experience $\{o_0, r_0, a_1, o_1, r_1, a_2, o_2, r_2,...\}$ with the goal of developing an evaluation procedure for intelligent agents that can 
@@ -55,15 +53,17 @@ Some works propose other notions of regret to allow for nonstationarity in the p
 At a high-level, all these regret definitions limit the amount of nonstationarity to make the problem tractable, with the exact restrictions varying from one to the other. 
 For this reason, these regret definitions are unsuitable for our purpose because they explicitly or implicitly place constraints on the environment. We aim to define a performance measure suitable for \textit{any} world. 
 
-\textbf{Contributions}
+\paragraph{Contributions.}
 In this paper, we propose the \textit{agent-examiner} framework to evaluate any agent in any world.
-An \textit{examiner} $\chi$ views the same stream of experience as the agent . 
+An \textit{examiner} $\chi$ views the same stream of experience as the agent, with no influence on the future. This examiner estimates the 
 
 We define a novel performance measure: The \textit{perceived regret} $\rho^\chi_t$. 
 This quantity is defiend
 
+
+
 \begin{itemize}
-    \item brief description
+    \item 
     \item We discuss assumptions on it
     \item show a no-free-lunch theorem for examiners
     \item Small experiments illustrate how perceived regret works in different, informative  problems 
