@@ -29,10 +29,14 @@ In the switching world (Figure~\ref{fig:practice_main}b), the good examiner is r
 There are two primary ways an examiner can fail.
 \textit{Invalid upper bound.} 
 An examiner can produce a perceived regret lower than the true regret. 
-We this case in the switching world, with the bad examiner on UCB1, 
-% The bad examiner fails in the direction its mismatch dictates, and it can stop being an upper bound at all. 
-In the switching world, a bad examiner that assumes stationarity keeps stale data, so its lower confidence value $\Vlow_t$ is held too high and its aspiration $\Vhi_t$ too low; its $\rho^\chi_t$ then drifts toward zero between changes and falls \emph{below} the true regret even while the agent is incurring large regret. 
+We this case in the switching world and with the bad examiner on UCB1: the bad examiner assumes stationarity and keeps stale data, so its lower confidence value $\Vlow_t$ is held too high and its aspiration $\Vhi_t$ too low; its $\rho^\chi_t$ then drifts toward zero between changes and falls \emph{below} the true regret even while the agent is incurring large regret. 
 This breaks the optimism assumption (Assumption~\ref{a:optimistic}), so the perceived regret is no longer valid and would wrongly certify the agent as near-optimal.
+% The bad examiner fails in the direction its mismatch dictates, and it can stop being an upper bound at all. 
+% In the switching world, a bad examiner that assumes stationarity keeps stale data, so its lower confidence value $\Vlow_t$ is held too high and its aspiration $\Vhi_t$ too low; its $\rho^\chi_t$ then drifts toward zero between changes and falls \emph{below} the true regret even while the agent is incurring large regret. 
+\textit{Loose upper bound.} The examiner may produce
+
+While not as dire as producing invalid regret bounds, this is also unsatisf
+
 Read together, the success and failure cases are the practical face of the no-free-lunch result of Section~\ref{sec:nfl}: an examiner is informative only when it carries the right prior knowledge of the world, and is misleading when it does not. The same pattern recurs along a second axis, the relative representational capacity of agent and examiner, which we examine in Appendix~\ref{app:capacity}.
 
 \subsection{Comparing learners with a fixed examiner}
