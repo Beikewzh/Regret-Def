@@ -1,4 +1,4 @@
-\begin{figure}[h]
+\begin{figure}[t!]
 \centering
 \includegraphics[width=\textwidth]{image/fig12_combined.pdf}
 \caption{Perceived regret $\rho^\chi_t$ versus true regret on the agent/examiner grid, in (a) a stationary and (b) a switching bounded-Gaussian bandit (dotted: segment boundaries). Each world pairs a good (matched) and a bad (mismatched) examiner with a well-adapted and a poorly-adapted agent. Curves are the mean over $100$ seeds; shaded bands are $95\%$ bootstrap intervals.}
@@ -13,20 +13,28 @@ In this section, we conduct simple experiments to illustrate how the choice of e
 
 % We illustrate how perceived regret behaves when the examiner's modeling bias 
 
-We use a multi-armed Gaussian bandit in which the optimal policy and the true regret are both known, so $\rho^\chi_t$ can be assessed against ground truth. Complete experimental details are deferred to Appendix~\ref{app:details}. Throughout, our expectation follows the theory of Section~\ref{sec:nfl}: an examiner reports a valid and tight $\rho^\chi_t$ when its assumptions match the environment's structure, and it may fail when they do not.
+We use a multi-armed Gaussian bandit in which the optimal policy and the true regret are both known, so $\rho^\chi_t$ can be assessed against ground truth. 
+We begin by showing how two instructive scenarios: an examiner reports a valid and tight $\rho^\chi_t$ when its assumptions match the environment's structure, and it may fail when they do not.
+% Throughout, our expectation follows the theory of Section~\ref{sec:nfl}: an examiner reports a valid and tight $\rho^\chi_t$ when its assumptions match the environment's structure, and it may fail when they do not.
+Complete experimental details are deferred to Appendix~\ref{app:details}. 
 
+\textbf{A good examiner converges to the true regret.} In each world we run a \emph{good} examiner, whose modeling assumptions match the world's dynamics, and a \emph{bad} examiner, whose assumptions are mismatched.
 
+We consider two kinds of examiners: 1. 
 
-\textbf{A good examiner converges to the true regret.} In each world we run a \emph{good} examiner, whose modeling assumptions match the world's dynamics, and a \emph{bad} examiner, whose assumptions are mismatched; the precise agents and examiners are listed in Appendix~\ref{app:details}. When the examiner is good, its perceived regret behaves as Proposition~\ref{prop:valid} predicts: it stays above the true regret. Furthermore, it shrinks as the agent learns. In the stationary world (Figure~\ref{fig:practice_main}a), the good examiner's $\rho^\chi_t$ decays toward zero on the converging agent and settles at the residual sub-optimality gap on the agent that keeps exploring, tracking the true regret from above in both cases. In the switching world (Figure~\ref{fig:practice_main}b), the good examiner is reset-aware: its $\rho^\chi_t$ spikes at each change and recovers between changes, following the true regret of the agent that re-adapts, and it reports persistent regret for the agent that wrongly assumes the world is static.
+\wes{say something about what these agent and examiners are}
+the precise agents and examiners are listed in Appendix~\ref{app:details}.
+When the examiner is good, its perceived regret behaves as Proposition~\ref{prop:valid} predicts: it stays above the true regret. Furthermore, it shrinks as the agent learns. In the stationary world (Figure~\ref{fig:practice_main}a), the good examiner's $\rho^\chi_t$ decays toward zero on the converging agent and settles at the residual sub-optimality gap on the agent that keeps exploring, tracking the true regret from above in both cases. In the switching world (Figure~\ref{fig:practice_main}b), the good examiner is reset-aware: its $\rho^\chi_t$ spikes at each change and recovers between changes, following the true regret of the agent that re-adapts, and it reports persistent regret for the agent that wrongly assumes the world is static.
 
 \textbf{A bad examiner loses validity.} The bad examiner fails in the direction its mismatch dictates, and it can stop being an upper bound at all. In the switching world, a bad examiner that assumes stationarity keeps stale data, so its lower confidence value $\Vlow_t$ is held too high and its aspiration $\Vhi_t$ too low; its $\rho^\chi_t$ then drifts toward zero between changes and falls \emph{below} the true regret even while the agent is incurring large regret. This breaks the optimism assumption (Assumption~\ref{a:optimistic}), so the perceived regret is no longer valid and would wrongly certify the agent as near-optimal. Read together, the success and failure cases are the practical face of the no-free-lunch result of Section~\ref{sec:nfl}: an examiner is informative only when it carries the right prior knowledge of the world, and is misleading when it does not. The same pattern recurs along a second axis, the relative representational capacity of agent and examiner, which we examine in Appendix~\ref{app:capacity}.
 
 \subsection{Comparing learners with a fixed examiner}
 \label{sec:learner_comparison}
 
-In a large, non-stationary world we rarely have access to the true regret, yet we still want to compare candidate learners from a single stream of experience \citep{javed2025bigworld}. Perceived regret offers a stream-only surrogate: given an examiner, we can rank a pool of learners by their $\rho^\chi_t$. By using the same examiner on different agents, we can get a consistent measure of performance 
+In a large, non-stationary world we rarely have access to the true regret, yet we still want to compare candidate learners from a single stream of experience \citep{javed2025bigworld}. Perceived regret offers a stream-only surrogate: given an examiner, we can rank a pool of learners by their $\rho^\chi_t$. By using the same examiner, we can get a consistent measure of performance across different agents.
 
-whether this recovers the ranking the true regret would give. We run several standard bandit learners in the switching world under a single good examiner, and we expect $\rho^\chi_t$ to upper-bound each learner's true regret and, more importantly, to preserve their relative order.
+
+We show an example where, using a good examiner, this recovers the ranking the true regret would give. We run several standard bandit learners in the switching world under a single good examiner, and we expect $\rho^\chi_t$ to upper-bound each learner's true regret and, more importantly, to preserve their relative order.
 
 \begin{figure}[t]
 \centering
@@ -35,7 +43,15 @@ whether this recovers the ranking the true regret would give. We run several sta
 \label{fig:learner_comparison}
 \end{figure}
 
-Both expectations hold, with an instructive caveat about the size of the margin. For every learner $\rho^\chi_t$ stays above the true regret throughout learning (Figure~\ref{fig:learner_comparison}a), but the width of the margin between them does not track how good the learner is: it reflects how much evidence the agent's own behaviour gives the examiner. The margin is the examiner's validity slack, $(\Vhi_t - V^*_t) + (V^{\pi_t}_t - \Vlow_t)$, which the examiner can only close where the agent's data let it rule arms out. A learner that probes the action set broadly therefore lets the examiner tighten its optimistic aspiration and carries a small margin even when its true regret is large (EXP3.S, which spreads its pulls), whereas a near-optimal learner that concentrates on a few arms leaves the rest, including newly added ones, under-sampled, so the examiner stays optimistic about them and the margin is wider despite a true regret near zero (SW-UCB). The margin is thus a property of the data the agent collects, not of its performance. Because of this, ranking by $\rho^\chi_t$ does not reproduce the true-regret ranking exactly, but the two remain strongly rank-correlated across learners and seeds (Spearman $\rho_S = 0.85$, Figure~\ref{fig:learner_comparison}b), so $\rho^\chi_t$ still largely recovers the ordering without ever observing the truth. The points lie almost entirely above the diagonal, consistent with $\rho^\chi_t$ acting as a conservative rather than an unbiased proxy.
+% Both expectations hold, with an instructive caveat about the size of the margin.
+
+In Figure~\ref{fig:learner_comparison}(a), 
+
+
+For every learner $\rho^\chi_t$ stays above the true regret throughout learning (), but the width of the margin between them does not track how good the learner is: it reflects how much evidence the agent's own behaviour gives the examiner. 
+The margin is the examiner's validity slack, $(\Vhi_t - V^*_t) + (V^{\pi_t}_t - \Vlow_t)$, which the examiner can only close where the agent's data let it rule arms out.
+A learner that probes the action set broadly therefore lets the examiner tighten its optimistic aspiration and carries a small margin even when its true regret is large (EXP3.S, which spreads its pulls), whereas a near-optimal learner that concentrates on a few arms leaves the rest, including newly added ones, under-sampled, so the examiner stays optimistic about them and the margin is wider despite a true regret near zero (SW-UCB).
+The margin is thus a property of the data the agent collects, not of its performance. Because of this, ranking by $\rho^\chi_t$ does not reproduce the true-regret ranking exactly, but the two remain strongly rank-correlated across learners and seeds (Spearman $\rho_S = 0.85$, Figure~\ref{fig:learner_comparison}b), so $\rho^\chi_t$ still largely recovers the ordering without ever observing the truth. The points lie almost entirely above the diagonal, consistent with $\rho^\chi_t$ acting as a conservative rather than an unbiased proxy.
 
 \subsection{Exploration via examiner uncertainty}
 \label{sec:intrinsic}
