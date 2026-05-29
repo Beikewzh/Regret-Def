@@ -264,29 +264,51 @@ Ideally, there would be a universal examiner $\chi^*$ applicable to any agent an
 Unfortunately, this is asking for too much. The situation is similar to generalization in supervised learning, where we cannot create a universal learning algorithm that generalizes well on any data distribution.
 Similarly, we prove a no-free-lunch theorem showing that it is impossible to define a ``universal" examiner capable of accurately judging all agents in all worlds and discuss the implications. 
 
-Suppose the true values of all policies are bounded in $[0, V_{max}]$. We define a non-vacuous examiner $\chi$ as one that produces bounds. 
+To state this theorem, we first posit some additional assumptions about the agent and environment. We assume $\Actions$ is discrete with at least two actions. We also assume the rewards are bounded in $[0, R_{max}]$ so the true values of all policies are bounded in $[0, V_{max}]$. We define some useful quantities:
+Let $V_{unif}$ be the value of the uniform policy at all future steps and define $\rho_{bound} := V_{max} - V_{unif}$. This quantity is an upper bound on useful perceived regret estimates since, if the true regret is larger than $\rho_{bound}$, the agent is worse than the uniform random policy.
+We say that a perceived regret $\rho$ is \textit{vacuous} if $\rho > \rho_{bound}$. 
 
-\begin{theorem}[No Free Lunch for Examiners] For any non-vacuous examiner $\chi$ and any history of experience $h \in \Hist$, there exists an environment $\mathcal{E}$ consistent with the history such that the perceived regret estimate $\rho^\chi_t$ is an invalid upper bound on the true regret.
-\wes{Could rephrase it}
-The only examiner $\chi$ that produces valid perceived regret estimates (satisfying assumptions \ref{a:lb} and \ref{a:optimistic}) for any history $h \in \Hist$, any environment $\Env$ and any agent outputs the vacuous bound $V_{max}$  at all steps.
+
+\begin{theorem}[No Free Lunch for Examiners] 
+% For any non-vacuous examiner $\chi$ and any history of experience $h \in \Hist$, there exists an environment $\mathcal{E}$ consistent with the history such that the perceived regret estimate $\rho^\chi_t$ is an invalid upper bound on the true regret.
+% \wes{Could rephrase it}
+The only examiner $\chi$ that produces valid perceived regret estimates (satisfying assumptions \ref{a:lb} and \ref{a:optimistic}) for any history $h \in \Hist$, any environment $\Env$ and any agent outputs a vacuous perceived regret $\rho^\chi > \rho_{bound}$  at all steps.
 
 \end{theorem})
 \begin{proof}
-    We proceed by contradiction and show that any examiner that produces a non-vacuous bound will be invalid in some situations. Suppose that the examiner $\chi$ produces a non-vacuous bound $\rho^\chi(h) < V_{max}$, where we make the perceived regret's dependence on the history explicit. 
-    The agent may receive a 
-    Since we consider a genea
+    We proceed by contradiction and show that, given a history $h$ and an agent, any examiner that produces a non-vacuous bound will be invalid in some environments. 
+    Suppose we have an agent with history $h=\{o_0, ..., a_{t-2}, r_{t-1}, o_{t-1}\}$.
+    and that the examiner $\chi$ produces a non-vacuous bound $\rho^\chi(h) < \rho_{bound}(h)$, where we make the perceived regret's dependence on the history explicit. 
+    We will show that $V^{\pi} \le V_{unif}$ and $\sup_{\pi'} V^{\pi'} = V^{max}$. This will imply $V^*- V^\pi > \rho^\chi $  (perceived regret does not bound the true regret), establishing the contradiction.
 
-    \textit{Sketch:} The agent's true value under its policy $\pi$ is $V^{\pi}=0$ but $\sup_{\pi'} V^{\pi'} = V^{max}$.
-    This occurs if the agent's policy
+    The agent has history $h$ and has a distribution over its next action. Let $a_{min}$ be the action with minimal probability (this exists since the action space is discrete).
+
+    We let $a_{min}$ have associated reward $\Rew(h, a_{min}) = R_{max}$ and 
+    Have it go to a ``heaven" state. ALl other actions lead to 0 rewards forever.
     
+    We produce an environment $\Env$ that generates the desired bounds. 
+    
+    We assign 
+    Suppose the environment is such that t
+    First, for any $V^\pi $
+    
+    
+    \textit{Sketch:} The idea is that given the history $h=\{o_0, ..., a_{t-2}, r_{t-1}, o_{t-1}\}$, no matter what the agent's distribution is over the next action, there is a world where it will incur 
+    . The past does not inform the future when considering an arbitrary world.
+    
+    agent's true value under its policy $\pi$ is $V^{\pi} \le V_{unif}$ and $\sup_{\pi'} V^{\pi'} = V^{max}$.
+    This occurs if the agent's policy
+        
     Thus 
     \wes{consider how to change this for stochasticity. By picking a uniform policy, you can avoid bad actions maybe? or we assume deterministic history-based policy? }
 \end{proof}
-
-
+\wes{high probability bound?}
+\wes{add determnistic history-dependent agent}
 
 \wes{what about randomness? Maybe forget about it for nwo}
 \wes{maybe change the form of the thm}
+
+
 
 Similar to no-free-lunch theorems in supervised learning, which tell us that over all data distributions, no model can outperform random guessing on the population loss, we find that it is impossible to produce valid non-vacuous bounds on all environments. 
 
@@ -384,7 +406,7 @@ Procedure how to use it in practice.
 %     \item L
 % \end{itemize}
 \textbf{Limitations.} The perceived regret is produced by an examiner, which is also a learning agent (that cannot influence the future). When deployed alongside the agent, there are no guarantees that its perceived regret is actually meaningful and it could be wildly incorrect. 
-This may be an unavoidable price of seeking to evaluate agents in arbitrary worlds---the general applicability impacts the reliability of the assessment. 
+This may be an unavoidable price of seeking to evaluate agents in arbitrary worlds---the general applicability impacts the reliability of the assessment. This issue is akin to the problem of generalization. When an agent encounters a truly novel situation, there cannot be any guarantees and we can only hope it generalizes correctly. 
 
 
 
@@ -406,161 +428,6 @@ If we view the agent as part of the world, meaning the world has access to the a
 
 
 
-
-
-Reinforcement learning grades an agent from outside, against an optimum $V^{*}$ that a model, a prior, or a fixed comparator supplies \citep{lai1985asymptotically,jaksch2010ucrl2}. This is sound when the world is small enough to model. Continual reinforcement learning (CRL) assumes the opposite \citep{ring1994continual,abel2023definition}: under the big-world hypothesis the agent is far smaller than its environment, cannot represent or retain a fixed optimal solution, and never stops learning \citep{javed2025bigworld,lewandowski2025bigger,dohare2024plasticity}. Formally, two failures follow. At run time the agent has no estimator of $V^{*}$ that is measurable with respect to its own experience, and even given $V^{*}$ the quantity $V^{*}-f^{\pi_t}_t$ is the wrong objective, since a capacity-bounded agent should be compared to the best policy it can itself represent rather than to one it can never express \citep{simon1955behavioral,russell1995bounded,lieder2020resource,abel2024dogmas}.
-
-Our position is that a continual agent's only honest measure of progress is one it computes from its own stream, and that to be trustworthy that measure must be produced by a module that out-learns the policy it grades. We make the measure explicit. Alongside the acting learner $\mathcal{L}$, an internal examiner $\mathcal{E}$ outputs an aspiration $\Vhi$ for the value it believes attainable and a guarantee $\Vlow$ for the value it is sure of, and the examiner regret is the gap $\rho_t=\Vhi-\Vlow\ge 0$. We make four formal claims. The self-report certifies nothing on its own (Proposition~\ref{prop:nothing}). A soundness condition makes $\rho_t$ an upper bound on the regret the agent can reduce (Lemma~\ref{lem:bridge}). In a coverable world this bound recovers the classical confidence-bound theory exactly (Proposition~\ref{prop:bandit}). And in a big world the bound cannot be driven to zero by any procedure, because the missing comparator is non-identifiable from the agent's stream (Lemma~\ref{lem:indist}, Theorem~\ref{thm:nofree}). The consequence is a design principle: the examiner must out-learn the learner, since estimating $\Vhi$ requires predicting the value of policies never executed. We claim no new rate; a bandit runs as the worked example throughout.
-
-\section{Setting and Definitions}
-\label{sec:defs}
-
-We work over a single, never-resetting stream under an unknown law $\mu$, with no Markov, episodic, or stationarity assumption. Let $\Filt=\sigma(h_t)$ be the filtration generated by the observed history. We collect the standing assumptions.
-
-\begin{assumption}
-\label{ass:all}
-\textnormal{(A1)} rewards satisfy $r_s\in[0,\Rmax]$. \textnormal{(A2)} value uses a fixed $H$-step look-ahead. \textnormal{(A3)} the learner is representable in $K_L$ bits, with policy class $\PiK$, $|\PiK|\le 2^{K_L}$. \textnormal{(A4)} the examiner carries an inductive bias, a model class $\ModE$ of laws it deems possible. \textnormal{(A5)} all guarantees hold with probability at least $1-\alpha$ over the stream. \textnormal{(A6)} the learner's policy $\pi_t$ and the examiner's outputs $\Vhi,\Vlow$ are $\Filt$-measurable; the agent acts on its stream alone, at any computational budget.
-\end{assumption}
-
-\begin{definition}[Stream, policy, value]
-\label{def:basic}
-A history is $h_t=(o_0,r_0,a_1,\dots,a_t,o_t,r_t)$. A policy $\pi$ maps histories to action distributions, with value $f^{\pi}_t=\Ex_{\mu,\pi}\!\big[\sum_{s=t+1}^{t+H} r_s \mid h_t\big]$.
-\end{definition}
-
-\begin{definition}[Within-capacity optimum and structural gap]
-\label{def:capcomp}
-The within-capacity optimum is $f^{K_L}_t=\sup_{\pi\in\PiK} f^{\pi}_t$, and the structural gap to the global optimum $f^{*}_t=\sup_{\pi}f^\pi_t$ is $\Dstruct_t=f^{*}_t-f^{K_L}_t\ge 0$. We compare the agent to $f^{K_L}_t$ and keep $\Dstruct_t$ explicit as the irreducible price of bounded capacity.
-\end{definition}
-
-\begin{definition}[Learner and examiner]
-\label{def:agent}
-An agent is a pair $(\mathcal{L},\mathcal{E})$. The learner $\mathcal{L}$ emits $\pi_t\in\PiK$. The examiner $\mathcal{E}$ is an $\Filt$-measurable predictive model outputting $\Vhi\ge\Vlow$. Since $f^{K_L}_t$ depends on policies the learner may not run, estimating $\Vhi$ requires predicting the value of unexecuted behaviour, in the sense of general value functions \citep{sutton2011horde,modayil2014nexting} and off-policy prediction \citep{precup2001offpolicy,suttonprecupsingh1999}, with $\ModE$ the bias enabling generalization beyond the support of the data \citep{osband2013psrl}.
-\end{definition}
-
-\begin{definition}[Examiner regret]
-\label{def:exreg}
-$\rho_t=\Vhi-\Vlow\ge 0$, with $\Rex_T=\sum_{t=1}^T\rho_t$. As an $\Filt$-measurable functional, $\rho_t$ never refers to $\mu$, $f^{K_L}_t$, or $f^{*}_t$.
-\end{definition}
-
-\section{Where the External Comparator Fails}
-\label{sec:fails}
-
-The case for an internal measure is that the external comparator is, in the CRL regime, either undefined or non-estimable. Three cases make this precise. First, when the world's behaviour set grows without bound, the global optimum $f^{*}_t=\sup_{\pi}f^{\pi}_t$ is a moving and possibly unattained target, so static regret against a single $V^{*}$ has no fixed referent; our comparator $f^{K_L}_t$ stays well defined precisely because $\PiK$ is capacity-bounded with $|\PiK|\le 2^{K_L}$, which is one reason to prefer it. Second, even for a fixed action set, $f^{K_L}_t$ can depend on $\mu$ through regions the agent need never observe, so it need not be $\Filt$-measurable and may admit no estimator from the stream; we make this quantitative in Lemma~\ref{lem:indist}. Third, under non-stationarity the comparator $f^{K_L}_t$ varies in $t$, so a fixed-comparator regret can be negative or vacuous, and dynamic regret \citep{wei2021master,morrill2021hindsight} reinstates a moving optimum that is again non-estimable in a big world. In all three the obstruction is that the comparator lies outside $\Filt$. The examiner regret of Definition~\ref{def:exreg} is, by construction, an $\Filt$-measurable object; the rest of the paper asks what it is worth.
-
-\section{A Self-Report Carries No Guarantee}
-\label{sec:nothing}
-
-\begin{proposition}
-\label{prop:nothing}
-There exists an examiner with $\rho_t\equiv 0$ for every learner and every $\mu$. Consequently, two agents with identical self-report $\rho_t\equiv 0$ can satisfy $f^{K_L}_t-f^{\pi_t}_t=0$ for all $t$ in one case and $f^{K_L}_t-f^{\pi_t}_t\ge c>0$ for all $t$ in the other.
-\end{proposition}
-
-\begin{proof}
-Take $\Vhi=\Vlow=0$, which is $\Filt$-measurable and gives $\rho_t\equiv 0$ independent of $(\mathcal{L},\mu)$. Pair it with a learner playing a within-capacity optimum, and with one playing a policy of value $f^{K_L}_t-c$ at each $t$; both report $\rho_t\equiv0$. \textbf{[proved]}
-\end{proof}
-
-Hence no guarantee can be read from $\rho_t$ alone. Trust requires a condition relating $\Vhi,\Vlow$ to value.
-
-\section{Soundness Turns the Self-Report into a Certificate}
-\label{sec:sound}
-
-\begin{definition}[Soundness]
-\label{def:sound}
-The examiner is sound with slack $(\delta_t)$ if, with probability at least $1-\alpha$, for all $t$,
-\[
-\Vlow\le f^{\pi_t}_t \quad\text{(floor)} \qquad\text{and}\qquad \Vhi\ge f^{K_L}_t-\delta_t \quad\text{(ceiling)} .
-\]
-It is consistent if $\tfrac1T\sum_{t\le T}\delta_t\to 0$.
-\end{definition}
-
-\begin{lemma}[Certificate]
-\label{lem:bridge}
-If the examiner is sound with slack $(\delta_t)$ then, with probability at least $1-\alpha$,
-\[
-\sum_{t=1}^T\big(f^{K_L}_t-f^{\pi_t}_t\big)\;\le\;\Rex_T+\sum_{t=1}^T\delta_t,
-\qquad
-\sum_{t=1}^T\big(f^{*}_t-f^{\pi_t}_t\big)\;\le\;\Rex_T+\sum_{t=1}^T\delta_t+\sum_{t=1}^T\Dstruct_t .
-\]
-\end{lemma}
-
-\begin{proof}
-On the event of Definition~\ref{def:sound}, decompose $f^{K_L}_t-f^{\pi_t}_t=(f^{K_L}_t-\Vhi)+(\Vhi-\Vlow)+(\Vlow-f^{\pi_t}_t)$. The first summand is at most $\delta_t$ by the ceiling, the third is at most $0$ by the floor, and the middle is $\rho_t$. Summing over $t$ gives the first inequality; adding $\sum_t\Dstruct_t=\sum_t(f^{*}_t-f^{K_L}_t)$ gives the second. \textbf{[proved]}
-\end{proof}
-
-The identity is the optimism and performance-difference decomposition \citep{kakade2002cpi,jaksch2010ucrl2}; the content is that under soundness the $\Filt$-measurable $\Rex_T$ upper-bounds a quantity, $\sum_t(f^{K_L}_t-f^{\pi_t}_t)$, that is not itself $\Filt$-measurable. Meeting the ceiling demands strictly more than acting: by Definition~\ref{def:sound} the examiner must lower-bound $f^{K_L}_t$, a supremum over $\PiK$, whereas the learner need only realize one $\pi_t\in\PiK$. This is the formal sense in which the examiner must out-learn the learner.
-
-\section{What the Bound Recovers}
-\label{sec:recover}
-
-In the coverable case the construction is exactly the classical confidence-bound theory under a new name. Let $|\mathcal{S}|=1$, $H=1$ (a bandit) with $N$ arms of mean $\mu_i$, $\mu^{\star}=\max_i\mu_i$, so $f^{\pi}_t=\mu_i$ for ``pull $i$'' and $f^{K_L}_t=\mu^{\star}$. Let $n_i(t)$ be the pull count, $\hat\mu_i$ the empirical mean, and $c_i(t)=\sqrt{2\ln t/n_i(t)}$.
-
-\begin{proposition}[Recovery of UCB and pseudo-regret]
-\label{prop:bandit}
-The examiner $\Vhi=\max_i(\hat\mu_i+c_i)$, $\Vlow=\hat\mu_{a_t}-c_{a_t}$ satisfies the following. \textnormal{(i)} It is sound with slack $\delta_t\to 0$ with high probability. \textnormal{(ii)} $\rho_t=2c_{a_t}$ is twice the played arm's confidence width, and $\sum_t(f^{K_L}_t-f^{\pi_t}_t)=\sum_t(\mu^{\star}-\mu_{a_t})$ is the classical pseudo-regret. \textnormal{(iii)} $\Rex_T=O(\sqrt{NT\log T})$, matching the UCB1 rate \citep{auer2002ucb}.
-\end{proposition}
-
-\begin{proof}
-\textnormal{(i)} By Hoeffding, $\Pr(|\hat\mu_i-\mu_i|>c_i)\le 2e^{-2n_i c_i^2}=2t^{-4}$ for each arm at each round; summing over arms and rounds, the bounds $\hat\mu_i+c_i\ge\mu_i$ for all $i$ and $\hat\mu_{a_t}-c_{a_t}\le\mu_{a_t}$ hold for all $t\le T$ with high probability under the standard UCB1 constants \citep{auer2002ucb}. On that event $\Vhi=\max_i(\hat\mu_i+c_i)\ge\mu^{\star}$ (ceiling, $\delta_t=0$) and $\Vlow\le\mu_{a_t}=f^{\pi_t}_t$ (floor). \textnormal{(ii)} Since $a_t=\arg\max_i(\hat\mu_i+c_i)$, the maximizing index is the played arm's, so $\Vhi=\hat\mu_{a_t}+c_{a_t}$ and $\rho_t=\Vhi-\Vlow=2c_{a_t}$; the pseudo-regret identity is immediate from $f^{\pi}_t=\mu_i$ and $f^{K_L}_t=\mu^{\star}$. \textnormal{(iii)} Using $\sum_{k=1}^{n_i}k^{-1/2}\le 2\sqrt{n_i}$ and $\ln t\le\ln T$, $\Rex_T=2\sum_t c_{a_t}\le 2\sqrt{2\ln T}\sum_i\sum_{k=1}^{n_i}k^{-1/2}\le 4\sqrt{2\ln T}\sum_i\sqrt{n_i}\le 4\sqrt{2\ln T}\,\sqrt{N\textstyle\sum_i n_i}=4\sqrt{2NT\ln T}$ by Cauchy--Schwarz, since $\sum_i n_i=T$. \textbf{[proved]}
-\end{proof}
-
-Thus $\rho_t$ is not exotic: it is the UCB/LCB pair, and Lemma~\ref{lem:bridge} reads off the UCB1 guarantee. When the agent covers its arms, $\delta_t\to 0$ and $\rho_t\to 0$, so the certificate is tight and vanishing, and the agent bounds its distance from $\mu^{\star}$ without ever computing $\mu^{\star}$ (Figure~\ref{fig:bandit}A).
-
-\section{The Price: No Free Self-Evaluation in a Big World}
-\label{sec:nofree}
-
-Coverage is what a big world denies. The obstruction is information, not computation, and it is exactly non-identifiability.
-
-\begin{lemma}[Indistinguishability and its price]
-\label{lem:indist}
-Let $\mu,\mu'$ satisfy $\Pr_\mu=\Pr_{\mu'}$ on $\Filt$. Then under \textnormal{(A6)} every agent output has the same law under $\mu$ and $\mu'$, and for any world functional $\theta$ and any $\Filt$-measurable estimator $\hat\theta$,
-\[
-\max_{\nu\in\{\mu,\mu'\}}\Ex_\nu\big|\hat\theta-\theta(\nu)\big|\;\ge\;\tfrac12\,\big|\theta(\mu)-\theta(\mu')\big|.
-\]
-\end{lemma}
-
-\begin{proof}
-An $\Filt$-measurable map is a function of $h_t$, whose law is identical under $\mu,\mu'$; hence its push-forward law is identical \textbf{[proved]}. The inequality is Le Cam's two-point bound with $\TV(\Pr_\mu,\Pr_{\mu'})=0$ on $\Filt$ \citep{tsybakov2009} \textbf{[cited]}.
-\end{proof}
-
-\begin{theorem}[No free self-evaluation]
-\label{thm:nofree}
-Consider the family of $N$-armed bandits in which one arm pays $\tfrac12+\epsilon$ and the rest pay $\tfrac12$, with the special arm unknown, run for horizon $T$. On a worst-case member, with probability at least $1-\alpha$, a sound examiner has
-\[
-\rho_t\;\ge\;\epsilon-\delta_t \ \text{ for all } t,\qquad \Rex_T\;\ge\;\epsilon T-\sum_{t\le T}\delta_t,
-\]
-unless it closes (i) a coverage gap, $T\ge N$ so that every arm is pulled, or (ii) a bias gap, $\ModE$ distinguishes the special arm from an ordinary one.
-\end{theorem}
-
-\begin{proof}
-\emph{Coverage gap.} If $T<N$ the learner pulls at most $T<N$ distinct arms, so some arm $i^{*}$ is unpulled. Let $\mu_0$ be all-$\tfrac12$ and $\mu_{i^{*}}$ make $i^{*}$ special; the two differ only at $i^{*}$, so $\Pr_{\mu_0}=\Pr_{\mu_{i^{*}}}$ on $\Filt$. By Lemma~\ref{lem:indist} with $\theta=f^{K_L}$, the examiner emits the same $(\Vhi,\Vlow)$ in both, while $f^{K_L}$ differs by $\epsilon$. Under $\mu_{i^{*}}$ the played value is $\tfrac12$, so the floor forces $\Vlow\le\tfrac12$ and the ceiling forces $\Vhi\ge(\tfrac12+\epsilon)-\delta_t$; hence $\rho_t\ge\epsilon-\delta_t$, and the true regret is $\epsilon T$.
-\emph{Bias gap.} If instead every arm is pulled but $\ModE$ maps the special-arm world and an ordinary world to a common forecast, an examiner trusting $\ModE$ sets $\Vhi\approx\tfrac12<(\tfrac12+\epsilon)-\delta_t$ and is unsound where that arm is special; restoring the ceiling forces a hedge of size $\epsilon$, i.e.\ $\rho_t\ge\epsilon-\delta_t$. \textbf{[proved]}
-\end{proof}
-
-Two reading rules follow. First, the bound holds over all $\Filt$-measurable procedures, so no computational budget escapes it: extra compute tightens estimates only within what $\Filt$ and $\ModE$ determine. Second, a consistent examiner ($\delta_t\to 0$) reporting $\rho_t\to 0$ in a big world is, by Theorem~\ref{thm:nofree}, relying on an unverified $\ModE$, so a near-zero $\rho_t$ is unearned confidence, not completed learning. The impossibility direction is not novel: gaps (i) and (ii) are the explore-or-assume dichotomy and the realizability requirement \citep{kearns2002e3,brafman2002rmax,azar2017minimax,lai1985asymptotically}. We use it to price the position.
-
-Figure~\ref{fig:bandit} contrasts the regimes against the best the external view can compute, namely the plug-in estimate $\max_i\hat\mu_i-\hat\mu_{a_t}$ of static regret (and, with a sliding window, of dynamic regret \citep{wei2021master}). With coverage (panel A) examiner regret vanishes with the true regret. Without it (panel B), and under non-stationarity (panel C, where $f^{K_L}_t$ moves and consistency cannot hold cheaply), the plug-in estimate underestimates the true regret, declaring the agent done, while examiner regret remains a valid upper bound.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{examiner_bandit_fig.pdf}
-\caption{Examiner regret against existing regret notions and their plug-in estimates, with no external optimum visible to the agent. \textbf{(A)} Enough budget (coverable, $N\le T$): examiner regret shrinks toward zero alongside the true regret, a tight vanishing certificate. \textbf{(B)} Big world ($T<N$): examiner regret $\sum_t\rho_t$ stays a valid bound on the true static regret while the plug-in estimate of static regret underestimates it. \textbf{(C)} Non-stationary: the special arm switches at the dotted lines, so the windowed plug-in estimates dynamic regret and underestimates, while examiner regret stays a valid certificate. All quantities are $\Filt$-measurable, computed without $\mu$ or $\mu^{\star}$.}
-\label{fig:bandit}
-\end{figure}
-
-\section{Building an Examiner that Out-Learns the Learner}
-\label{sec:practical}
-
-The principle is constructive: $\Vhi$ is any optimistic estimate, a UCB index \citep{auer2002ucb}, optimistic value iteration \citep{jaksch2010ucrl2}, an ensemble upper quantile \citep{osband2016bootstrapped}, or a posterior upper quantile \citep{osband2013psrl}, and $\Vlow$ any pessimistic one \citep{kumar2020cql,jin2021pessimism}. The remaining question is how an $\Filt$-measurable examiner can lower-bound $f^{K_L}_t=\sup_{\pi\in\PiK}f^\pi_t$ when the learner realizes only one $\pi_t$. Three mechanisms answer it, none of which is merely a better prior. \emph{Off-policy estimation} of the value of a family of policies the learner never runs, through off-policy temporal-difference learning and general value functions \citep{sutton2011horde,precup2001offpolicy,modayil2014nexting}, is exactly what estimating $\Vhi$ requires. \emph{Asymmetric capacity and a faster timescale} let the examiner track ahead of the policy it grades \citep{pinto2018asymmetric,konda2000actorcritic,borkar1997twotimescale}. And a \emph{calibration target} \citep{foster1998calibration} makes the slack $\delta_t$ shrink on the covered region, rendering ``is the examiner learning?'' operational. By Theorem~\ref{thm:nofree} none of the three manufactures information, so the lead is real but capped by coverage; the bound becomes a design rule, namely to separate the critic from the actor and grant it its own budget $K_E$, off-policy targets, and a calibration loss, with the split $K=K_L+K_E$ the open problem the position opens. For a deployed agent that cannot be graded against an optimum, $\rho_t$ is then an online, $\Filt$-measurable read of self-assessed room to improve, and Theorem~\ref{thm:nofree} is the operator's warning that a small $\rho_t$ without coverage is unearned.
-
-\section{Limitations}
-\label{sec:limits}
-
-The content lives in Definition~\ref{def:sound}, not in $\rho_t$, and soundness is extrinsic, requiring $\ModE$ and hence a prior. Lemma~\ref{lem:bridge} is a decomposition, the optimism gap relabeled, not a new rate. Proposition~\ref{prop:bandit} is tight only in the coverable bandit; soundness of a biased, capacity-bounded examiner under non-stationarity, and the under-capacity case $\Dstruct_t>0$, are not established \textbf{[GAP]}. Figure~\ref{fig:bandit} is an illustration on a synthetic bandit, not a general guarantee. Theorem~\ref{thm:nofree} and Lemma~\ref{lem:indist} are worst-case two-point statements and not themselves novel, and we do not characterize which $\ModE$ avoid the bias gap on which families. The out-learning principle is a design argument, not a theorem that an off-policy examiner attains soundness faster than the learner attains optimality \textbf{[GAP]}. We propose one coupling, $\rho_t$ as intrinsic reward, but do not analyze the joint dynamics.
-
-\section{Related Work}
-\label{sec:related}
-
-\textbf{Foundations.} \citet{ring1994continual,abel2023definition,abel2024dogmas,abel2020bounded} develop CRL and the agent-centric view; bounded optimality and resource-rational analysis \citep{simon1955behavioral,russell1995bounded,lewis2014computational,lieder2020resource} motivate the comparator $f^{K_L}$ and the reward hypothesis \citep{silver2021reward} the goal it tracks, while the big-world hypothesis \citep{javed2025bigworld,lewandowski2025bigger,dohare2024plasticity} drives the removal of the external yardstick. \textbf{Machinery.} General value functions and off-policy prediction \citep{sutton2011horde,modayil2014nexting,suttonprecupsingh1999,precup2001offpolicy} and asymmetric and two-timescale actor critic \citep{pinto2018asymmetric,konda2000actorcritic,borkar1997twotimescale} let the examiner learn about behaviours it does not enact; optimistic and pessimistic value learning \citep{kearns2002e3,brafman2002rmax,jaksch2010ucrl2,auer2002ucb,strehl2009pacmdp,azar2017minimax,kakade2002cpi,kumar2020cql,jin2021pessimism,osband2016bootstrapped} supply its two numbers, and the two-point method \citep{lai1985asymptotically,tsybakov2009} its price. \textbf{Closest.} Bayesian and capacity-limited RL \citep{osband2013psrl,russo2017ids,lu2021bitbybit,arumugam2024capacity} and model-value inconsistency \citep{filos2022modelvalue} read a value gap as uncertainty; self-assessment and calibration \citep{schmidhuber2010formal,oudeyer2007intrinsic,bellemare2016count,pathak2017curiosity,burda2019rnd,foster1998calibration,li2011kwik,morrill2021hindsight} bear on honest progress. In each, the evaluator is external or fused with the policy, whereas we make it an explicit, continually-learning, $\Filt$-measurable, capacity-bounded module and ask what its self-report certifies.
 
 
 \bibliography{main}
