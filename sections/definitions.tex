@@ -11,7 +11,7 @@ We first define the environment and how an agent interacts with it. The environm
 \begin{definition}[Agent and Policy]
     The \textbf{agent} $\Lambda$ chooses actions according to a \textbf{policy} $\pi$, defined as a mapping from histories to actions $\pi : \Hist \rightarrow \Actions$.  
 \end{definition}
-With this definition of a policy, it encompasses any algorithm that modifies the decision-making process based on past data, including memory-based policies or even parameter updates. 
+With this definition of a policy, it encompasses any algorithm that modifies the decision-making process based on past data, including memory-based action-selection or internal parameter updates. 
 
 The agent and environment interact in sequence, alternating between the environment producing an observation/reward and the agent choosing an action. These two steps can depend on the entire history of observations, rewards and actions up to that point in time. 
 The standard environment transition function from state to state in MDPs or POMDPs is implicitly defined through $\Rew$ and $\Tr$ as they depend on the history, we do not need to explicitly assume the existence of a ground-truth environment state.
