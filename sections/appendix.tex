@@ -69,7 +69,7 @@ A further axis, orthogonal to the dynamics mismatch of Section~\ref{sec:practice
 \centering
 \includegraphics[width=\textwidth]{image/fig4_capacity_forward.pdf}\\[6pt]
 \includegraphics[width=\textwidth]{image/fig4_capacity_reverse.pdf}
-\caption{Relative capacity in the switching bandit, one cell per resolution $G$ (the number of arm groups the coarse party can distinguish). \textbf{(Top, forward).} A fine-grained agent assessed by an examiner that resolves only $G$ groups: a coarse examiner is blind to within-group changes and under-reports, with $\rho^\chi_t$ falling below the true regret (red), while only the fully resolved examiner tracks it. \textbf{(Bottom, reverse).} An agent restricted to $G$ groups assessed by a fully resolved examiner: $\rho^\chi_t$ plateaus just above the structural gap (labelled) the restricted agent cannot close, while the fully resolved agent drives both regrets toward zero. Red: true regret; blue: $\rho^\chi_t$.}
+\caption{Relative capacity in the switching bandit, one cell per resolution, labelled by group size (actions per group). \textbf{(Top, forward).} A fine-grained agent assessed by an examiner that resolves only $G$ groups: a coarse examiner is blind to within-group changes and under-reports, with $\rho^\chi_t$ falling below the true regret (red), while only the fully resolved examiner tracks it. \textbf{(Bottom, reverse).} An agent restricted to $G$ groups assessed by a fully resolved examiner: $\rho^\chi_t$ plateaus just above the structural gap (labelled) the restricted agent cannot close, while the fully resolved agent drives both regrets toward zero. Red: true regret; blue: $\rho^\chi_t$.}
 \label{fig:capacity}
 \end{figure}
 
@@ -85,6 +85,6 @@ We repeat the capacity probe in the stationary world, where the effect is milder
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{image/fig3_capacity.pdf}
-\caption{Relative capacity in the stationary bandit. \textbf{(a)} Forward: a fine-grained agent assessed by an examiner that aggregates arms into $G$ groups; all $G$ converge to the same small $\rho^\chi_t$ once the optimal arm is found (inset: early transient). \textbf{(b)} Reverse: an agent restricted to $G$ groups assessed by a fully resolved examiner; $\rho^\chi_t$ plateaus just above each structural gap (labelled). Red: true regret; coloured: $\rho^\chi_t$ per $G$.}
+\caption{Relative capacity in the stationary bandit. \textbf{(a)} Forward: a fine-grained agent assessed by an examiner that aggregates arms into groups; all resolutions converge to the same small $\rho^\chi_t$ once the optimal arm is found (inset: early transient). \textbf{(b)} Reverse: an agent restricted to groups of actions assessed by a fully resolved examiner; $\rho^\chi_t$ plateaus just above each structural gap (labelled). Red: true regret; coloured: $\rho^\chi_t$ per resolution.}
 \label{fig:capacity_stationary}
 \end{figure}
