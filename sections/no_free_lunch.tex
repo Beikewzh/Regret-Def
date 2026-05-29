@@ -43,31 +43,25 @@ The only examiner $\chi$ that produces valid perceived regret estimates (satisfy
     The agent produces a distribution over its next action given its history. Let $a_{min}$ be the action with minimal probability (this exists since the action space is discrete).
     To define $\Env_{bad}$,
     we let $a_{min}$ have associated reward $\Rew(h, a_{min}) = R_{max}$ and 
-    lead to a future where a unique optimal action at each step receives $R_{max}$. 
-    Thus, the optimal policy has value $V_{max}$. Note that this optimal policy assigns probability 1 to $a_{min}$ for the immediate next action. 
+    lead to a future where a unique optimal action at each step receives $R_{max}$. On each future step, this optimal action is the one that minimizes the policy's probability. 
+    Thus, the optimal policy has value $V_{max}$ as it assigns probability 1 to $a_{min}$,the optimal action, at every step. 
     All other actions lead to 0 rewards forever.
-    We also define $\Env_{bad}$ such that its observation function $\Tr$ leads to 
-    \wes{...?}
+    We also define $\Env_{bad}$ such that its reward  and observation functions are consistent with the history $h$. This is always possible since we put no restrictions on these functions and each element of the history $h$ depends only on the past. 
 
-    We show that $\pi$ is a 
+    Next, we show that $V^\pi(h) \le V_{unif}$ in $\Env_{bad}$. 
     The uniform random policy will have associated value $V_{unif}(h)= \frac{1}{|\Actions|} {R_{max}} + \gamma V_{unif}(h || a_{min}, R_{max},o' )$, where $a || b$ denotes the concatenation of history $a$ followed by $b$. This expressions is due to the fact that one action has reward $R_{max}$ and other actions leads to 0 reward forever.
-    Then, t
+    Then, consider the value of the policy $\pi$. Policy $\pi$ assigns probability $\pi(a_{min}) \le 1/|\mathcal{A}|$ to the optimal action.
+    So, $V^\pi(h) = \pi(a_{min})R_{max} + V^\pi(h||(a_{min}, R_{max}, o') \le V_{unif} $ since $\pi$ assigns less (or equal) probability to each optimal action. 
 
-    \textit{Sketch:} The idea is that given the history $h=\{o_0, ..., a_{t-2}, r_{t-1}, o_{t-1}\}$, no matter what the agent's distribution is over the next action, there is a world where it will incur 
-    . The past does not inform the future when considering an arbitrary world.
+    Thus, $V^\pi \le V_{unif}$ and $V^* = V_{max}$ as desired.
     
-    agent's true value under its policy $\pi$ is $V^{\pi} \le V_{unif}$ and $\sup_{\pi'} V^{\pi'} = V^{max}$.
-    This occurs if the agent's policy
-        
-    Thus 
-    \wes{consider how to change this for stochasticity. By picking a uniform policy, you can avoid bad actions maybe? or we assume deterministic history-based policy? }
 \end{proof}
-\wes{high probability bound?}
-\wes{add determnistic history-dependent agent}
+% \wes{high probability bound?}
+% \wes{add determnistic history-dependent agent}
 
-\wes{what about randomness? Maybe forget about it for nwo}
-\wes{maybe change the form of the thm}
-
+% \wes{what about randomness? Maybe forget about it for nwo}
+% \wes{maybe change the form of the thm}
+% \wes{look at offline RL lower bounds for inspiration on proofs?}
 
 
 Similar to no-free-lunch theorems in supervised learning, which tell us that over all data distributions, no model can outperform random guessing on the population loss, we find that it is impossible to produce valid non-vacuous bounds on all environments. 
