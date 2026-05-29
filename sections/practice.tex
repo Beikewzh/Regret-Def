@@ -12,24 +12,7 @@ We illustrate how perceived regret behaves when the examiner's inductive bias is
 
 \textbf{Matched examiners track true regret.} In the stationary world (Figure~\ref{fig:practice_main}a), the matched examiner's $\rho^\chi_t$ decays toward zero on a converging agent and settles at the residual sub-optimality gap on an agent that keeps exploring, mirroring the true regret in both cases. In the switching world (Figure~\ref{fig:practice_main}b), a reset-aware examiner spikes at each change and recovers between changes, following the true regret of an agent that re-adapts, and it correctly reports persistent regret for an agent that assumes the world is static.
 
-\textbf{Mismatched examiners fail predictably.} An examiner that assumes the wrong dynamics fails in the direction its bias dictates. A stationarity-assuming examiner in the switching world lets $\rho^\chi_t$ drift toward zero between changes even while the agent incurs large true regret, an optimistic and invalid assessment. Conversely, an examiner that always expects change inflates $\rho^\chi_t$ on an agent that has already converged. These are the two practical faces of the no-free-lunch result: validity (Assumptions~\ref{a:lb}, \ref{a:optimistic}) and tightness can each be lost when the examiner is incompatible with the stream.
-
-\subsection{Relative capacity between learner and examiner}
-\label{sec:capacity}
-
-A second axis is representational capacity: how finely the examiner, or the agent, resolves the action space. We probe it by letting one party distinguish only a coarse grouping of the arms while the other stays fine-grained. We expect $\rho^\chi_t$ to stay valid and tight only when the examiner is at least as fine-grained as the distinctions that drive regret, and, when the agent is instead the coarser party, to remain valid while exposing the agent's structural limitation. Figure~\ref{fig:capacity} confirms both in the switching world; the milder stationary case is in Appendix~\ref{app:capacity_stationary}.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{image/fig4_capacity_forward.pdf}\\[6pt]
-\includegraphics[width=\textwidth]{image/fig4_capacity_reverse.pdf}
-\caption{Relative capacity in the switching bandit, with all resolutions $G$ (the number of arm groups the coarse party can distinguish) overlaid in one panel and offset vertically for clarity. \textbf{Top (forward).} A fine-grained agent assessed by an examiner that resolves only $G$ groups: a coarse examiner ($G<10$) is blind to within-group changes and under-reports, staying flat and below the true regret, while only the fully resolved examiner ($G=10$) spikes with and tracks the truth. \textbf{Bottom (reverse).} An agent restricted to $G$ groups assessed by a fully resolved examiner: a restricted agent ($G<10$) plateaus at a positive structural gap (labelled) it cannot close, while the fully resolved agent drives the regret toward zero. Red: true regret; coloured: $\rho^\chi_t$ per $G$.}
-\label{fig:capacity}
-\end{figure}
-
-\textbf{An under-resolved examiner under-reports.} When the agent is fine-grained but the examiner aggregates arms (Figure~\ref{fig:capacity}, top), only a sufficiently fine examiner reacts to the within-group changes the agent must track. As the examiner coarsens it grows blind to those changes and its $\rho^\chi_t$ falls below the true regret, an optimistic and invalid assessment that would wrongly certify the agent as near-optimal. This is the failure of the lower-bound and optimism assumptions when the examiner is too coarse for the world.
-
-\textbf{An under-resolved agent reveals a structural gap.} When the examiner is fine-grained but the agent is restricted (Figure~\ref{fig:capacity}, bottom), the limitation is the agent's. Here $\rho^\chi_t$ stays a valid upper bound and settles just above the residual gap the restricted agent cannot close, a gap that grows as the agent coarsens, while a fully resolved agent drives both regrets toward zero. Perceived regret thus attributes the persistent regret to the agent's capacity rather than masking it.
+\textbf{Mismatched examiners fail predictably.} An examiner that assumes the wrong dynamics fails in the direction its bias dictates. A stationarity-assuming examiner in the switching world lets $\rho^\chi_t$ drift toward zero between changes even while the agent incurs large true regret, an optimistic and invalid assessment. Conversely, an examiner that always expects change inflates $\rho^\chi_t$ on an agent that has already converged. These are the two practical faces of the no-free-lunch result: validity (Assumptions~\ref{a:lb}, \ref{a:optimistic}) and tightness can each be lost when the examiner is incompatible with the stream. A further axis, the relative representational capacity of agent and examiner, behaves the same way and is examined in Appendix~\ref{app:capacity}.
 
 \subsection{Comparing learners with a fixed examiner}
 \label{sec:learner_comparison}
@@ -44,5 +27,28 @@ A natural use of perceived regret is model selection without ground truth: given
 \end{figure}
 
 Both expectations hold. For every learner, $\rho^\chi_t$ tracks the true regret from above throughout learning (Figure~\ref{fig:learner_comparison}a). Aggregating each run to a single number, the final perceived and true regret are strongly rank-correlated across learners and seeds (Figure~\ref{fig:learner_comparison}b), so the examiner recovers the correct ordering without ever observing the truth. The scatter lies almost entirely above the diagonal, consistent with $\rho^\chi_t$ acting as a conservative proxy rather than an unbiased estimate.
+
+\subsection{Exploration via examiner uncertainty}
+\label{sec:intrinsic}
+
+So far the examiner only scores the agent. It can also steer it. We feed the examiner's per-arm uncertainty back to the agent as an intrinsic exploration bonus of strength $\beta$, with no other novelty signal, in a switching world whose action set grows over time. We expect the uncertainty of a well-matched examiner to prompt re-exploration after each change and so to lower regret, and we expect this benefit to hinge on the examiner's quality rather than on the mere presence of a bonus.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{image/fig_examiner_bonus.pdf}
+\caption{Examiner uncertainty as an intrinsic bonus, using the good (reset-aware) examiner and sweeping the bonus strength $\beta$; $\beta=0$ (dashed) is the no-bonus reference. \textbf{(a)} cumulative and \textbf{(b)} per-step true regret. A moderate bonus lowers regret and speeds re-adaptation after each change, while too large a bonus over-explores.}
+\label{fig:intrinsic_beta}
+\end{figure}
+
+\textbf{A matched examiner's uncertainty drives useful exploration.} With the reset-aware examiner as the bonus source, a moderate bonus markedly lowers cumulative regret relative to no bonus and re-adapts faster after each change, while too large a bonus over-explores (Figure~\ref{fig:intrinsic_beta}). The advantage widens over later segments, where the growing action set leaves more to discover.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{image/fig_examiner_quality.pdf}
+\caption{Examiner quality as the bonus source ($\beta=1$). \textbf{(a)} cumulative true regret: the single oracle examiner and an ensemble of three weak examiners both fall well below the no-bonus reference, while the vacuous examiner runs off the top of the axis (annotated). \textbf{(b)} per-step true regret: the good and ensemble examiners re-adapt after each change, whereas the vacuous examiner's uniform bonus saturates the reward and pins regret near the random-policy level.}
+\label{fig:intrinsic_quality}
+\end{figure}
+
+\textbf{The bonus is only as good as the examiner behind it.} Both the single oracle examiner and an ensemble of three weak, diverse examiners substantially reduce regret, with the ensemble recovering much of the oracle's benefit without knowing when or how the world changes (Figure~\ref{fig:intrinsic_quality}a). A vacuous examiner whose uncertainty is uniform across arms instead carries no exploration signal: its bonus saturates the reward and learning collapses to the random-policy level (Figure~\ref{fig:intrinsic_quality}b). Examiner quality, not the mere presence of a bonus, is what turns perceived regret into a useful exploration signal.
 
 \textbf{A recipe for unknown streams.} These experiments suggest a simple procedure when the world is unknown: instantiate a small, diverse pool of examiners whose biases bracket plausible dynamics and resolutions; report $\rho^\chi_t$ from each alongside the agent's behaviour; and treat agreement as evidence of meaningful estimates and disagreement as a sign that the examiner pool, not necessarily the agent, needs revisiting.
