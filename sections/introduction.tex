@@ -36,7 +36,10 @@ No assumptions are placed on the form of the environment; it is not necessarily 
 
 
 \paragraph{Motivation: Standard measures of regret are not suitable for arbitrary streams of experience.} 
-Regret is traditionally defined as $V^{*} - V^{\pi_t}$ at timestep $t$ where $V^*$ represents an ``optimal" value and $V^{\pi_t}$ represents the value of the agent's current policy.
+Regret is traditionally defined as $V^{*} - V^{\pi_t}$ at timestep $t$
+\textcolor{red}{[Should it be ``Regret at timestep $t$ ..."?]}
+where $V^*$ represents an ``optimal" value \textcolor{red}{[Is this vague?
+Does this include both cases?]} and $V^{\pi_t}$ represents the value of the agent's current policy.
 There are two classic families of regret definitions which define $V^*$ differently: 1. \textit{Expected regret}, used in stochastic bandits and MDPs. 2. \textit{Hindsight regret}, used in adversarial bandits and online learning. 
 
 For \textit{expected regret}, $V^*$ is the value of the optimal policy, which achieves the largest expected return in the future.
