@@ -10,13 +10,14 @@ We illustrate how perceived regret behaves when the examiner's inductive bias is
 \label{fig:practice_main}
 \end{figure}
 
+\textcolor{red}{Could you make it sounds exmainer and mismatched examiners matched with figure, figure said it's good examiner and bad examiner, and also we want to say good examiner would convergen into the true regret, but the bad examiner would violate the assumption and under the true regret, so not upperbound anymore, refer back into the assumtpion etc. and a little bit insight is that examiner should have correct prior knowlegde of the world. We should emphasize the success case and failure cases as this is the first time reviewer read and directly see how our regret is working under which condition, and later linked to 4.1 with the usage. ANd we need to explain what is good, and bad, which is refer to matched and mismatched, detail could be in appendix }
 \textbf{Matched examiners track true regret.} In the stationary world (Figure~\ref{fig:practice_main}a), the matched examiner's $\rho^\chi_t$ decays toward zero on a converging agent and settles at the residual sub-optimality gap on an agent that keeps exploring, mirroring the true regret in both cases. In the switching world (Figure~\ref{fig:practice_main}b), a reset-aware examiner spikes at each change and recovers between changes, following the true regret of an agent that re-adapts, and it correctly reports persistent regret for an agent that assumes the world is static.
 
 \textbf{Mismatched examiners fail predictably.} An examiner that assumes the wrong dynamics fails in the direction its bias dictates. A stationarity-assuming examiner in the switching world lets $\rho^\chi_t$ drift toward zero between changes even while the agent incurs large true regret, an optimistic and invalid assessment. Conversely, an examiner that always expects change inflates $\rho^\chi_t$ on an agent that has already converged. These are the two practical faces of the no-free-lunch result: validity (Assumptions~\ref{a:lb}, \ref{a:optimistic}) and tightness can each be lost when the examiner is incompatible with the stream. A further axis, the relative representational capacity of agent and examiner, behaves the same way and is examined in Appendix~\ref{app:capacity}.
 
 \subsection{Comparing learners with a fixed examiner}
 \label{sec:learner_comparison}
-
+\textcolor{red}{E.g. mentioend a sample cases why need such perceived regret, link back to the previous section that e.g. big world..? and still need to be same as figure, so here we still need to use the good, .? and actually i didn't know what is figure 2a you are trying to say what.. maybe like the different algs. would be different tightness of the gap between true regret and our regret, and explain some intuition }
 A natural use of perceived regret is model selection without ground truth: given one sufficiently powerful examiner, can we rank a pool of learners by $\rho^\chi_t$ and recover the ranking we would obtain from the unavailable true regret? We run several standard bandit learners in the switching world under a single matched examiner. We expect $\rho^\chi_t$ to upper-bound the true regret for each learner and, more importantly, to preserve their relative ordering.
 
 \begin{figure}[t]
@@ -30,7 +31,7 @@ Both expectations hold. For every learner, $\rho^\chi_t$ tracks the true regret 
 
 \subsection{Exploration via examiner uncertainty}
 \label{sec:intrinsic}
-
+\textcolor{red}{so we should put fig_examiner_quality as the first, and the figure 3 could be in appendix as ablation study, and in this subsection, do not use \paragraph{}, as we could show the good examiner could be consider as a uncertiry metric and help on the exploration, but when model converge it woudl still increase exploration so hurt perforamnce, you can do some reference linked with other intrinsic motivation (make sure the citation is correct). And then but we don't know the true world siutation, so maybe we do not have the correct prior knowledge of the world, but we do have some knowledge, and we can make a robust by ensemble, but vacuous examienr are definitely wrong, make the detail what are thoses examiner in appendix.}
 So far the examiner only scores the agent. It can also steer it. We feed the examiner's per-arm uncertainty back to the agent as an intrinsic exploration bonus of strength $\beta$, with no other novelty signal, in a switching world whose action set grows over time. We expect the uncertainty of a well-matched examiner to prompt re-exploration after each change and so to lower regret, and we expect this benefit to hinge on the examiner's quality rather than on the mere presence of a bonus.
 
 \begin{figure}[t]

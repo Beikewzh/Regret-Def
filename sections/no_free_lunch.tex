@@ -23,35 +23,16 @@ To state this theorem, we first posit some additional assumptions about the agen
 Let $V_{unif}$ be the value of the uniform policy at all future steps and define $\rho_{bound} := V_{max} - V_{unif}$. This quantity is an upper bound on useful perceived regret estimates since, if the true regret is larger than $\rho_{bound}$, the agent is worse than the uniform random policy.
 We say that a perceived regret $\rho$ is \textit{vacuous} if $\rho > \rho_{bound}$. 
 
-
-\begin{theorem}[No Free Lunch for Examiners] 
+\begin{restatable}[No Free Lunch for Examiners]{theorem}{nofreelunch}
 The only examiner $\chi$ that produces valid perceived regret estimates (satisfying assumptions \ref{a:lb} and \ref{a:optimistic}) for any history $h \in \Hist$, any environment $\Env$ and any agent outputs a vacuous perceived regret $\rho^\chi > \rho_{bound}$  at all steps.
-\end{theorem})
+\end{restatable}
 
 \begin{proof}
-    We proceed by contradiction and show that, given a history $h$ and an agent policy $\pi$, any examiner that produces a non-vacuous bound will be invalid in some environments. 
-    Suppose we have an agent with history $h=\{o_0, ..., a_{t-2}, r_{t-1}, o_{t-1}\}$.
-    and that the examiner $\chi$ produces a non-vacuous bound $\rho^\chi(h) < \rho_{bound}(h)$, where we make the perceived regret's dependence on the history explicit. 
-    We will show that $V^{\pi} \le V_{unif}$ and $\sup_{\pi'} V^{\pi'} = V^{max}$. This will imply $V^*- V^\pi > \rho^\chi $  (perceived regret does not bound the true regret), establishing the contradiction.
-
-    Given history $h$, we produce an environment $\Env_{bad}$ that generates the desired bounds. 
-        
-    The agent produces a distribution over its next action given its history. Let $a_{min}$ be the action with minimal probability (this exists since the action space is discrete).
-    To define $\Env_{bad}$,
-    we let $a_{min}$ have associated reward $\Rew(h, a_{min}) = R_{max}$ and 
-    lead to a future where a unique optimal action at each step receives $R_{max}$. On each future step, this optimal action is the one that minimizes the policy's probability. 
-    Thus, the optimal policy has value $V_{max}$ as it assigns probability 1 to $a_{min}$,the optimal action, at every step. 
-    All other actions lead to 0 rewards forever.
-    We also define $\Env_{bad}$ such that its reward  and observation functions are consistent with the history $h$. This is always possible since we put no restrictions on these functions and each element of the history $h$ depends only on the past. 
-
-    Next, we show that $V^\pi(h) \le V_{unif}$ in $\Env_{bad}$. 
-    The uniform random policy will have associated value $V_{unif}(h)= \frac{1}{|\Actions|} {R_{max}} + \gamma V_{unif}(h || a_{min}, R_{max},o' )$, where $a || b$ denotes the concatenation of history $a$ followed by $b$. This expressions is due to the fact that one action has reward $R_{max}$ and other actions leads to 0 reward forever.
-    Then, consider the value of the policy $\pi$. Policy $\pi$ assigns probability $\pi(a_{min}) \le 1/|\mathcal{A}|$ to the optimal action.
-    So, $V^\pi(h) = \pi(a_{min})R_{max} + V^\pi(h||(a_{min}, R_{max}, o') \le V_{unif} $ since $\pi$ assigns less (or equal) probability to each optimal action. 
-
-    Thus, $V^\pi \le V_{unif}$ and $V^* = V_{max}$ as desired.
-    
+    (Sketch, full proof in appendix \ref{app:theory}). The main idea is to show that, for any examiner $\chi$, given any history $h$ and agent, there exists some environment $\Env_{bad}$ where the  examiner will produce an invalid perceived regret estimate $\rho^\chi$. 
+    This counter-example $\Env_{bad}$ is consistent with the history $h$ but leads to the true regret of the current step to be greater or equal to $V_{max} - V_{unif}$ for any policy $\pi$. 
+    Thus, if $\rho^\chi$ is lower than that, it will be invalid.
 \end{proof}
+
 % \wes{high probability bound?}
 % \wes{add determnistic history-dependent agent}
 
@@ -106,7 +87,7 @@ Certain examiners may also provide invalid perceived regret, which do not bound 
 Without a prior knowledge of the environment, we can mitigate the possibility of poor examiner by utilizing multiple examiners in parallel on a single agent's stream of experience, resulting in several performance estimates. These can aggregated or used a distribution of assessments. Similar to ensembles, we may want to choose a diverse set of examiners, with different modeling biases and learning mechanisms. 
 We can also consider pretrained models (e.g. foundation models) that have assimilated a large corpus of data. This can lead to complex inductive biases within the examiner that could potentially help it produce more useful perceived regret values. 
 
-In the next section, we illustrate some simple experiments where the appropriate choice of examiner for an agent and environment leads to meaningful perceived regret throughout the agent's learning process.
+In the next section, we conduct simple experiments to illustrate how the  choice of examiner for an agent and environment impacts the perceived regret.
 
 % \textbf{Abstract notions of learning}
 % An alternative approach is to posit that the examiner integrates information into its estimates. 
