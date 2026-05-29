@@ -9,10 +9,12 @@
 \section{Perceived regret in practice}
 \label{sec:practice}
 
-In this section, we conduct simple experiments to illustrate how the choice of examiner and its modeling biases impacts the perceived regret.
+In this section, we conduct simple experiments to illustrate how perceived regret can be used in practice and modeling 
 
 We use a multi-armed Gaussian bandit where the optimal policy and the true regret are both known, so $\rho^\chi_t$ can be assessed against ground truth. 
-We begin by showing how two instructive scenarios: an examiner reports a valid and tight $\rho^\chi_t$ when its assumptions match the environment's structure, and it may fail when they do not.
+We begin by conducting simple experiments to illustrate how the choice of examiner and its modeling biases impacts the perceived regret.
+
+% We begin by showing how two instructive scenarios: an examiner reports a valid and tight $\rho^\chi_t$ when its assumptions match the environment's structure, and it may fail when they do not.
 % Throughout, our expectation follows the theory of Section~\ref{sec:nfl}: an examiner reports a valid and tight $\rho^\chi_t$ when its assumptions match the environment's structure, and it may fail when they do not.
 Complete experimental details are deferred to Appendix~\ref{app:details}. 
 
@@ -33,11 +35,12 @@ We this case in the switching world and with the bad examiner on UCB1: the bad e
 This breaks the optimism assumption (Assumption~\ref{a:optimistic}), so the perceived regret is no longer valid and would wrongly certify the agent as near-optimal.
 % The bad examiner fails in the direction its mismatch dictates, and it can stop being an upper bound at all. 
 % In the switching world, a bad examiner that assumes stationarity keeps stale data, so its lower confidence value $\Vlow_t$ is held too high and its aspiration $\Vhi_t$ too low; its $\rho^\chi_t$ then drifts toward zero between changes and falls \emph{below} the true regret even while the agent is incurring large regret. 
-\textit{Loose upper bound.} The examiner may produce
+\textit{Non-decreasing upper bound.} The examiner may produce a perceived regret that is larger than the true regret and never decrease it. 
+While not as dire as producing invalid regret bounds, this is also unsatisfying since it wrongly suggests that the agent can keep improving even though its policy may be optimal. 
+This failure case is illustrated in the the stationary world with the UCB1 agent. The examiner's perceived regret plateaus at a high value even though the agent achieves near-zero regret. This occurs since it mistakenly models the bandit as being nonstationary, when it is not.
 
-While not as dire as producing invalid regret bounds, this is also unsatisf
-
-Read together, the success and failure cases are the practical face of the no-free-lunch result of Section~\ref{sec:nfl}: an examiner is informative only when it carries the right prior knowledge of the world, and is misleading when it does not. The same pattern recurs along a second axis, the relative representational capacity of agent and examiner, which we examine in Appendix~\ref{app:capacity}.
+Read together, the success and failure cases showcase the practical side of the no-free-lunch result of Section~\ref{sec:nfl}: an examiner is informative only when it carries the right prior knowledge about the world and may be misleading when it does not. 
+We further explore these considerations across another axis, varying the relative representational capacity of agent and examiner (results in Appendix~\ref{app:capacity}).
 
 \subsection{Comparing learners with a fixed examiner}
 \label{sec:learner_comparison}

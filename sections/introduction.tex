@@ -52,7 +52,7 @@ For example, in classic adversarial bandits, $\Pi$ is the set of policies that a
 Then, to achieve low hindsight regret (usually termed ``external regret"), the agent has to do (almost) as well as having chosen the best fixed action in hindsight.
 In nonstationary settings or MDPs, it is more difficult to define $\Pi$ without making low regret impossible to achieve \citep{even2004experts, even2009online}.
 
-Some works propose other notions of regret to allow for nonstationarity in the problem settings. These include adaptive regret, tracking regret, dynamic regret among others \wes{add cites}.
+Some works propose other notions of regret to allow for nonstationarity in the problem settings. These include adaptive regret, tracking regret, dynamic regret among others \textcolor{red}{\cite{hazan2009efficient, herbster1998tracking, zinkevich2003online, wei2021master}} \wes{add cites}.
 At a high-level, all these regret definitions limit the amount of nonstationarity to make the problem tractable, with the exact restrictions varying from one to the other. 
 For this reason, these regret definitions are unsuitable for our purpose because they explicitly or implicitly place constraints on the environment. We aim to define a performance measure suitable for \textit{any} world. 
 
