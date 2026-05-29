@@ -1,0 +1,11 @@
+\section{Capacity in the stationary world}
+\label{app:capacity_stationary}
+
+We repeat the capacity probe of Section~\ref{sec:capacity} in the stationary $K{=}10$ Bernoulli bandit, where the effect is milder because there are no switches to expose a coarse examiner. Figure~\ref{fig:capacity_stationary} shows both directions. In the forward case, once UCB1 has identified the optimal arm the examiner's aggregation barely matters: all resolutions $G$ converge to nearly the same small $\rho^\chi_t$, since the only distinction that drives regret---optimal versus sub-optimal arm---is preserved under every grouping (the early-transient separation is visible in the inset). In the reverse case, a capacity-restricted agent again plateaus at the structural sub-optimality gap induced by its grouping, and the full examiner's $\rho^\chi_t$ tracks that gap from above. The stationary world therefore exercises the same mechanism as Figure~\ref{fig:capacity} but without the non-stationary stress that makes an under-resolved examiner visibly invalid.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{image/fig3_capacity.pdf}
+\caption{Relative capacity in the stationary bandit. \textbf{(a)} Forward: a full UCB1 agent assessed by an examiner that aggregates arms into $G$ groups; all $G$ converge to the same small $\rho^\chi_t$ once the optimal arm is found (inset: early transient). \textbf{(b)} Reverse: an agent restricted to $G$ groups assessed by a full examiner; $\rho^\chi_t$ plateaus just above each structural gap (labelled). Red: true regret; coloured: $\rho^\chi_t$ per $G$; mean over $100$ seeds with $95\%$ intervals.}
+\label{fig:capacity_stationary}
+\end{figure}

@@ -1,0 +1,21 @@
+\section{Discussion and Limitations}
+% \begin{itemize}
+%     \item In practice, we may not know if the examiner is accurate or not without privileged info about the environment. 
+%     \item Connection with LLM as judge. Inception score. Generative models more broadly. 
+%     \item We could run different examiners.
+%     \item True environment as an optimal examiner. 
+%     \item L
+% \end{itemize}
+\textbf{Limitations.} The perceived regret is produced by an examiner, which is also a learning agent (that cannot influence the future). When deployed alongside the agent, there are no guarantees that its perceived regret is actually meaningful and it could be wildly incorrect. 
+This may be an unavoidable price of seeking to evaluate agents in arbitrary worlds---the general applicability impacts the reliability of the assessment. This issue is akin to the problem of generalization. When an agent encounters a truly novel situation, there cannot be any guarantees and we can only hope it generalizes correctly. 
+
+
+
+\paragraph{Models evaluating other models.} The definition of perceived regret is similar in spirit to previously-used performance measures in the machine learning community. Generative models are one area where it has been common to assess the performance of one model with others. 
+One example is the Inception score used as a performance metric to measure diversity and fidelity of a model's generated images by passing them through the Inception network. Another is CLIPScore in a similar context for test-to-image generation, utilizing the CLIP model as an evaluator. 
+More recently, LLM-as-judge is a common framework used to automatically assess the outputs of a given LLM by feeding it to  multiple other LLMs.
+LLMs have also been used to inspect their own outputs, critiquing and refining them to produce higher-quality answers \wes{add cite}. 
+
+\paragraph{The world as an examiner.} When defining the true value and true regret, we 
+If we view the agent as part of the world, meaning the world has access to the agent's policy (and learning algorithm), we can view the world as an examiner that outputs $\Vlow_t =V^\pi_t$ and $\Vhi =V^*_t$. 
+

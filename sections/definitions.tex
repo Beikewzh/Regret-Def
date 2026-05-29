@@ -1,0 +1,87 @@
+\section{Formal Definitions and Assumptions}
+
+We first define the environment and how an agent interacts with it. The environment is framed to allow maximal flexibility and impose minimal constraints on an agent's associated stream of experience. 
+
+\wes{reorganize possibly}
+
+\begin{definition}[Environment] The \textbf{environment} $\Env$ is defined by a tuple $(\Obs, \Actions, \Rew, \Tr, \gamma)$. The observation space $\Obs$ and action space $\Actions$ serve as the agent-environment interface. We let $\mathcal{H}$ be the space of histories, sequences $h_t =\{o_0, a_0, r_1 , o_1, ..., a_{t-2}, r_{t-1},o_{t-1} \}$ for any $t \in \mathbb{N}$. Next, $\Rew:  \Hist \times \Actions \rightarrow \Reals$ is the \textit{reward function} and $\gamma : \Hist \times \Actions$ is the \textit{discount function}, which together define the objective to maximize. Finally, $\Tr: \Hist \times \Actions \rightarrow \Obs$ defines the \textit{observation function}. \wes{maybe add something about observations}
+\end{definition}
+
+
+\begin{definition}[Agent and Policy]
+    The \textbf{agent} $\Lambda$ chooses actions according to a \textbf{policy} $\pi$, defined as a mapping from histories to actions $\pi : \Hist \rightarrow \Actions$.  
+\end{definition}
+With this definition of a policy, it encompasses any algorithm that modifies the decision-making process based on past data, including memory-based policies or even parameter updates. 
+
+The agent and environment interact in sequence, alternating between the environment producing an observation/reward and the agent choosing an action. These two steps can depend on the entire history of observations, rewards and actions up to that point in time. 
+
+
+These definitions aims to capture complex streams of experience. In particular, we allow the rewards $\Rew$ and transitions $\Tr$ to depend on the entire history in an arbitrary fashion. In this way, it encompasses a large class of environments, including non-Markovian transition dynamics of any order, adaptive (or adversarial) environments and nonstationarity. 
+In particular, we can model ``big worlds" \wes{add cite}, where the agent's computational capacity is tiny compared to the complexity of the world. From the perspective of the agent, the world may appear highly nonstationary and the agent cannot hope to accurately model its full complexity. 
+
+
+This environment definition has certain limitations as it does not encompass continuous time environments or variable number of observations between actions. We can easily extend our proposed regret definitions to these settings by modifying the definitions of the relevant values but we focus on this setup for simplicity.
+We can also augment $\Rew$, $\Tr$ and $\pi$ with an auxiliary argument $\xi \in \Omega$, which allows the rewards, observations and actions to be stochastic by treating $\xi$ as a source of randomness. 
+
+We first define the true value and regret for an agent at a given time in a world. These quantities are unknowable to the agent but are useful to develop the theory. 
+
+
+\begin{definition}[True Value and Optimal Value]
+\wes{maybe call this ``environment value"}
+The \textbf{true value} at time $t$ of policy $\pi$ is defined as $V_t^\pi = \Ex_{\substack{o_i \sim \Tr, r_i \sim \Rew, a_i \sim \pi \\ \text{ for } i \in \{1, 2, ...\} }}[\sum_{i=0}^\infty \gamma^i \Rew(H_{t+i}, A_{t+i}) | H_t=h]$ which is the expectation over the future according to the environment's dynamics and rewards, given the past history $h$. 
+Then, the \textbf{optimal value} is defined as $V^*_t =\sup_\pi V^\pi_t$
+\end{definition}
+
+\begin{definition}[True Regret]
+    The \textbf{true regret} is defined as the difference between the true optimal value and the policy value. For a policy $\pi$, the regret is defined as $\rho^*_t = V^* - V^\pi_t$
+\end{definition}
+
+% \paragraph{Definition} The true regret at time $t$ is defined as  (expectation over future). 
+
+
+
+\subsection{Defining Perceived Regret}
+
+
+With the basic setting outlined, we can now define our proposed notion of regret. 
+We consider an \textit{examiner} $\chi$ that views the same data stream as the agent at every step. 
+
+\begin{definition}[Perceived Regret \wes{add color? highlight somehow. Make text box?}]
+The \textit{examiner} $\chi$ maintains estimates of two quantities: an \emph{aspiration} $\Vhi_t$ (``the highest value it thinks is achievable'') and a \emph{lower confidence value} $\Vlow_t$ (``the value it is confident the learner achieves''). We define the \textbf{perceived regret} as $\rho^\chi_t := \Vhi_t - \Vlow_t.$ 
+\end{definition}
+
+The following assumptions make this quantity non-trivial:
+
+\begin{assumption}[Valid lower bound]\label{a:lb}
+$\Vlow_t \leq V^{\pi_t}_t$ for all $t$. The lower confidence value truly is a lower bound on the policy value. 
+\end{assumption}
+
+
+\begin{assumption}[Optimism]\label{a:optimistic}
+$\tilde{V}^*_t \geq V^{*}_t$ for all $t$. The agent overestimates the optimal value in the environment. We can relax this condition to give different guarantees on the performance of the agent. 
+\end{assumption}
+
+
+\begin{proposition}[Validity]\label{prop:valid}  Under these two assumptions, $\rho^\chi_t$ upper bounds the true regret: 
+\[
+\rho^\chi_t = \underbrace{(\Vhi_t - V^*_t)}_{\geq\, 0} + \underbrace{(V^*_t - V^{\pi_t}_t)}_{\text{true regret}} + \underbrace{(V^{\pi_t}_t - \Vlow_t)}_{\geq\, 0} \;\;\geq\;\; V^*_t - V^{\pi_t}_t.
+\]
+    
+\end{proposition}
+
+
+Thus, driving $\rho^\chi_t \to 0$ also causes the true regret to vanish, making this definition a meaningful notion of regret.  
+Additionally, these quantities are estimated exclusively from the agent's past stream of experience, without reference to external quantities from the environment.
+
+We view these two assumptions as the minimal conditions necessary for $\rho^\chi_t$ to be useful. If either fails to hold, then $\rho^\chi_t$ may not bound the true regret and give an invalid assessment. 
+However, these assumptions are not sufficient to guarantee $\rho^\chi_t$ is useful. We may have that $\rho^\chi_t$ is an upper bound but never goes to zero, even if the agent finds an optimal policy. Consider the following example.
+\vspace{-2mm}
+\paragraph{Example: Vacuous upper bound and examiner.} Suppose the reward is bounded in $[0, R_{max}]$. Then, suppose we have an examiner $\chi_{bad}$ that outputs $\rho^{\chi_{bad}}_t = R_{max}  / (1-\gamma)$ at every step $t$. This quantity is an upper bound on the true value (and true regret) but does not depend on the data at all. Crucially, no matter how well the agent does, the bound will never decrease and $\rho_t$ is not a useful performance measure.
+
+
+We seek an examiner that refine its estimates of $\rho^\chi_t$ as it receives more information. In other words, we want an examiner that \textit{learns}. This is a tricky requirement and  we discuss how to frame this theoretically in the following section.
+
+
+
+
+
