@@ -1,7 +1,7 @@
 \begin{figure}[t!]
 \centering
 \includegraphics[width=\textwidth]{image/fig12_combined.pdf}
-\caption{Perceived regret $\rho^\chi_t$ versus true regret on the agent/examiner grid, in (a) a stationary and (b) a switching bounded-Gaussian bandit (dotted: segment boundaries). Each world pairs a good (matched) and a bad (mismatched) examiner with a well-adapted and a poorly-adapted agent. Curves are the mean over $100$ seeds; shaded bands are $95\%$ bootstrap intervals.}
+\caption{Perceived regret $\rho^\chi_t$ versus true regret on the agent/examiner grid, in (a) a stationary and (b) a switching bounded-Gaussian bandit (vertical lines: switching times). Each world pairs a good (matched) and a bad (mismatched) examiner with a well-adapted and a poorly-adapted agent. Curves are the mean over $100$ seeds; shaded bands are $95\%$ bootstrap intervals.}
 \label{fig:practice_main}
 \end{figure}
 
@@ -25,7 +25,13 @@ When the examiner is good, its perceived regret behaves as Proposition~\ref{prop
 In the stationary world (Figure~\ref{fig:practice_main}a), the good examiner's $\rho^\chi_t$ decays toward zero on the converging agent and settles at the residual sub-optimality gap on the agent that keeps exploring, tracking the true regret from above in both cases. 
 In the switching world (Figure~\ref{fig:practice_main}b), the good examiner is reset-aware: its $\rho^\chi_t$ spikes at each change and recovers between changes, following the true regret of the agent that re-adapts, and it reports persistent regret for the agent that wrongly assumes the world is static.
 
-\textbf{A bad examiner loses validity.} The bad examiner fails in the direction its mismatch dictates, and it can stop being an upper bound at all. In the switching world, a bad examiner that assumes stationarity keeps stale data, so its lower confidence value $\Vlow_t$ is held too high and its aspiration $\Vhi_t$ too low; its $\rho^\chi_t$ then drifts toward zero between changes and falls \emph{below} the true regret even while the agent is incurring large regret. This breaks the optimism assumption (Assumption~\ref{a:optimistic}), so the perceived regret is no longer valid and would wrongly certify the agent as near-optimal. Read together, the success and failure cases are the practical face of the no-free-lunch result of Section~\ref{sec:nfl}: an examiner is informative only when it carries the right prior knowledge of the world, and is misleading when it does not. The same pattern recurs along a second axis, the relative representational capacity of agent and examiner, which we examine in Appendix~\ref{app:capacity}.
+\textbf{Failure modes of a bad examiner.} 
+There are two primary ways an examiner can fail.
+When the 
+The bad examiner fails in the direction its mismatch dictates, and it can stop being an upper bound at all. 
+In the switching world, a bad examiner that assumes stationarity keeps stale data, so its lower confidence value $\Vlow_t$ is held too high and its aspiration $\Vhi_t$ too low; its $\rho^\chi_t$ then drifts toward zero between changes and falls \emph{below} the true regret even while the agent is incurring large regret. 
+This breaks the optimism assumption (Assumption~\ref{a:optimistic}), so the perceived regret is no longer valid and would wrongly certify the agent as near-optimal.
+Read together, the success and failure cases are the practical face of the no-free-lunch result of Section~\ref{sec:nfl}: an examiner is informative only when it carries the right prior knowledge of the world, and is misleading when it does not. The same pattern recurs along a second axis, the relative representational capacity of agent and examiner, which we examine in Appendix~\ref{app:capacity}.
 
 \subsection{Comparing learners with a fixed examiner}
 \label{sec:learner_comparison}
