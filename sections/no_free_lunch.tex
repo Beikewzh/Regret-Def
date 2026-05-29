@@ -31,7 +31,7 @@ The only examiner $\chi$ that produces valid perceived regret estimates (satisfy
 
 \end{theorem})
 \begin{proof}
-    We proceed by contradiction and show that, given a history $h$ and an agent, any examiner that produces a non-vacuous bound will be invalid in some environments. 
+    We proceed by contradiction and show that, given a history $h$ and an agent policy $\pi$, any examiner that produces a non-vacuous bound will be invalid in some environments. 
     Suppose we have an agent with history $h=\{o_0, ..., a_{t-2}, r_{t-1}, o_{t-1}\}$.
     and that the examiner $\chi$ produces a non-vacuous bound $\rho^\chi(h) < \rho_{bound}(h)$, where we make the perceived regret's dependence on the history explicit. 
     We will show that $V^{\pi} \le V_{unif}$ and $\sup_{\pi'} V^{\pi'} = V^{max}$. This will imply $V^*- V^\pi > \rho^\chi $  (perceived regret does not bound the true regret), establishing the contradiction.
@@ -49,7 +49,8 @@ The only examiner $\chi$ that produces valid perceived regret estimates (satisfy
     We also define $\Env_{bad}$ such that its observation function $\Tr$ leads to 
     \wes{...?}
 
-    The uniform random policy will have associated value $V_{unif}(h)=1/|\Actions| {R_{max}} + V_{unif}(h || a_{min}, R_{max},o' )$, where $a || b$ denotes the concatenation of history $a$ followed by $b$. This expressions is due to the fact that one action has reward $R_{max}$ and other actions leads to 0 reward forever.
+    We show that $\pi$ is a 
+    The uniform random policy will have associated value $V_{unif}(h)= \frac{1}{|\Actions|} {R_{max}} + \gamma V_{unif}(h || a_{min}, R_{max},o' )$, where $a || b$ denotes the concatenation of history $a$ followed by $b$. This expressions is due to the fact that one action has reward $R_{max}$ and other actions leads to 0 reward forever.
     Then, t
 
     \textit{Sketch:} The idea is that given the history $h=\{o_0, ..., a_{t-2}, r_{t-1}, o_{t-1}\}$, no matter what the agent's distribution is over the next action, there is a world where it will incur 
