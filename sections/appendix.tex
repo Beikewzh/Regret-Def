@@ -59,15 +59,6 @@ and \wes{fix ref} shows one whose mis-calibration degrades sharply; the ensemble
 
 These observations suggest a simple procedure for unknown streams: instantiate a small, diverse pool of examiners whose biases bracket plausible dynamics and resolutions, report $\rho^\chi_t$ from each alongside the agent's behaviour, and treat agreement across the pool as evidence of meaningful estimates and disagreement as a sign that the pool, not necessarily the agent, needs revisiting.
 
-\begin{figure}[t!]
-\centering
-\includegraphics[width=\textwidth]{image/fig_examiner_quality.pdf}
-\caption{Examiner quality as the bonus source ($\beta=1$). \textbf{(a)} cumulative true regret: the single good (reset-aware) examiner and an ensemble of three weak examiners both fall well below the no-bonus reference, while the vacuous examiner runs off the top of the axis (annotated). \textbf{(b)} per-step true regret: the good and ensemble examiners re-adapt after each change, whereas the vacuous examiner's uniform bonus saturates the reward and pins regret near the random-policy level.}
-\label{fig:intrinsic_quality}
-\end{figure}
-
-
-
 Two ablations support the discussion. First, sweeping the bonus strength with the good examiner (Figure~\ref{fig:intrinsic_beta}) shows that a moderate $\beta$ lowers regret while too large a $\beta$ over-explores, because the bonus keeps pushing an already-converged agent to explore. Second, at the fixed strength $\beta=1$ used in Figure~\ref{fig:intrinsic_quality}, we compare the three weak examiners individually against their ensemble (Figure~\ref{fig:single_examiners}). The weak examiners disagree: the sliding-window and full-memory trackers each lower regret below the no-bonus baseline, but the mis-calibrated one, with an oversized $\sigma$, raises it above. Since we cannot know in advance which weak examiner suits an unknown world, averaging them is the safe choice: the ensemble stays below the baseline and close to its better members, absorbing the bad one rather than inheriting its failure.
 
 \begin{figure}[t]
@@ -100,9 +91,6 @@ A further axis, orthogonal to the dynamics mismatch of Section~\ref{sec:practice
 \textbf{An under-resolved examiner under-reports.} When the agent is fine-grained but the examiner aggregates arms (Figure~\ref{fig:capacity}, top), only a sufficiently fine examiner reacts to the within-group changes the agent must track. As the examiner coarsens it grows blind to those changes and its $\rho^\chi_t$ falls below the true regret, an optimistic and invalid assessment that would wrongly certify the agent as near-optimal. This is the failure of the lower-bound and optimism assumptions when the examiner is too coarse for the world.
 
 \textbf{An under-resolved agent reveals a structural gap.} When the examiner is fine-grained but the agent is restricted (Figure~\ref{fig:capacity}, bottom), the limitation is the agent's. Here $\rho^\chi_t$ stays a valid upper bound and settles just above the residual gap the restricted agent cannot close, a gap that grows as the agent coarsens, while a fully resolved agent drives both regrets toward zero. Perceived regret thus attributes the persistent regret to the agent's capacity rather than masking it.
-
-\subsection{Capacity in the stationary world}
-\label{app:capacity_stationary}
 
 We repeat the capacity probe in the stationary world, where the effect is milder because there are no changes to expose a coarse examiner. Figure~\ref{fig:capacity_stationary} shows both directions. In the forward case, once the agent has identified the optimal arm the examiner's aggregation barely matters: all resolutions $G$ converge to nearly the same small $\rho^\chi_t$, since the only distinction that drives regret (optimal versus sub-optimal arm) is preserved under every grouping, with the early-transient separation visible in the inset. In the reverse case, a capacity-restricted agent again plateaus at the structural gap induced by its grouping, and the fully resolved examiner's $\rho^\chi_t$ tracks that gap from above. The stationary world therefore exercises the same mechanism as Figure~\ref{fig:capacity} but without the non-stationary stress that makes an under-resolved examiner visibly invalid.
 

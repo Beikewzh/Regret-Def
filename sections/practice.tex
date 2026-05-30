@@ -83,7 +83,7 @@ These results suggest that perceived regret is a reasonable proxy for true regre
 \label{fig:coverage}
 \end{figure}
 
-We can consider another use-case of the examiner. Instead of evaluating the agent's value---it's ability to collect reward---we can define a pseudo-reward and evaluate how well the agent accumulates that quantity. This can be viewed as a particular cumulant in general value functions \wes{cite}).
+We can consider another use-case of the examiner. Instead of evaluating the agent's value---it's ability to collect reward---we can define a pseudo-reward and evaluate how well the agent accumulates that quantity. This can be viewed as a particular cumulant in general value functions \citep{sutton2011horde} ).
 As an example, we can quantify the agent's ability to explore by defining a quantity $r_{IG}$ representing the ``information gain" from choosing an action.
 
 In the following bandit experiment, we use $r_{IG}(a) = C_k(a) - C_{k+1}(a)$ where $C_k$ is the width of the confidence interval after $k$ pulls of action $a$. 
