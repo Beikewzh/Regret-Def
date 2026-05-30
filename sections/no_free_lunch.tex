@@ -11,12 +11,11 @@
 
 The examiner is faced with a learning problem of its own. 
 Given the stream of observations, rewards and actions, it must estimate $\Vhi$ and $\Vlow$ and produce the regret estimate $\rho^\chi_t$. 
-
 Broadly-speaking, we desire to have an examiner $\chi$ that produces valid (in the sense of Prop. \ref{prop:valid}) estimates while keeping the bounds as tight as possible. 
 Whenever the agent is learning effectively $\rho^\chi_t$ should decrease and, if the agent has an optimal policy, the examiner should output $\rho^\chi_t=0$.
 Ideally, there would be a universal examiner $\chi^*$ applicable to any agent and any world while producing effective perceived regret estimates. 
 
-Unfortunately, this is asking for too much. The situation is similar to generalization in supervised learning, where we cannot create a universal learning algorithm that generalizes well on any data distribution.
+Unfortunately, this is asking for too much. The situation is similar to generalization in supervised learning, where it is impossible to create a universal learning algorithm that generalizes well on any data distribution.
 Similarly, we prove a no-free-lunch theorem showing that it is impossible to define a ``universal" examiner capable of accurately judging all agents in all worlds and discuss the implications. 
 
 To state this theorem, we first posit some additional assumptions about the agent and environment. We assume $\Actions$ is discrete with at least two actions. We also assume the rewards are bounded in $[0, R_{max}]$ so the true values of all policies are bounded in $[0, V_{max}]$. We define some useful quantities:
@@ -28,12 +27,13 @@ We say that a perceived regret $\rho$ is \textit{vacuous} if $\rho > \rho_{bound
 The only examiner $\chi$ that produces valid perceived regret estimates (satisfying assumptions \ref{a:lb} and \ref{a:optimistic}) for any history $h \in \Hist$, any environment $\Env$ and any agent outputs a vacuous perceived regret $\rho^\chi > \rho_{bound}$  at all steps.
 \end{restatable}
 \end{highlightbox}
-
+\vspace{-4mm}
 \begin{proof}
     (Sketch, full proof in appendix \ref{app:theory}). The main idea is to show that, for any examiner $\chi$, given any history $h$ and agent, there exists some environment $\Env_{bad}$ where the  examiner will produce an invalid perceived regret estimate $\rho^\chi$. 
     This counter-example $\Env_{bad}$ is consistent with the history $h$ but leads to the true regret of the current step to be greater or equal to $V_{max} - V_{unif}$ for any policy $\pi$. 
     Thus, if $\rho^\chi$ is lower than that, it will be invalid.
 \end{proof}
+\vspace{-1mm}
 
 % \wes{high probability bound?}
 % \wes{add determnistic history-dependent agent}

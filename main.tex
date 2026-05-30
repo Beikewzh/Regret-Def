@@ -73,6 +73,7 @@
 \newcommand{\Reals}{\mathbb{R}}
 
 
+
 \newcommand{\wes}[1]{ {\color{blue} #1}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Meta-data (cover page) -- fill in the TODO fields
@@ -93,13 +94,15 @@ $^{1}$\textbf{Anonymous Institution}
 }
 
 %%
-\contribution{We define a novel notion of regret suitable for agents in any environment which depends only on the agent's experience, called the ``perceived regret". }{Previous works have defined regret to measure the performance of reinforcement learning agents. These broadly fall into two categories: 1. Expected Regret (e.g. stochastic bandits, MDPs) and 2. Hindsight Regret (e.g. adversarial bandits, online convex optimization). These definitions are not suitable for arbitrary worlds. Expected regret depends on the true environment's dynamics, which are not necessarily available.  
+\contribution{We introduce the \textit{agent-examiner} framework to assess an agent's performance in any environment based solely on its past experience. 
+An \textit{examiner} observes the same stream of experience as the agent and outputs a regret estimate called the \textit{perceived regret}. 
+We prove a no-free-lunch theorem showing there are no universal examiners. Then, we conduct experiments to show how perceived regret can be useful in practice and how modeling assumptions affect the estimates.}{Previous works have defined regret to measure the performance of reinforcement learning agents. These broadly fall into two categories: 1. Expected regret (e.g. stochastic bandits, MDPs) and 2. Hindsight regret (e.g. adversarial bandits, online convex optimization). These definitions are not suitable for arbitrary worlds. Expected regret depends on the true environment's dynamics in the future, which are not available based on the agent's stream of experience. Hindsight regret definitions are not suitable for environments with general nonstationarity as they produce vacuous bounds when the environment can change arbitrarily. In those situations, the worst-case performance for the agent can be very poor while a comparator policy can do well.  
 }
 
 \keywords{Continual Reinforcement Learning, Big World Hypothesis, Evaluation}
 
 \summary{Continual reinforcement learning considers an agent receiving and learning from a stream of experience. The agent only learns about its world through these experiences and aims to maximize its accumulated reward. A fundamental problem is to evaluate this agent using only its stream of experience, without assuming a particular structure of the world.
-We outline a novel approach to this problem: Define an \textit{examiner} that observes the same stream of experience and, at every timestep, computes a \textit{perceived regret}, representing the  agent's suboptimality gap in value from the examiner's perspective.
+We outline a novel approach to this problem: Define an \textit{examiner} that observes the same stream of experience and, at every timestep, computes a \textit{perceived regret}, representing the agent's suboptimality gap in value from the examiner's perspective.
 We empirically demonstrate how perceived regret can be a useful performance measure, applicable to arbitrary streams of experience.
 Theoretically, we prove that there is no universal examiner, capable of accurately assessing all agents in any world but specific modeling biases can enable success in associated environments.
 Further experiments show the flexibility of this approach and explore its nuances. }
@@ -111,7 +114,7 @@ Further experiments show the flexibility of this approach and explore its nuance
 
 \begin{abstract}
 Continual reinforcement learning considers an agent receiving and learning from a stream of experience. The agent only learns about its world through these experiences and aims to maximize its accumulated reward. A fundamental problem is to evaluate this agent using only its stream of experience, without assuming a particular structure of the world.
-We outline a novel approach to this problem: Define an \textit{examiner} that observes the same stream of experience and, at every timestep, computes a \textit{perceived regret}, representing the  agent's suboptimality gap in value from the examiner's perspective.
+We outline a novel approach to this problem: Define an \textit{examiner} that observes the same stream of experience and, at every timestep, computes a \textit{perceived regret}, representing the agent's suboptimality gap in value from the examiner's perspective.
 We empirically demonstrate how perceived regret can be a useful performance measure, applicable to arbitrary streams of experience.
 Theoretically, we prove that there is no universal examiner, capable of accurately assessing all agents in any world but specific modeling biases can enable success in particular environments.
 Further experiments show the flexibility of this approach and explore its nuances. 

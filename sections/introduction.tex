@@ -28,7 +28,7 @@
 % \end{itemize}
 Continual reinforcement learning imagines an intelligent agent interacting with its world which can 
 ``continue to adapt over the course of lifelong streams of experience." \citep{silver2025welcome}.
-The agent chooses actions to accumulate as much reward as possible and improve its future reward. A natural question arises: Without external knowledge about the world, how can we evaluate this agent? 
+The agent chooses actions to collect  as much reward as possible and improve its future reward. A natural question arises: Without external knowledge about the world, how can we evaluate this agent? 
 % We discuss how we can evaluate a continual reinforcement learning agent from its own stream of experience.
 
 \paragraph{Learning in Any World.} Our setting considers an agent interacting with a general environment. The agent takes actions $a_t$ based on its observation history and the environment produces rewards and observations $(r_t, o_t)$ based on the entire interaction history.  
@@ -44,7 +44,7 @@ and $V^{\pi_t}$ represents the value of the agent's current policy.
 % \textcolor{red}{[Is there any difference between $V^{\pi_t}$
 % and $V_t^{\pi}$ used in defining True Regret?
 % In Proposition 1, $V_t^{\pi_t}$ is also used.]}
-There are two classic families of regret definitions which define $V^*$ differently: 1. \textit{Expected regret}, used in stochastic bandits and MDPs. 2. \textit{Hindsight regret}, used in adversarial bandits and online learning. 
+There are two classic families of regret definitions which define $V^*$ differently: 1. \textit{Expected regret}, used in stochastic bandits \citep{auer2002ucb} and MDPs \citep{puterman2014markov}. 2. \textit{Hindsight regret}, used in adversarial bandits \citep{auer2002nonstochastic} and online learning \citep{zinkevich2003online}. 
 
 For \textit{expected regret}, $V^*$ is the value of the optimal policy, which achieves the largest expected return in the future.
 This is an unreasonable standard for the agent to achieve in a nonstationary environment since this optimal value will depend on quantities inaccessible to the agent, such as how the environment will evolve in the future. 

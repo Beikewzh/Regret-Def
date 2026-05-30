@@ -3,6 +3,7 @@
 \includegraphics[width=\textwidth]{image/fig12_combined.pdf}
 \caption{Learning curves for perceived regret $\rho^\chi_t$ and true regret for agent/examiner combinations in (a) a stationary bandit and (b) a nonstationary bandit (vertical lines: switching times). Each world pairs a good (matched) and a bad (mismatched) examiner with a near-optimal and a poor learning agent. Curves are the mean over $100$ seeds; shaded bands are $95\%$ bootstrap intervals.}
 \label{fig:practice_main}
+\vspace{-4mm}
 \end{figure}
 
 
@@ -52,6 +53,7 @@ In a complex world, we rarely have access to the true regret, yet we still want 
 \includegraphics[width=\textwidth]{image/fig5_learner_comparison.pdf}
 \caption{Perceived regret as a stream-only comparison metric across learners in the switching bandit. \textbf{(a)} For each learner, $\rho^\chi_t$ (blue) tracks and upper-bounds the oracle true regret (red); dotted lines mark task boundaries. \textbf{(b)} Final perceived versus true regret over all learners and seeds; the strong rank correlation (Spearman $\rho_S = 0.87$) shows that  $\rho^\chi_t$ is a good proxy for the true regret.}
 \label{fig:learner_comparison}
+\vspace{-4mm}
 \end{figure}
 
 We run several standard bandit learners in the switching world under a single good examiner, and we expect $\rho^\chi_t$ to upper-bound each learner's true regret while giving meaningful performance estimates.  
@@ -74,12 +76,21 @@ These results suggest that perceived regret is a reasonable proxy for true regre
 
 
 
-
 \subsection{Evaluating Exploration with an Examiner}
 
 
 We can consider another use-case of the examiner. Instead of evaluating the agent's value (its ability to collect reward), we can define a pseudo-reward and evaluate how well the agent accumulates that quantity. This can be viewed as a particular cumulant in general value functions \citep{sutton2011horde}.
 As an example, we can quantify the agent's ability to explore by defining a quantity $r_{IG}$ representing the ``information gain" from choosing an action.
+
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{image/fig_coverage.pdf}
+\caption{The plots show the relationship between perceived regret with information-gain pseudo-reward and the minimum pull count over arms (left) and the entropy of the count distribution (right). The examiner's perceived regret $\rho^\chi_t$ closely matches the minimum pull count $\min_i n_i$ \textbf{(a)} (Spearman $\rho_S = -1.00$), and is correlated with the pull-count entropy $H_t$ \textbf{(b)} ($\rho_S = -0.79$); colour denotes the UCB1 exploration level. } 
+\label{fig:coverage}
+\vspace{-2mm}
+\end{figure}
 
 In the following bandit experiment, we use $r_{IG}(a) = C_k(a) - C_{k+1}(a)$ where $C_k$ is the width of the confidence interval after $k$ pulls of action $a$. 
 This value quantifies how much tighter the confidence interval becomes after choosing that action. That is, how much the uncertainty has been reduced.
@@ -88,12 +99,7 @@ The examiner computes its perceived regret as before but we can now interpret it
 Again, if the perceived regret (with respect to $r_{IG}$) is low, we can say that the agent is exploring well. 
 
 
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=\textwidth]{image/fig_coverage.pdf}
-\caption{The plots show the relationship between perceived regret with information-gain pseudo-reward and the minimum pull count over arms (left) and the entropy of the count distribution (right). The examiner's perceived regret $\rho^\chi_t$ closely matches the minimum pull count $\min_i n_i$ \textbf{(a)} (Spearman $\rho_S = -1.00$), and is correlated with the pull-count entropy $H_t$ \textbf{(b)} ($\rho_S = -0.79$); colour denotes the UCB1 exploration level. } 
-\label{fig:coverage}
-\end{figure}
+
 For this experiment, we run the UCB1 agent on a stationary bandit as in Fig.~\ref{fig:practice_main} with different coefficients $\sigma_{\text{UCB}}$ for the upper confidence bound. Larger $\sigma_{\text{UCB}}$ lead to more exploration. The larger  
 In Fig.~\ref{fig:coverage} , we see that $\rho^{IG}$ strongly correlates  with the fewest pull counts over actions.
 Moreover, we see a clear trend with larger $\sigma_{\text{UCB}}$ values (more exploration) leading to smaller info-gain perceived regret, as expected. 
