@@ -26,13 +26,13 @@
 %     \item Practical usage and experiments
 %     \item 
 % \end{itemize}
-Continual reinforcement learning imagines an agent interacting with its world and learning from its stream of experience. 
+Continual reinforcement learning imagines an intelligent agent interacting with its world which can 
+``continue to adapt over the course of lifelong streams of experience." \citep{silver2025welcome}.
 The agent chooses actions to accumulate as much reward as possible and improve its future reward. A natural question arises: Without external knowledge about the world, how can we evaluate this agent? 
 % We discuss how we can evaluate a continual reinforcement learning agent from its own stream of experience.
 
 \paragraph{Learning in Any World.} Our setting considers an agent interacting with a general environment. The agent takes actions $a_t$ based on its observation history and the environment produces rewards and observations $(r_t, o_t)$ based on the entire interaction history.  
-No assumptions are placed on the form of the environment; it is not necessarily a MDP, POMDP, etc. Thus, we allow the agent to interact with an arbitrary stream of experience $\{o_0, r_0, a_1, o_1, r_1, a_2, o_2, r_2,...\}$ with the goal of developing an evaluation procedure for intelligent agents that can 
-``continue to adapt over the course of lifelong streams of experience." \citep{silver2025welcome}.
+No assumptions are placed on the form of the environment; it is not necessarily a MDP, POMDP, etc. Thus, we allow the agent to interact with an arbitrary stream of experience $\{o_0, r_0, a_1, o_1, r_1, a_2, o_2, r_2,...\}$.
 
 
 \paragraph{Motivation: Standard measures of regret are not suitable for arbitrary streams of experience.} 
@@ -68,7 +68,7 @@ The paper proceeds as follows:
     \item We formally define the \textit{perceived regret} $\rho^\chi$ and outline the advantages of this approach.
     \item We prove a no-free-lunch theorem showing there are no universal examiners capable of evaluating any agent in any world.
     \item Experiments illustrate how perceived regret works in small, informative problems.
-    \item Discuss other potential extensions to perceived regret such as evaluating exploration.
+    \item We discuss other potential extensions to perceived regret such as evaluating exploration.
 \end{itemize}
 
 

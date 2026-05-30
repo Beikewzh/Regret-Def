@@ -19,6 +19,15 @@
 
 \usepackage{thmtools, thm-restate}
 
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems, skins}
+\usepackage{thmtools, thm-restate}
+
+% \newtcbtheorem[number within=section]{definition}{Definition}{
+%   colback=blue!8, colframe=blue!60!black,
+%   fonttitle=\bfseries, arc=2mm
+% }{def}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Theorem environments and macros
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -77,9 +86,13 @@ $^{1}$\textbf{Anonymous Institution}
 %%
 \contribution{We define a novel notion of regret suitable for agents in general environments. }{None}
 
-\keywords{TODO}
+\keywords{Continual Learning, Reinforcement Learning, Big World Hypothesis}
 
-\summary{TODO}
+\summary{Continual reinforcement learning considers an agent receiving and learning from a stream of experience. The agent only learns about its world through these experiences and aims to maximize its accumulated reward. A fundamental problem is to evaluate this agent using only its stream of experience, without assuming a particular structure of the world.
+We outline a novel approach to this problem: Define an \textit{examiner} that observes the same stream of experience and, at every timestep, computes a \textit{perceived regret}, representing the  agent's suboptimality gap in value from the examiner's perspective.
+We empirically demonstrate how perceived regret can be a useful performance measure, applicable to arbitrary streams of experience.
+Theoretically, we prove that there is no universal examiner, capable of accurately assessing all agents in any world but specific modeling biases can enable success in associated environments.
+Further experiments show the flexibility of this approach and explore its nuances. }
 
 \begin{document}
 
@@ -87,12 +100,11 @@ $^{1}$\textbf{Anonymous Institution}
 \maketitle
 
 \begin{abstract}
-Continual reinforcement learning considers an agent receiving and learning from a stream of experience. The agent only learns about its world through these experiences and aims to maximize its accumulated reward. A fundamental problem is to evaluate this agent, using only its stream of experience, without assuming a particular structure of the world.
-We outline a novel approach to this problem: Define an \textit{examiner} that observes the same stream of experience and, at every timestep, computes a \textit{perceived regret}, which represents the potential improvement in value from the examiner's perspective.
-We empirically demonstrate how perceived regret can be a useful performance measure. 
-Theoretically, we prove that there is no universal examiner, capable of accurately assessing all agents in any world but specific modeling biases can let enable success in particular ones. 
-Further experiments 
-We discuss further extensions to this agent-examiner framework and highlight its flexibility. 
+Continual reinforcement learning considers an agent receiving and learning from a stream of experience. The agent only learns about its world through these experiences and aims to maximize its accumulated reward. A fundamental problem is to evaluate this agent using only its stream of experience, without assuming a particular structure of the world.
+We outline a novel approach to this problem: Define an \textit{examiner} that observes the same stream of experience and, at every timestep, computes a \textit{perceived regret}, representing the  agent's suboptimality gap in value from the examiner's perspective.
+We empirically demonstrate how perceived regret can be a useful performance measure, applicable to arbitrary streams of experience.
+Theoretically, we prove that there is no universal examiner, capable of accurately assessing all agents in any world but specific modeling biases can enable success in particular environments.
+Further experiments show the flexibility of this approach and explore its nuances. 
 
 \end{abstract}
 
