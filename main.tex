@@ -20,8 +20,17 @@
 \usepackage{thmtools, thm-restate}
 
 \usepackage{tcolorbox}
-\tcbuselibrary{theorems, skins}
+\tcbuselibrary{theorems, skins,breakable}
 \usepackage{thmtools, thm-restate}
+
+\newtcolorbox{highlightbox}{
+  colback=blue!4,
+  colframe=blue!40!black,
+  boxrule=0.7pt,
+  arc=2mm,
+  left=2.5mm, right=2.5mm, top=1.5mm, bottom=1.5mm,
+  breakable, enhanced
+}
 
 % \newtcbtheorem[number within=section]{definition}{Definition}{
 %   colback=blue!8, colframe=blue!60!black,
@@ -84,9 +93,10 @@ $^{1}$\textbf{Anonymous Institution}
 }
 
 %%
-\contribution{We define a novel notion of regret suitable for agents in general environments. }{None}
+\contribution{We define a novel notion of regret suitable for agents in any environment which depends only on the agent's experience, called the ``perceived regret". }{Previous works have defined regret to measure the performance of reinforcement learning agents. These broadly fall into two categories: 1. Expected Regret (e.g. stochastic bandits, MDPs) and 2. Hindsight Regret (e.g. adversarial bandits, online convex optimization). These definitions are not suitable for arbitrary worlds. Expected regret depends on the true environment's dynamics, which are not necessarily available.  
+}
 
-\keywords{Continual Learning, Reinforcement Learning, Big World Hypothesis}
+\keywords{Continual Reinforcement Learning, Big World Hypothesis, Evaluation}
 
 \summary{Continual reinforcement learning considers an agent receiving and learning from a stream of experience. The agent only learns about its world through these experiences and aims to maximize its accumulated reward. A fundamental problem is to evaluate this agent using only its stream of experience, without assuming a particular structure of the world.
 We outline a novel approach to this problem: Define an \textit{examiner} that observes the same stream of experience and, at every timestep, computes a \textit{perceived regret}, representing the  agent's suboptimality gap in value from the examiner's perspective.

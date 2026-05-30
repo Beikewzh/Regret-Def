@@ -47,9 +47,12 @@ Then, the \textbf{optimal value} is defined as $V^*_t =\sup_\pi V^\pi_t$
 With the basic setting outlined, we can now define our proposed notion of regret. 
 We consider an \textit{examiner} $\chi$ that views the same data stream as the agent at every step. 
 
+\begin{highlightbox}
 \begin{definition}[Perceived Regret]
 The \textit{examiner} $\chi$ maintains estimates of two quantities: an \emph{aspiration} $\Vhi_t$ (``the highest value it thinks is achievable'') and a \emph{lower confidence value} $\Vlow_t$ (``the value it is confident the learner achieves''). We define the \textbf{perceived regret} as $\rho^\chi_t := \Vhi_t - \Vlow_t.$ 
 \end{definition}
+\end{highlightbox}
+
 
 The following assumptions make this quantity non-trivial:
 

@@ -23,9 +23,11 @@ To state this theorem, we first posit some additional assumptions about the agen
 Let $V_{unif}$ be the value of the uniform policy at all future steps and define $\rho_{bound} := V_{max} - V_{unif}$. This quantity is an upper bound on useful perceived regret estimates since, if the true regret is larger than $\rho_{bound}$, the agent is worse than the uniform random policy.
 We say that a perceived regret $\rho$ is \textit{vacuous} if $\rho > \rho_{bound}$. 
 
+\begin{highlightbox}
 \begin{restatable}[No Free Lunch for Examiners]{theorem}{nofreelunch}
 The only examiner $\chi$ that produces valid perceived regret estimates (satisfying assumptions \ref{a:lb} and \ref{a:optimistic}) for any history $h \in \Hist$, any environment $\Env$ and any agent outputs a vacuous perceived regret $\rho^\chi > \rho_{bound}$  at all steps.
 \end{restatable}
+\end{highlightbox}
 
 \begin{proof}
     (Sketch, full proof in appendix \ref{app:theory}). The main idea is to show that, for any examiner $\chi$, given any history $h$ and agent, there exists some environment $\Env_{bad}$ where the  examiner will produce an invalid perceived regret estimate $\rho^\chi$. 
