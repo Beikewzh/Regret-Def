@@ -37,12 +37,13 @@ No assumptions are placed on the form of the environment; it is not necessarily 
 
 \paragraph{Motivation: Standard measures of regret are not suitable for arbitrary streams of experience.} 
 Regret is traditionally defined as $V^{*} - V^{\pi_t}$ at timestep $t$
-\textcolor{red}{[Should it be ``Regret at timestep $t$ ..."?]}
-where $V^*$ represents an ``optimal" value \textcolor{red}{[Is this precise?
-Does this include both cases?]} and $V^{\pi_t}$ represents the value of the agent's current policy.
-\textcolor{red}{[Is there any difference between $V^{\pi_t}$
-and $V_t^{\pi}$ used in defining True Regret?
-In Proposition 1, $V_t^{\pi_t}$ is also used.]}
+% \textcolor{red}{[Should it be ``Regret at timestep $t$ ..."?]}
+where $V^*$ represents an ``optimal" value 
+% \textcolor{red}{[Is this precise?Does this include both cases?]} 
+and $V^{\pi_t}$ represents the value of the agent's current policy.
+% \textcolor{red}{[Is there any difference between $V^{\pi_t}$
+% and $V_t^{\pi}$ used in defining True Regret?
+% In Proposition 1, $V_t^{\pi_t}$ is also used.]}
 There are two classic families of regret definitions which define $V^*$ differently: 1. \textit{Expected regret}, used in stochastic bandits and MDPs. 2. \textit{Hindsight regret}, used in adversarial bandits and online learning. 
 
 For \textit{expected regret}, $V^*$ is the value of the optimal policy, which achieves the largest expected return in the future.
@@ -61,19 +62,13 @@ For this reason, these regret definitions are unsuitable for our purpose because
 
 \paragraph{Contributions.}
 In this paper, we propose the \textit{agent-examiner} framework to evaluate any agent in any world.
-An \textit{examiner} $\chi$ views the same stream of experience as the agent, with no influence on the future. This examiner estimates the current regret of the agent by computing two quantities: $\Vhi$, the best performance it believes the agent \textit{could} achieve and $\Vlow$, how well the it believes the agent can currently do. The difference between the two 
-
-We define a novel performance measure: The \textit{perceived regret} $\rho^\chi_t$. 
-This quantity is defiend
-
-
-
+An \textit{examiner} $\chi$ views the same stream of experience as the agent, with no influence on the future. This examiner estimates the current regret of the agent by computing two quantities: $\Vhi$, the best performance it believes the agent \textit{could} achieve and $\Vlow$, how well it believes the agent can currently do. The difference between the two we define as the \textit{perceived regret} $\rho^\chi$. 
+The paper proceeds as follows:
 \begin{itemize}
-    \item 
-    \item We discuss assumptions on it
-    \item show a no-free-lunch theorem for examiners
-    \item Small experiments illustrate how perceived regret works in different, informative  problems 
-    \item Discuss possible extensions
+    \item We formally define the \textit{perceived regret} $\rho^\chi$ and assumptions required for it to be meaningful.
+    \item We prove a no-free-lunch theorem showing there are no universal examiners capable of evaluating any agent in any world.
+    \item Experiments illustrate how perceived regret works in small, informative problems, includin
+    \item Discuss other
 \end{itemize}
 
 

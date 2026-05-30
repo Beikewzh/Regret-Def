@@ -76,6 +76,13 @@ These results suggest that perceived regret is a reasonable proxy for true regre
 
 \subsection{Evaluating exploration with examiners}
 
+\begin{figure}[b]
+\centering
+\includegraphics[width=\textwidth]{image/fig_coverage.pdf}
+\caption{The examiner's uncertainty tracks worst-case coverage. With an information-gain pseudo reward, the examiner's perceived regret $\rho^\chi_t$ is determined almost exactly by the minimum pull count $\min_i n_i$ \textbf{(a)} (Spearman $\rho_S = -1.00$), and only loosely by the pull-count entropy $H_t$ \textbf{(b)} ($\rho_S = -0.79$); colour denotes the UCB1 exploration level.}
+\label{fig:coverage}
+\end{figure}
+
 We can consider another use-case of the examiner. Instead of evaluating the agent's value---it's ability to collect reward---we can define a pseudo-reward and evaluate how well the agent accumulates that quantity. This can be viewed as a particular cumulant in general value functions \wes{cite}).
 As an example, we can quantify the agent's ability to explore by defining a quantity $r_{IG}$ representing the ``information gain" from choosing an action.
 
@@ -87,7 +94,8 @@ Again, if the perceived regret (with respect to $r_{IG}$) is low, we can say tha
 
 For this experiment, we run the UCB1 agent on a stationary bandit as in \wes{add ref to sec 1} with different coefficients on the exploration. 
 
-\wes{add figure}
+
+
 
 In Fig. , we see that this $\rho^{IG}$ 
 
