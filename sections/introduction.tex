@@ -47,7 +47,7 @@ and $V^{\pi_t}$ represents the value of the agent's current policy.
 There are two classic families of regret definitions which define $V^*$ differently: 1. \textit{Expected regret}, used in stochastic bandits and MDPs. 2. \textit{Hindsight regret}, used in adversarial bandits and online learning. 
 
 For \textit{expected regret}, $V^*$ is the value of the optimal policy, which achieves the largest expected return in the future.
-This is is an unreasonable standard for the agent to achieve in a nonstationary environment since this optimal value will depend on quantities inaccessible to the agent, such as how the environment will evolve in the future. 
+This is an unreasonable standard for the agent to achieve in a nonstationary environment since this optimal value will depend on quantities inaccessible to the agent, such as how the environment will evolve in the future. 
 
 For \textit{hindsight regret}, $V^*$ is defined as a counterfactual: 
 What if the agent had chosen past actions according to a different policy $\pi$ instead? 

@@ -50,8 +50,8 @@ The examiner's inductive bias also matters as the agent may enter previously uns
 
 Overall, we see that the examiner faces a learning problem at least as difficult as supervised learning, combining prediction on new examples with a temporal and decision-making component. 
 As such, it is expected that similar no-free-lunch theorems apply to the examiner. 
-This means there are no ``universally" best examiners---we must make do with the examiners we believe are best fit for the environment at hand and cannot give general guarantees on their evaluation performance. 
-Next, we discuss some choices of modeling biases for the examiner with and how we can evaluate them.
+This means there are no ``universally" best examiners; we must make do with the examiners we believe are best fit for the environment at hand and cannot give general guarantees on their evaluation performance.
+Next, we discuss some choices of modeling biases for the examiner and how we can evaluate them.
 
 % \wes{should the examiner see internals of the agent?}
 
@@ -77,14 +77,14 @@ We can assess an examiner by how it behaves in certain families of environments 
 For example, in stochastic bandits and finite MDPs, there are known provably-optimal learning algorithms, achieving the best (true) expected regret possible. These agents will shrink the regret per step towards zero. 
 A ``good" examiner, when run on these learning agents, should also reduce its perceived regret towards zero as the agent converges towards an optimal policy. 
 
-We may be able to create more flexible examiners, capable of dealing with larger families of environments, by considering environments where provably-optimal learning agents exist. Drawing from the vast reinforcement learning theory literature, theorists have crafted increasingly general conditions where provably low regret is achievable. For example, tabular MDPs are a special case of linear MDPs \citep{jin2020provably}, which are in turn subsumed by low Bellman rank MDPs \citep{jiang2017contextual} or low Eluder dimension \citep{russo2013eluder}. These can be  further generalized with concepts such as the Bellman-Eluder dimension \citep{jin2021bellman}, bilinear classes \citep{du2021bilinear} and many alternative concepts \citep{ayoub2020model, sun2019model}. One of the most general family of environments where low regret is possible are those with low Decision-Estimation Coefficient \citep{foster2021statistical}. 
+We may be able to create more flexible examiners, capable of dealing with larger families of environments, by considering environments where provably-optimal learning agents exist. Drawing from the vast reinforcement learning theory literature, theorists have crafted increasingly general conditions where provably low regret is achievable. For example, tabular MDPs are a special case of linear MDPs \citep{jin2020provably}, which are in turn subsumed by low Bellman rank MDPs \citep{jiang2017contextual} or low Eluder dimension \citep{russo2013eluder}. These can be  further generalized with concepts such as the Bellman-Eluder dimension \citep{jin2021bellman}, bilinear classes \citep{du2021bilinear} and many alternative concepts \citep{ayoub2020model, sun2019model}. Among the most general families of environments where low regret is possible are those with low Decision-Estimation Coefficient \citep{foster2021statistical}. 
 Whenever we have a provably optimal agent for some environment family, we can use this as a benchmark to test candidate examiners. In these cases, we can require that the examiner produces a perceived regret decreasing to zero at the similar rate as the true regret. 
 
-It is important note that, in light of the no-free-lunch theorem, it will be impossible to expand the family of environments ad infinitum. The examiner will always be unreliable in some world. 
-Certain examiners may also provide invalid perceived regret, which do not bound the true regret. In a general environment, we may not have any formal guarantee, similar to generalization in supervised learning. In practice, on a unknown environment, we  forgo any formal guarantees. 
+It is important to note that, in light of the no-free-lunch theorem, it will be impossible to expand the family of environments ad infinitum. The examiner will always be unreliable in some world. 
+Certain examiners may also provide invalid perceived regret, which do not bound the true regret. In a general environment, we may not have any formal guarantee, similar to generalization in supervised learning. In practice, on an unknown environment, we forgo any formal guarantees. 
 % These are all modeling decisions that a use must make. 
 
-Without a prior knowledge of the environment, we can mitigate the possibility of poor examiner by utilizing multiple examiners in parallel on a single agent's stream of experience, resulting in several performance estimates. These can aggregated or used a distribution of assessments. Similar to ensembles, we may want to choose a diverse set of examiners, with different modeling biases and learning mechanisms. 
+Without prior knowledge of the environment, we can mitigate the possibility of a poor examiner by utilizing multiple examiners in parallel on a single agent's stream of experience, resulting in several performance estimates. These can be aggregated or used as a distribution of assessments. Similar to ensembles, we may want to choose a diverse set of examiners, with different modeling biases and learning mechanisms. 
 We can also consider pretrained models (e.g. foundation models) that have assimilated a large corpus of data. This can lead to complex inductive biases within the examiner that could potentially help it produce more useful perceived regret values. 
 
 % In the next section, we conduct simple experiments to illustrate how the  choice of examiner for an agent and environment impacts the perceived regret.

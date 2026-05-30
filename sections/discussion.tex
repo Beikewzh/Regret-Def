@@ -7,13 +7,13 @@
 %     \item L
 % \end{itemize}
 \textbf{Limitations.} The perceived regret is produced by an examiner, which is also a learning agent (that cannot influence the future). When deployed alongside the agent, there are no guarantees that its perceived regret is actually meaningful and it could be wildly incorrect. 
-This may be an unavoidable price of seeking to evaluate agents in arbitrary worlds---the general applicability impacts the reliability of the assessment. This issue is akin to the problem of generalization. When an agent encounters a truly novel situation, there cannot be any guarantees and we can only hope it generalizes correctly. 
+This may be an unavoidable price of seeking to evaluate agents in arbitrary worlds: the general applicability impacts the reliability of the assessment. This issue is akin to the problem of generalization. When an agent encounters a truly novel situation, there cannot be any guarantees and we can only hope it generalizes correctly. 
 
 \paragraph{Models evaluating other models.} The definition of perceived regret is similar in spirit to previously-used performance measures in the machine learning community. Generative models are one area where it has been common to assess the performance of one model with others. 
 One example is the Inception score \citep{salimans2016improved}, used to measure diversity and fidelity of a model's generated images by passing them through the Inception network \citep{szegedy2016rethinking}. Another is CLIPScore \citep{hessel2021clipscore} in text-to-image generation, which uses the CLIP model \citep{radford2021clip} as an evaluator. More recently, LLM-as-judge \citep{zheng2023judging} is a common framework used to automatically assess the outputs of a given LLM with other LLMs. LLMs have also been used to inspect their own outputs, critiquing and refining them to produce higher-quality answers \citep{madaan2023selfrefine, shinn2023reflexion}. 
 
 \paragraph{The world as an examiner.} When defining the true value and true regret, we write them with expectations involving the environment $\Env$.
-If we view the agent as part of the world \citep{lewandowski2025bigger}, the world has access to the agent's policy (and learning algorithm), we can view the world as an examiner that outputs $\Vlow_t =V^\pi_t$ and $\Vhi =V^*_t$. 
+If we view the agent as part of the world \citep{lewandowski2025bigger}, so that the world has access to the agent's policy (and learning algorithm), we can view the world as an examiner that outputs $\Vlow_t =V^\pi_t$ and $\Vhi =V^*_t$.
 From this perspective, we can interpret the world as being a particularly powerful examiner, capable of accurately modeling the agent's future.
 
 % \paragraph{Tandem Learning}

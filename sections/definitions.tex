@@ -16,8 +16,8 @@ With this definition of a policy, it encompasses any algorithm that modifies the
 The agent and environment interact in sequence, alternating between the environment producing an observation/reward and the agent choosing an action. These two steps can depend on the entire history of observations, rewards and actions up to that point in time. 
 The standard environment transition function from state to state in MDPs or POMDPs is implicitly defined through $\Rew$ and $\Tr$ as they depend on the history, we do not need to explicitly assume the existence of a ground-truth environment state.
 
-These definitions aims to capture complex streams of experience. In particular, we allow the rewards $\Rew$ and observations $\Tr$ to depend on the entire history in an arbitrary fashion. 
-In this way, it encompasses a large class of environments, including non-Markovian transition dynamics of any order, adaptive (or adversarial) environments and nonstationarity. 
+These definitions aim to capture complex streams of experience. In particular, we allow the rewards $\Rew$ and observations $\Tr$ to depend on the entire history in an arbitrary fashion. 
+In this way, they encompass a large class of environments, including non-Markovian transition dynamics of any order, adaptive (or adversarial) environments and nonstationarity. 
 In particular, we can model ``big worlds" \citep{javed2025bigworld, lu2021bitbybit}, where the agent's computational capacity is tiny compared to the complexity of the world. From the perspective of the agent, the world may appear highly nonstationary and the agent cannot hope to accurately model its full complexity. 
 
 
@@ -34,7 +34,7 @@ Then, the \textbf{optimal value} is defined as $V^*_t =\sup_\pi V^\pi_t$
 \end{definition}
 
 \begin{definition}[True Regret]
-    The \textbf{true regret} is defined as the difference between the true optimal value and the policy value. For a policy $\pi$, the regret is defined as $\rho^*_t = V^* - V^\pi_t$
+    The \textbf{true regret} is defined as the difference between the true optimal value and the policy value. For a policy $\pi$, the regret is defined as $\rho^*_t = V^*_t - V^\pi_t$
 \end{definition}
 
 % \paragraph{Definition} The true regret at time $t$ is defined as  (expectation over future). 
@@ -59,7 +59,7 @@ $\Vlow_t \leq V^{\pi_t}_t$ for all $t$. The lower confidence value truly is a lo
 
 
 \begin{assumption}[Optimism]\label{a:optimistic}
-$\tilde{V}^*_t \geq V^{*}_t$ for all $t$. The agent overestimates the optimal value in the environment. We can relax this condition to give different guarantees on the performance of the agent. 
+$\tilde{V}^*_t \geq V^{*}_t$ for all $t$. The examiner overestimates the optimal value in the environment. We can relax this condition to give different guarantees on the performance of the agent. 
 \end{assumption}
 
 
@@ -80,7 +80,7 @@ However, these assumptions are not sufficient to guarantee $\rho^\chi_t$ is usef
 \paragraph{Example: Vacuous upper bound and examiner.} Suppose the reward is bounded in $[0, R_{max}]$. Then, suppose we have an examiner $\chi_{bad}$ that outputs $\rho^{\chi_{bad}}_t = R_{max}  / (1-\gamma)$ at every step $t$. This quantity is an upper bound on the true value (and true regret) but does not depend on the data at all. Crucially, no matter how well the agent does, the bound will never decrease and $\rho_t$ is not a useful performance measure.
 
 
-We seek an examiner that refine its estimates of $\rho^\chi_t$ as it receives more information. In other words, we want an examiner that \textit{learns}. This is a tricky requirement and  we discuss how to frame this theoretically in the following section.
+We seek an examiner that refines its estimates of $\rho^\chi_t$ as it receives more information. In other words, we want an examiner that \textit{learns}. This is a tricky requirement and  we discuss how to frame this theoretically in the following section.
 
 
 
