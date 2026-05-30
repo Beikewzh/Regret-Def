@@ -41,10 +41,35 @@
 
 \paragraph{Intrinsic motivation (Figures~\ref{fig:intrinsic_beta} and \ref{fig:intrinsic_quality}).} The bonus added to the agent's reward is $\beta$ times the examiner's per-arm Hoeffding confidence width $c_i(t)=\sigma\sqrt{2\ln t_{\mathrm{eff}}/(n_i+1)}$, clipped into $[0,1]$, with no other novelty term. The world is a growing-action switching bandit (arm set $10 \to 50$). The good examiner is reset-aware; the ensemble averages three weak count trackers (a sliding window, a full-memory tracker, and a sliding window with a mis-specified $\sigma$); the vacuous examiner returns a uniform, count-independent width $\sigma\sqrt{2\ln t}$ for every arm. We sweep $\beta \in \{0.5, 1, 2\}$, with $\beta=0$ the no-bonus reference.
 
-\subsection{Intrinsic-motivation ablations}
-\label{app:intrinsic_ablation}
 
-Two ablations support the discussion of Section~\ref{sec:intrinsic}. First, sweeping the bonus strength with the good examiner (Figure~\ref{fig:intrinsic_beta}) shows that a moderate $\beta$ lowers regret while too large a $\beta$ over-explores, because the bonus keeps pushing an already-converged agent to explore. Second, at the fixed strength $\beta=1$ used in Figure~\ref{fig:intrinsic_quality}, we compare the three weak examiners individually against their ensemble (Figure~\ref{fig:single_examiners}). The weak examiners disagree: the sliding-window and full-memory trackers each lower regret below the no-bonus baseline, but the mis-calibrated one, with an oversized $\sigma$, raises it above. Since we cannot know in advance which weak examiner suits an unknown world, averaging them is the safe choice: the ensemble stays below the baseline and close to its better members, absorbing the bad one rather than inheriting its failure.
+
+
+
+\subsection{Exploration via examiner uncertainty}
+\label{sec:intrinsic_optimization}
+
+
+The examiner has so far been a passive scorer, but its uncertainty can also drive the agent. We add to the agent's reward an intrinsic bonus equal to the examiner's per-arm confidence width, scaled by $\beta$, with no other novelty signal, and study a switching world whose action set grows over time. Treating an uncertainty estimate as an exploration bonus is the basis of count-based and optimism-driven exploration and of intrinsic motivation more broadly \citep{strehl2009pacmdp, auer2008near, oudeyer2007intrinsic, lidayan2025bampf}; here the estimate is supplied by the examiner rather than the agent, which lets us ask whether a good examiner can double as a useful uncertainty metric.
+
+
+It can, when the examiner is good. A reset-aware examiner's uncertainty rises again at each change and prompts the agent to re-explore exactly when the world has shifted, which lowers cumulative regret well below the no-bonus baseline and speeds recovery after each switch (Figure~\ref{fig:intrinsic_quality}). The benefit is not unconditional, however: because the bonus persists, an examiner that keeps reporting uncertainty after the agent has converged will keep pushing it to explore and so erode performance, the familiar tension that an intrinsic bonus must eventually decay or be annealed \citep{lidayan2025bampf}. In our setting this appears as an over-exploration regime once $\beta$ is too large, which we report in Appendix~\ref{app:intrinsic_ablation}.
+
+In practice we do not know the true dynamics, so we cannot guarantee a perfectly matched examiner, but we usually have some partial knowledge. Averaging a small, diverse pool of reasonable but imperfect examiners turns that partial knowledge into a robust bonus: an ensemble of three weak examiners reduces regret almost as much as the single oracle examiner, without knowing when or how the world changes (Figure~\ref{fig:intrinsic_quality}). What must be avoided is an examiner with no real knowledge of the world: a vacuous examiner whose uncertainty is uniform across arms carries no exploration signal, and as $\beta$ grows its bonus saturates the reward until learning collapses to the random-policy level (Figure~\ref{fig:intrinsic_quality}).
+A single weak examiner is often sufficient on its own, but it is not guaranteed to be, 
+and \wes{fix ref} shows one whose mis-calibration degrades sharply; the ensemble is therefore best understood as a hedge against a poorly chosen examiner rather than as a free improvement over a good one.
+
+These observations suggest a simple procedure for unknown streams: instantiate a small, diverse pool of examiners whose biases bracket plausible dynamics and resolutions, report $\rho^\chi_t$ from each alongside the agent's behaviour, and treat agreement across the pool as evidence of meaningful estimates and disagreement as a sign that the pool, not necessarily the agent, needs revisiting.
+
+\begin{figure}[t!]
+\centering
+\includegraphics[width=\textwidth]{image/fig_examiner_quality.pdf}
+\caption{Examiner quality as the bonus source ($\beta=1$). \textbf{(a)} cumulative true regret: the single good (reset-aware) examiner and an ensemble of three weak examiners both fall well below the no-bonus reference, while the vacuous examiner runs off the top of the axis (annotated). \textbf{(b)} per-step true regret: the good and ensemble examiners re-adapt after each change, whereas the vacuous examiner's uniform bonus saturates the reward and pins regret near the random-policy level.}
+\label{fig:intrinsic_quality}
+\end{figure}
+
+
+
+Two ablations support the discussion. First, sweeping the bonus strength with the good examiner (Figure~\ref{fig:intrinsic_beta}) shows that a moderate $\beta$ lowers regret while too large a $\beta$ over-explores, because the bonus keeps pushing an already-converged agent to explore. Second, at the fixed strength $\beta=1$ used in Figure~\ref{fig:intrinsic_quality}, we compare the three weak examiners individually against their ensemble (Figure~\ref{fig:single_examiners}). The weak examiners disagree: the sliding-window and full-memory trackers each lower regret below the no-bonus baseline, but the mis-calibrated one, with an oversized $\sigma$, raises it above. Since we cannot know in advance which weak examiner suits an unknown world, averaging them is the safe choice: the ensemble stays below the baseline and close to its better members, absorbing the bad one rather than inheriting its failure.
 
 \begin{figure}[t]
 \centering

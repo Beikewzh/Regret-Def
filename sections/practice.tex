@@ -32,7 +32,8 @@ In the switching world (Figure~\ref{fig:practice_main}b), the good examiner is r
 There are two primary ways an examiner can fail.\\
 \textit{Invalid upper bound.} 
 An examiner can produce a perceived regret lower than the true regret. 
-We observe this in the switching world with the bad examiner on UCB1: the bad examiner assumes stationarity and keeps stale data, so its lower confidence value $\Vlow_t$ is held too high and its aspiration $\Vhi_t$ too low; its $\rho^\chi_t$ then drifts toward zero between changes and falls \emph{below} the true regret even while the agent is incurring large regret. 
+We observe this in the switching world with the bad examiner on UCB1: 
+The bad examiner assumes stationarity and keeps stale data, so its lower confidence value $\Vlow_t$ is held too high and its aspiration $\Vhi_t$ too low; its $\rho^\chi_t$ then drifts toward zero between changes and falls \emph{below} the true regret even while the agent is incurring large regret. 
 This breaks the optimism assumption (Assumption~\ref{a:optimistic}), so the perceived regret is no longer valid and would wrongly certify the agent as near-optimal.\\
 \textit{Non-decreasing upper bound.} The examiner may produce a perceived regret that is larger than the true regret but never decrease it. 
 While not as dire as producing invalid regret bounds, this is also unsatisfying since it wrongly suggests that the agent can keep improving even though its policy may be optimal. 
@@ -46,25 +47,49 @@ We further explore these considerations across another axis, varying the relativ
 In a complex world, we rarely have access to the true regret, yet we still want to compare candidate learners from a single stream of experience \citep{javed2025bigworld}. Perceived regret offers a stream-only surrogate: given an examiner, we can rank a pool of learners by their $\rho^\chi_t$ value. By using the same examiner, we can get a consistent measure of performance across different agents.
 
 % We show an example where, using a good examiner, this recovers the ranking the true regret would give. 
-We run several standard bandit learners in the switching world under a single good examiner, and we expect $\rho^\chi_t$ to upper-bound each learner's true regret while giving. 
+We run several standard bandit learners in the switching world under a single good examiner, and we expect $\rho^\chi_t$ to upper-bound each learner's true regret while giving meaningful performance estimates.  Note that 
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{image/fig5_learner_comparison.pdf}
-\caption{Perceived regret as a stream-only comparison metric across learners in the switching bandit. \textbf{(a)} For each learner, $\rho^\chi_t$ (blue) tracks and upper-bounds the oracle true regret (red); dotted lines mark segment boundaries. \textbf{(b)} Final perceived versus true regret over all learners and seeds; the strong rank correlation (Spearman $\rho_S = 0.85$) shows that ranking by $\rho^\chi_t$ recovers the true ordering without access to ground truth.}
+\caption{Perceived regret as a stream-only comparison metric across learners in the switching bandit. \textbf{(a)} For each learner, $\rho^\chi_t$ (blue) tracks and upper-bounds the oracle true regret (red); dotted lines mark segment boundaries. \textbf{(b)} Final perceived versus true regret over all learners and seeds; the strong rank correlation (Spearman $\rho_S = 0.87$) shows that ranking by $\rho^\chi_t$ recovers the true ordering without access to ground truth.}
 \label{fig:learner_comparison}
 \end{figure}
 
 % Both expectations hold, with an instructive caveat about the size of the margin.
 
-In Figure~\ref{fig:learner_comparison}(a), 
+In Fig.~\ref{fig:learner_comparison}(a), we see that the perceived regret always upper bounds the true regret for different learning agents and decreases within each task.
+Then, in Fig.~\ref{fig:learner_comparison}(b), we see that the perceived regret is highly-correlated with the true regret with a Spearman correlation of 0.87. 
+For any fixed algorithm, we can see an even better agreement as the scatterplot shows the points lie roughly on a line.
+These results suggest that perceived regret is a reasonable proxy for true regret in this known setting although we note that the main advantage of the perceived regret is that it can be computed in general environments where the true regret is unavailable.
 
 
-\wes{rewrite this part}
-For every learner $\rho^\chi_t$ stays above the true regret throughout learning (), but the width of the margin between them does not track how good the learner is: it reflects how much evidence the agent's own behaviour gives the examiner. 
-The margin is the examiner's validity slack, $(\Vhi_t - V^*_t) + (V^{\pi_t}_t - \Vlow_t)$, which the examiner can only close where the agent's data let it rule arms out.
-A learner that probes the action set broadly therefore lets the examiner tighten its optimistic aspiration and carries a small margin even when its true regret is large (EXP3.S, which spreads its pulls), whereas a near-optimal learner that concentrates on a few arms leaves the rest, including newly added ones, under-sampled, so the examiner stays optimistic about them and the margin is wider despite a true regret near zero (SW-UCB).
-The margin is thus a property of the data the agent collects, not of its performance. Because of this, ranking by $\rho^\chi_t$ does not reproduce the true-regret ranking exactly, but the two remain strongly rank-correlated across learners and seeds (Spearman $\rho_S = 0.85$, Figure~\ref{fig:learner_comparison}b), so $\rho^\chi_t$ still largely recovers the ordering without ever observing the truth. The points lie almost entirely below the diagonal, consistent with $\rho^\chi_t$ acting as a conservative proxy to the true regret.
+% \wes{rewrite this part}
+% For every learner $\rho^\chi_t$ stays above the true regret throughout learning (), but the width of the margin between them does not track how good the learner is: it reflects how much evidence the agent's own behaviour gives the examiner. 
+% The margin is the examiner's validity slack, $(\Vhi_t - V^*_t) + (V^{\pi_t}_t - \Vlow_t)$, which the examiner can only close where the agent's data let it rule arms out.
+% A learner that probes the action set broadly therefore lets the examiner tighten its optimistic aspiration and carries a small margin even when its true regret is large (EXP3.S, which spreads its pulls), whereas a near-optimal learner that concentrates on a few arms leaves the rest, including newly added ones, under-sampled, so the examiner stays optimistic about them and the margin is wider despite a true regret near zero (SW-UCB).
+% The margin is thus a property of the data the agent collects, not of its performance. Because of this, ranking by $\rho^\chi_t$ does not reproduce the true-regret ranking exactly, but the two remain strongly rank-correlated across learners and seeds (Spearman $\rho_S = 0.85$, Figure~\ref{fig:learner_comparison}b), so $\rho^\chi_t$ still largely recovers the ordering without ever observing the truth. The points lie almost entirely below the diagonal, consistent with $\rho^\chi_t$ acting as a conservative proxy to the true regret.
+
+
+
+
+
+\subsection{Evaluating exploration with examiners}
+
+We can consider another use-case of the examiner. Instead of evaluating the agent's value---it's ability to collect reward---we can define a pseudo-reward and evaluate how well the agent accumulates that quantity. This can be viewed as a particular cumulant in general value functions \wes{cite}).
+As an example, we can quantify the agent's ability to explore by defining a quantity $r_{IG}$ representing the ``information gain" from choosing an action.
+
+In the following bandit experiment, we use $r_{IG}(a) = C_k(a) - C_{k+1}(a)$ where $C_k$ is the width of the confidence interval after $k$ pulls of action $a$. 
+This value quantifies how much tighter the confidence interval becomes after choosing that action. That is, how much the uncertainty has been reduced.
+
+The examiner computes its . We can now interpret its output $\rho^{IG}$ as an estimate of the difference between the maximum information gain the agent can obtain and how much  information it currently collects. 
+Again, if the perceived regret (with respect to $r_{IG}$) is low, we can say that the agent is exploring well. 
+
+For this experiment, we run the UCB1 agent on a stationary bandit as in \wes{add ref to sec 1} with different coefficients on the exploration. 
+
+\wes{add figure}
+
+In Fig. , we see that this $\rho^{IG}$ 
 
 
 
