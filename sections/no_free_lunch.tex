@@ -15,7 +15,7 @@ Broadly-speaking, we desire to have an examiner $\chi$ that produces valid (in t
 Whenever the agent is learning effectively $\rho^\chi_t$ should decrease and, if the agent has an optimal policy, the examiner should output $\rho^\chi_t=0$.
 Ideally, there would be a universal examiner $\chi^*$ applicable to any agent and any world while producing effective perceived regret estimates. 
 
-Unfortunately, this is asking for too much. The situation is similar to generalization in supervised learning, where it is impossible to create a universal learning algorithm that generalizes well on any data distribution.
+Unfortunately, this is asking for too much. The situation is similar to the problem of generalization in supervised learning, where it is impossible to create a universal learning algorithm that generalizes well on any data distribution \citep{wolpert1996lack}.
 Similarly, we prove a no-free-lunch theorem showing that it is impossible to define a ``universal" examiner capable of accurately judging all agents in all worlds and discuss the implications. 
 
 To state this theorem, we first posit some additional assumptions about the agent and environment. We assume $\Actions$ is discrete with at least two actions. We also assume the rewards are bounded in $[0, R_{max}]$ so the true values of all policies are bounded in $[0, V_{max}]$. We define some useful quantities:
@@ -47,12 +47,12 @@ Similar to no-free-lunch theorems in supervised learning, which tell us that ove
 % where we cannot expect a learning algorithm to generalize well for all data distributions, we cannot expect the examiner to accurately assess any learner. 
 The examiner must make some guess about the structure of the environment to account for possible futures and their associated rewards.  
 This guess depends on the various modeling biases baked into the examiner. 
-For example, the examiner may assume that the world is Markovian and produce its estimates in accordance with this assumption. This may be correct in certain environments and incorrect in others. 
+For example, the examiner may assume that the world is an MDP and produce its estimates in accordance with this assumption. This may be correct in certain environments and incorrect in others. 
 The examiner's inductive bias also matters as the agent may enter previously unseen parts of the world and thus the examiner's generalization properties matter too.
 
 Overall, we see that the examiner faces a learning problem at least as difficult as supervised learning, combining prediction on new examples with a temporal and decision-making component. 
 As such, it is expected that similar no-free-lunch theorems apply to the examiner. 
-This means there are no ``universally" best examiners; we must make do with the examiners we believe are best fit for the environment at hand and cannot give general guarantees on their evaluation performance.
+As there are no universally best examiners, we must make do with the examiners we believe are best fit for the environment at hand and cannot give general guarantees on their evaluation performance.
 Next, we discuss some choices of modeling biases for the examiner and how we can evaluate them.
 
 % \wes{should the examiner see internals of the agent?}
@@ -74,7 +74,7 @@ Next, we discuss some choices of modeling biases for the examiner and how we can
 % \end{itemize}
 
 Since universal examiners are impossible, we need to make tradeoffs and choose properties we may want an examiner to have. To help us decide, we may prefer examiners that are known to work in specific types of environments of interest. 
-We can assess an examiner by how it behaves in certain families of environments when run on known, optimal learning agents.
+More specifically, we can assess an examiner by how it behaves in certain families of environments when run on known, optimal learning agents.
 
 For example, in stochastic bandits and finite MDPs, there are known provably-optimal learning algorithms, achieving the best (true) expected regret possible. These agents will shrink the regret per step towards zero. 
 A ``good" examiner, when run on these learning agents, should also reduce its perceived regret towards zero as the agent converges towards an optimal policy. 

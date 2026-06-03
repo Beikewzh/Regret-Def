@@ -43,7 +43,7 @@ This failure case is illustrated in the stationary world with the UCB1 agent. Th
 Taken together, the success and failure cases showcase the practical side of the no-free-lunch result of Section~\ref{sec:nfl}: an examiner is informative only when it carries the appropriate prior knowledge about the world and may be misleading when it does not. 
 We further explore these considerations across another axis, varying the relative representational capacity of agent and examiner (results in Appendix~\ref{app:capacity}).
 
-\subsection{Comparing learners with a fixed examiner}
+\subsection{Comparing Learners with a Fixed Examiner}
 \label{sec:learner_comparison}
 In a complex world, we rarely have access to the true regret, yet we still want to compare candidate learners from a single stream of experience \citep{javed2025bigworld}. Perceived regret offers a stream-only surrogate: given an examiner, we can rank a pool of learners by their $\rho^\chi_t$ value. By using the same examiner, we can get a consistent measure of performance across different agents.
 
@@ -100,6 +100,6 @@ Again, if the perceived regret (with respect to $r_{IG}$) is low, we can say tha
 
 
 
-For this experiment, we run the UCB1 agent on a stationary bandit as in Fig.~\ref{fig:practice_main} with different coefficients $\sigma_{\text{UCB}}$ for the upper confidence bound. Larger $\sigma_{\text{UCB}}$ lead to more exploration. The larger  
-In Fig.~\ref{fig:coverage} , we see that $\rho^{IG}$ strongly correlates  with the fewest pull counts over actions.
-Moreover, we see a clear trend with larger $\sigma_{\text{UCB}}$ values (more exploration) leading to smaller info-gain perceived regret, as expected. 
+For this experiment, we run the same UCB1 agent on a stationary bandit as in Fig.~\ref{fig:practice_main} with different coefficients $\sigma_{\text{UCB}}$ for the upper confidence bound. Larger $\sigma_{\text{UCB}}$ lead to more exploration.
+In Fig.~\ref{fig:coverage}, we see that $\rho^{IG}$ strongly correlates  with the fewest pull counts over actions.
+Moreover, we see a clear trend with larger $\sigma_{\text{UCB}}$ values (more exploration) leading to smaller info-gain perceived regret and larger entropy over actions, as expected. 
